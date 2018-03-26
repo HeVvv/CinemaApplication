@@ -75,7 +75,6 @@ public class AuditChoosingActivity extends Activity {
 
         //HashMap<String, Integer> listInfo2 = new HashMap<>(QRScanActivity.getStaticQRScanActivity().getListData());
 
-
         System.out.println(listInfo1);
         System.out.println("~~~~~");
         TextView txt = (TextView) findViewById(R.id.txtInf);
