@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.user.cinemaapplication.Adds.JSONUtils;
+import com.example.user.cinemaapplication.Adds.ListData;
 import com.example.user.cinemaapplication.Adds.TicketListAdapter;
 import com.example.user.cinemaapplication.Adds.TicketSClass;
 import com.example.user.cinemaapplication.Classes.AuditoriumsClass;
@@ -58,11 +59,25 @@ public class QRScanActivity extends Activity {
     private static final int MY_CAMERA_REQUEST_CODE = 100;
     private String OLD_DATA = "";
     private Date OLD_DATE = Calendar.getInstance().getTime();
+    private  HashMap<String,Integer> list = ListData.loadAuditData();
 
     TextView text;
     ImageView responseImage;
 
     public String check_ticket_url = "https://soft.silverscreen.by:8443/wsglobal/webapi/check/ticket";
+
+    private static QRScanActivity staticQRScanActivity;
+    public static QRScanActivity getStaticQRScanActivity(){
+        return staticQRScanActivity;
+    }
+    public QRScanActivity(){
+        staticQRScanActivity = this;
+    }
+
+    public HashMap<String,Integer> getListData(){
+        return list;
+    }
+
 
 //    public boolean onCreateOptionsMenu(Menu menu) {
 //        getMenuInflater().inflate(R.menu.cinema_activity, menu);
@@ -143,8 +158,9 @@ public class QRScanActivity extends Activity {
                 Runnable myRunnable = new Runnable() {
                     @Override
                     public void run() {
-                        String str = "826/27372/203/5//11";
-                        String test = "1/5 6" + "/"+ str;
+//                      String data = "826/27372/203/5//11";
+
+                        String test = "1/5 6" + "/"+ data;
                             try {
                                 TicketSClass ticketSClass = new TicketSClass(test);
                                 String json = JSONUtils.parseObjectToJson(ticketSClass);

@@ -73,15 +73,15 @@ public class TabActivity extends ActivityGroup {
         spec.setContent(intent);
         tabHost.addTab(spec);
 
-//        spec = tabHost.newTabSpec("Settings"); // Create a new TabSpec using tab host
-//        spec.setIndicator("Settings"); // set the “ABOUT” as an indicator
-//        // Create an Intent to launch an Activity for the tab (to be reused)
-//        intent = new Intent(this, Settings_AboutActivity.class);
-//        spec.setContent(intent);
-//        tabHost.addTab(spec);
+        spec = tabHost.newTabSpec("Settings"); // Create a new TabSpec using tab host
+        spec.setIndicator("Settings"); // set the “ABOUT” as an indicator
+        // Create an Intent to launch an Activity for the tab (to be reused)
+        intent = new Intent(this, Settings_AboutActivity.class);
+        spec.setContent(intent);
+        tabHost.addTab(spec);
 
         //set tab which one you want to open first time 0 or 1 or 2
-        tabHost.setCurrentTab(0);
+        tabHost.setCurrentTab(1);
 
 
 //        tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {

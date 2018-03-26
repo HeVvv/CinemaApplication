@@ -21,7 +21,9 @@ public class Settings_AboutActivity extends Activity {
         setContentView(R.layout.activity_settings_about);
 
         txt = (TextView) findViewById(R.id.infoCinema);
-        txt.setText(LoginActivity.getStaticLoginActivity().getCINEMA_NAME());
+//        txt.setText(LoginActivity.getStaticLoginActivity().getCINEMA_NAME());
+        txt.setText(QRScanActivity.getStaticQRScanActivity().getListData().toString());
+
 
 
         super.onCreate(savedInstanceState);

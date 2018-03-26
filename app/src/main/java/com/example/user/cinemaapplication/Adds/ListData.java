@@ -2,22 +2,40 @@ package com.example.user.cinemaapplication.Adds;
 
 
 import android.app.Application;
+import android.net.Uri;
 import android.util.Log;
 
 
 import com.example.user.cinemaapplication.Classes.AuditoriumsClass;
 import com.example.user.cinemaapplication.Classes.SessionClass;
 import com.example.user.cinemaapplication.Activites.LoginActivity;
+import com.google.gson.Gson;
 import com.loopj.android.http.AsyncHttpClient;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.MySSLSocketFactory;
 import com.loopj.android.http.SyncHttpClient;
+import com.mysql.jdbc.authentication.MysqlClearPasswordPlugin;
 
+import org.apache.http.params.HttpParams;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.security.KeyStore;
+import java.security.SecureRandom;
 import java.sql.SQLOutput;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -29,8 +47,26 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManagerFactory;
+
 import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.HttpResponse;
+import cz.msebera.android.httpclient.HttpVersion;
+import cz.msebera.android.httpclient.client.ClientProtocolException;
+import cz.msebera.android.httpclient.client.HttpClient;
+import cz.msebera.android.httpclient.client.methods.HttpGet;
+import cz.msebera.android.httpclient.conn.scheme.SchemeRegistry;
 import cz.msebera.android.httpclient.impl.client.BasicCookieStore;
+import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
+import cz.msebera.android.httpclient.impl.client.HttpClientBuilder;
+import cz.msebera.android.httpclient.params.BasicHttpParams;
+import cz.msebera.android.httpclient.params.HttpProtocolParams;
+import cz.msebera.android.httpclient.protocol.HTTP;
+
+import static cz.msebera.android.httpclient.HttpHeaders.USER_AGENT;
 
 
 public class ListData extends Application {
@@ -188,5 +224,70 @@ public class ListData extends Application {
             }
         });
     }
+
+        // dont use, not testsed
+    public static String executePost(String targetURL, String urlParameters) {
+        HttpURLConnection connection = null;
+
+        try {
+            //Create connection
+            URL url = new URL(targetURL);
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setRequestProperty("Content-Type",
+                    "application/x-www-form-urlencoded");
+
+            connection.setRequestProperty("Content-Length",
+                    Integer.toString(urlParameters.getBytes().length));
+            connection.setRequestProperty("Content-Language", "en-US");
+
+            connection.setUseCaches(false);
+            connection.setDoOutput(true);
+
+            //Send request
+            DataOutputStream wr = new DataOutputStream(
+                    connection.getOutputStream());
+            wr.writeBytes(urlParameters);
+            wr.close();
+
+            //Get Response
+            InputStream is = connection.getInputStream();
+            BufferedReader rd = new BufferedReader(new InputStreamReader(is));
+            StringBuilder response = new StringBuilder(); // or StringBuffer if Java version 5+
+            String line;
+            while ((line = rd.readLine()) != null) {
+                response.append(line);
+                response.append('\r');
+            }
+            rd.close();
+            return response.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            if (connection != null) {
+                connection.disconnect();
+            }
+        }
+    }
 }
+
+//
+//    HttpResponse response = null;
+//        try {
+//                HttpClient client = new DefaultHttpClient();
+//                HttpGet request = new HttpGet();
+//                request.setURI(new URI(uri));
+//                request.addHeader("Authorisation", "Basic + ");
+//                response = client.execute(request);
+//                } catch (URISyntaxException e) {
+//                e.printStackTrace();
+//                } catch (ClientProtocolException e) {
+//                // TODO Auto-generated catch block
+//                e.printStackTrace();
+//                } catch (IOException e) {
+//                // TODO Auto-generated catch block
+//                e.printStackTrace();
+//                }
+//                return response.getEntity().getContent();;
 
