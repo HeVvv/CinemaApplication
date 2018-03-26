@@ -1,0 +1,51 @@
+apply plugin: 'com.android.application'
+repositories{
+    mavenCentral()
+}
+android {
+    compileSdkVersion 26
+    defaultConfig {
+        applicationId "com.example.user.cinemaapplication"
+        minSdkVersion 21
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    // https://mvnrepository.com/artifact/com.h2database/h2
+    testCompile group: 'com.h2database', name: 'h2', version: '1.4.196'
+
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    //compile 'com.android.support:appcompat-v7:26.2.0'
+
+        compile 'com.dlazaro66.qrcodereaderview:qrcodereaderview:2.0.3'
+
+    compile 'com.android.volley:volley:1.0.0'
+    compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.45'
+    compile 'com.otaliastudios:cameraview:1.5.0'
+    compile 'com.github.nisrulz:qreader:2.1.2'
+    implementation 'com.github.nisrulz:qreader:{latest version}'
+    implementation 'com.asksira.android:cameraviewplus:0.7.0'
+    compile 'com.google.code.gson:gson:2.8.1'
+    compile 'com.fasterxml.jackson.core:jackson-core:2.7.3'
+    compile 'com.fasterxml.jackson.core:jackson-annotations:2.7.3'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.7.3'
+    compile 'org.glassfish.hk2.external:javax.inject:2.4.0-b06'
+    compile 'com.loopj.android:android-async-http:1.4.9'
+    compile 'com.android.support:appcompat-v7:26.+'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    testCompile 'junit:junit:4.12'
+}
