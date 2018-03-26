@@ -71,12 +71,7 @@ public class AuditChoosingActivity extends Activity {
 
         listInfo1.putAll(QRScanActivity.getStaticQRScanActivity().getListData());
 
-        HashMap<String, Integer> listInfo2 = new HashMap<>(QRScanActivity.getStaticQRScanActivity().getListData());
-
-
-        String git = "hello git";
-        System.out.println(git);
-
+//        HashMap<String, Integer> listInfo2 = new HashMap<>(QRScanActivity.getStaticQRScanActivity().getListData());
 
 
         System.out.println(listInfo1);
