@@ -64,8 +64,6 @@ public class AuditChoosingActivity extends Activity {
         return returnString;
     }
 
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,7 +71,13 @@ public class AuditChoosingActivity extends Activity {
 
         listInfo1.putAll(QRScanActivity.getStaticQRScanActivity().getListData());
 
-        //HashMap<String, Integer> listInfo2 = new HashMap<>(QRScanActivity.getStaticQRScanActivity().getListData());
+        HashMap<String, Integer> listInfo2 = new HashMap<>(QRScanActivity.getStaticQRScanActivity().getListData());
+
+
+        String git = "hello git";
+        System.out.println(git);
+
+
 
         System.out.println(listInfo1);
         System.out.println("~~~~~");
@@ -103,9 +107,6 @@ public class AuditChoosingActivity extends Activity {
 /*
 
  ll1.removeViewsInLayout(2, auditNames.size() + 1);
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
