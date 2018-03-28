@@ -1,65 +1,66 @@
 package com.example.user.cinemaapplication.Activites;
 
+/**
+ * Created by User on 28.03.2018.
+ */
+
+
 import android.Manifest;
-import android.app.Activity;
-import android.content.Intent;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.SurfaceView;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.user.cinemaapplication.Adds.JSONUtils;
 import com.example.user.cinemaapplication.Adds.ListData;
 import com.example.user.cinemaapplication.Adds.TicketListAdapter;
 import com.example.user.cinemaapplication.Adds.TicketSClass;
-import com.example.user.cinemaapplication.Classes.AuditoriumsClass;
-import com.example.user.cinemaapplication.Classes.TicketClass;
 import com.example.user.cinemaapplication.R;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.MySSLSocketFactory;
 import com.loopj.android.http.TextHttpResponseHandler;
-import com.mysql.fabric.xmlrpc.base.Params;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.entity.StringEntity;
 import github.nisrulz.qreader.QRDataListener;
 import github.nisrulz.qreader.QREader;
 
-public class QRScanActivity extends Activity {
+public class QRScanActivity extends Fragment {
+
     private SurfaceView mySurfaceView;
     private QREader qrEader;
     private static final int MY_CAMERA_REQUEST_CODE = 100;
     private String OLD_DATA = "";
     private Date OLD_DATE = Calendar.getInstance().getTime();
-    private  HashMap<String,Integer> list = ListData.loadAuditData();
+    private HashMap<String, Integer> list = ListData.loadAuditData();
 
     TextView text;
     ImageView responseImage;
@@ -67,42 +68,18 @@ public class QRScanActivity extends Activity {
     public String check_ticket_url = "https://soft.silverscreen.by:8443/wsglobal/webapi/check/ticket";
 
     private static QRScanActivity staticQRScanActivity;
-    public static QRScanActivity getStaticQRScanActivity(){
+
+    public static QRScanActivity getStaticQRScanActivity() {
         return staticQRScanActivity;
     }
-    public QRScanActivity(){
+
+    public QRScanActivity() {
         staticQRScanActivity = this;
     }
 
-    public HashMap<String,Integer> getListData(){
+    public HashMap<String, Integer> getListData() {
         return list;
     }
-
-
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.cinema_activity, menu);
-//        return true;
-//    }
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        int id = item.getItemId();
-//        switch(id){
-//            case R.id.action_settings:
-//                Intent intentSettings = new Intent(this, AuditChoosingActivity.class);
-//                startActivity(intentSettings);
-//                return true;
-//            case R.id.action_qrScan:
-//                Intent intentQR = new Intent(this, QRScanActivity.class);
-//                startActivity(intentQR);
-//                return true;
-//            case R.id.Log_off:
-//                Intent intentLogOff = new Intent(this, LoginActivity.class);
-//                startActivity(intentLogOff);
-//                return true;
-//            default:
-//                return super.onOptionsItemSelected(item);
-//        }
-//    }
 
 
     @Override
@@ -110,57 +87,55 @@ public class QRScanActivity extends Activity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 1) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(QRScanActivity.this,"permission granted", Toast.LENGTH_SHORT).show();
                 // perform your action here
             } else {
-                Toast.makeText(QRScanActivity.this,"permission not granted", Toast.LENGTH_SHORT).show();
-            }
             }
         }
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        setContentView(R.layout.activity_qrscan);
         final AsyncHttpClient clientSQL = new AsyncHttpClient();
         clientSQL.setBasicAuth(LoginActivity.getStaticLoginActivity().getUsername(), LoginActivity.getStaticLoginActivity().getPassword());
         clientSQL.setSSLSocketFactory(MySSLSocketFactory.getFixedSocketFactory());
 
         final List<String> ticketList = new ArrayList<>();
 
-        text = (TextView) findViewById(R.id.responseInfo);
-        text.setTextAppearance(this,R.style.TextAppearance_AppCompat_Title);
+        text = (TextView) getView().findViewById(R.id.responseInfo);
+        text.setTextAppearance(getView().getContext(), R.style.TextAppearance_AppCompat_Title);
         text.setGravity(Gravity.CENTER);
 
-        responseImage = (ImageView) findViewById(R.id.imageView);
+        responseImage = (ImageView) getView().findViewById(R.id.imageView);
         //responseImage.setImageResource(R.drawable.ic_launcher_foreground);
 
-        final ListView ticketHistoryList = (ListView) findViewById(R.id.ticketHistoryList);
+        final ListView ticketHistoryList = (ListView) getView().findViewById(R.id.ticketHistoryList);
 
-        mySurfaceView = (SurfaceView) findViewById(R.id.camera);
-        final TicketListAdapter adapter = new TicketListAdapter(QRScanActivity.this, ticketList);
+        mySurfaceView = (SurfaceView) getView().findViewById(R.id.camera);
+        final TicketListAdapter adapter = new TicketListAdapter(QRScanActivity.staticQRScanActivity.getActivity(), ticketList);
         ticketHistoryList.setAdapter(adapter);
 
-        if (ContextCompat.checkSelfPermission(QRScanActivity.this, Manifest.permission.CAMERA)
-                == PackageManager.PERMISSION_DENIED){
-            ActivityCompat.requestPermissions(QRScanActivity.this, new String[] {Manifest.permission.CAMERA}, MY_CAMERA_REQUEST_CODE);
+        if (ContextCompat.checkSelfPermission(getView().getContext(), Manifest.permission.CAMERA)
+                == PackageManager.PERMISSION_DENIED) {
+            ActivityCompat.requestPermissions(QRScanActivity.staticQRScanActivity.getActivity(), new String[]{Manifest.permission.CAMERA}, MY_CAMERA_REQUEST_CODE);
+            //not tested
         }
 
 
-        qrEader = new QREader.Builder(QRScanActivity.this, mySurfaceView, new QRDataListener() {
+        qrEader = new QREader.Builder(getActivity(), mySurfaceView, new QRDataListener() {
             @Override
             public void onDetected(final String data) {
-                if(data.equals(OLD_DATA) && Calendar.getInstance().getTime().getTime() - OLD_DATE.getTime() < 3500 ){
-                }else{
-                OLD_DATA = data;
-                OLD_DATE = Calendar.getInstance().getTime();
-                Handler mainHandler = new Handler(Looper.getMainLooper());
-                Runnable myRunnable = new Runnable() {
-                    @Override
-                    public void run() {
+                if (data.equals(OLD_DATA) && Calendar.getInstance().getTime().getTime() - OLD_DATE.getTime() < 3500) {
+                } else {
+                    OLD_DATA = data;
+                    OLD_DATE = Calendar.getInstance().getTime();
+                    Handler mainHandler = new Handler(Looper.getMainLooper());
+                    Runnable myRunnable = new Runnable() {
+                        @Override
+                        public void run() {
 //                      String data = "826/27372/203/5//11";
 
-                        String test = "1/5 6" + "/"+ data;
+                            String test = "1/5 6" + "/" + data;
                             try {
                                 TicketSClass ticketSClass = new TicketSClass(test);
                                 String json = JSONUtils.parseObjectToJson(ticketSClass);
@@ -170,8 +145,8 @@ public class QRScanActivity extends Activity {
                                 } catch (UnsupportedEncodingException e) {
                                     e.printStackTrace();
                                 }
-
-                                clientSQL.put(QRScanActivity.this, check_ticket_url, entity, "application/json", new TextHttpResponseHandler() {
+                                // not tested also
+                                clientSQL.put(getActivity().getApplicationContext(), check_ticket_url, entity, "application/json", new TextHttpResponseHandler() {
                                     @Override
                                     public void onSuccess(int statusCode, Header[] headers, String responseString) {
                                         String status = responseString.substring(0, 1);
@@ -202,12 +177,12 @@ public class QRScanActivity extends Activity {
                                         System.out.println("error1 " + statusCode + "~~~~" + errorString);
                                     }
                                 });
-                            }catch (IOException e ){
+                            } catch (IOException e) {
                                 e.printStackTrace();
                             }
-                    }
-                };
-                mainHandler.post(myRunnable);
+                        }
+                    };
+                    mainHandler.post(myRunnable);
                 }
             }
         }
@@ -217,9 +192,111 @@ public class QRScanActivity extends Activity {
                 .width(mySurfaceView.getWidth())
                 .build();
         qrEader.initAndStart(mySurfaceView);
-        super.onCreate(savedInstanceState);
+        return inflater.inflate(R.layout.activity_qrscan, container, false);
     }
 }
+//    @Override
+//    protected void onCreate(Bundle savedInstanceState) {
+//
+//        setContentView(R.layout.activity_qrscan);
+//        final AsyncHttpClient clientSQL = new AsyncHttpClient();
+//        clientSQL.setBasicAuth(LoginActivity.getStaticLoginActivity().getUsername(), LoginActivity.getStaticLoginActivity().getPassword());
+//        clientSQL.setSSLSocketFactory(MySSLSocketFactory.getFixedSocketFactory());
+//
+//        final List<String> ticketList = new ArrayList<>();
+//
+//        text = (TextView) findViewById(R.id.responseInfo);
+//        text.setTextAppearance(this,R.style.TextAppearance_AppCompat_Title);
+//        text.setGravity(Gravity.CENTER);
+//
+//        responseImage = (ImageView) findViewById(R.id.imageView);
+//        //responseImage.setImageResource(R.drawable.ic_launcher_foreground);
+//
+//        final ListView ticketHistoryList = (ListView) findViewById(R.id.ticketHistoryList);
+//
+//        mySurfaceView = (SurfaceView) findViewById(R.id.camera);
+//        final TicketListAdapter adapter = new TicketListAdapter(QRScanActivity.this, ticketList);
+//        ticketHistoryList.setAdapter(adapter);
+//
+//        if (ContextCompat.checkSelfPermission(QRScanActivity.this, Manifest.permission.CAMERA)
+//                == PackageManager.PERMISSION_DENIED){
+//            ActivityCompat.requestPermissions(QRScanActivity.this, new String[] {Manifest.permission.CAMERA}, MY_CAMERA_REQUEST_CODE);
+//        }
+//
+//
+//        qrEader = new QREader.Builder(QRScanActivity.this, mySurfaceView, new QRDataListener() {
+//            @Override
+//            public void onDetected(final String data) {
+//                if(data.equals(OLD_DATA) && Calendar.getInstance().getTime().getTime() - OLD_DATE.getTime() < 3500 ){
+//                }else{
+//                OLD_DATA = data;
+//                OLD_DATE = Calendar.getInstance().getTime();
+//                Handler mainHandler = new Handler(Looper.getMainLooper());
+//                Runnable myRunnable = new Runnable() {
+//                    @Override
+//                    public void run() {
+////                      String data = "826/27372/203/5//11";
+//
+//                        String test = "1/5 6" + "/"+ data;
+//                            try {
+//                                TicketSClass ticketSClass = new TicketSClass(test);
+//                                String json = JSONUtils.parseObjectToJson(ticketSClass);
+//                                StringEntity entity = null;
+//                                try {
+//                                    entity = new StringEntity(json);
+//                                } catch (UnsupportedEncodingException e) {
+//                                    e.printStackTrace();
+//                                }
+//
+//                                clientSQL.put(QRScanActivity.this, check_ticket_url, entity, "application/json", new TextHttpResponseHandler() {
+//                                    @Override
+//                                    public void onSuccess(int statusCode, Header[] headers, String responseString) {
+//                                        String status = responseString.substring(0, 1);
+//                                        final String response = responseString.substring(2, responseString.length());
+//
+//                                        text.post(new Runnable() {
+//                                            @Override
+//                                            public void run() {
+//                                                text.setText(response);
+//                                            }
+//                                        });
+//                                        ticketList.add(response);
+//                                        adapter.notifyDataSetChanged();
+//                                        if (status.equals("0")) {
+//                                            responseImage.setImageResource(R.drawable.response_cancel);
+//                                        } else if (status.equals("1")) {
+//                                            responseImage.setImageResource(R.drawable.response_ok);
+//                                        } else if (status.equals("2")) {
+//                                            responseImage.setImageResource(R.drawable.response_qm);
+//                                        }
+//                                        if (ticketList.size() > 3) {
+//                                            ticketList.subList(0, ticketList.size() - 3).clear();
+//                                        }
+//                                    }
+//
+//                                    @Override
+//                                    public void onFailure(int statusCode, Header[] headers, String errorString, Throwable throwable) {
+//                                        System.out.println("error1 " + statusCode + "~~~~" + errorString);
+//                                    }
+//                                });
+//                            }catch (IOException e ){
+//                                e.printStackTrace();
+//                            }
+//                    }
+//                };
+//                mainHandler.post(myRunnable);
+//                }
+//            }
+//        }
+//        ).facing(QREader.BACK_CAM)
+//                .enableAutofocus(true)
+//                .height(mySurfaceView.getHeight())
+//                .width(mySurfaceView.getWidth())
+//                .build();
+//        qrEader.initAndStart(mySurfaceView);
+//        super.onCreate(savedInstanceState);
+//    }
+//}
     /*@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

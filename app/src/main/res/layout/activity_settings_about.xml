@@ -19,4 +19,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/idbtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="getid"
+        tools:layout_editor_absoluteX="74dp"
+        tools:layout_editor_absoluteY="116dp" />
 </android.support.constraint.ConstraintLayout>

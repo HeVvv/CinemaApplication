@@ -1,48 +1,48 @@
 package com.example.user.cinemaapplication.Activites;
 
+/**
+ * Created by User on 28.03.2018.
+ */
 
-import android.app.Activity;
+
+import android.content.Context;
 import android.os.Bundle;
-import android.util.TypedValue;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
+import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.example.user.cinemaapplication.Adds.ListData;
 import com.example.user.cinemaapplication.R;
-import com.google.android.gms.vision.text.Line;
-
-import org.w3c.dom.Text;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+public class AuditChoosingActivity extends Fragment {
 
-public class AuditChoosingActivity extends Activity {
     private static String auditIDs = "";
     private int XD = 0;
     private HashMap<String,Integer> listInfo1 = new HashMap<String,Integer>();
+    private Set<Integer> auditIDS = new HashSet<>();
+
+
 
     private static AuditChoosingActivity staticAuditChoosingActivity;
-
-    public static AuditChoosingActivity getSettingsActivity() {
+    public static AuditChoosingActivity getStaticAuditChoosingActivity(){
         return staticAuditChoosingActivity;
     }
-
-    public AuditChoosingActivity() {
+    public AuditChoosingActivity(){
         staticAuditChoosingActivity = this;
     }
 
-    public String getIDs() {
-        return auditIDs;
-    }
 
+    public Set<Integer> getAuditIDS(){ return auditIDS;}
 
     public static String parseString(String input) {
         char inp[] = input.toCharArray();
@@ -65,42 +65,57 @@ public class AuditChoosingActivity extends Activity {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_auditch);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        final HashMap<String,Integer> listinfoXD = new HashMap<>();
+        listinfoXD.put("Зал 1",2);
+        listinfoXD.put("Зал 2",3);
+        listinfoXD.put("Зал 3",4);
+        listinfoXD.put("Vip 1",1);
+        listinfoXD.put("Зал 5",5);
 
-        listInfo1.putAll(QRScanActivity.getStaticQRScanActivity().getListData());
 
-//        HashMap<String, Integer> listInfo2 = new HashMap<>(QRScanActivity.getStaticQRScanActivity().getListData());
-
-
-        System.out.println(listInfo1);
+        System.out.println(listinfoXD.toString());
         System.out.println("~~~~~");
-        TextView txt = (TextView) findViewById(R.id.txtInf);
-        LinearLayout ll = (LinearLayout) findViewById(R.id.checkBoxField);
+        TextView txt = (TextView) getView().findViewById(R.id.txtInf);
+        LinearLayout ll = (LinearLayout) getView().findViewById(R.id.checkBoxField);
 
         txt.setTextSize(20);
         txt.setText("Выберите аудитории для проверки");
 
-        for (Map.Entry entry : listInfo1.entrySet()) {
+        for (Map.Entry entry : listinfoXD.entrySet()) {
 
-            final CheckBox ch = new CheckBox(AuditChoosingActivity.this);
+            final CheckBox ch = new CheckBox(getView().getContext());
             ch.setText(entry.getKey().toString());
             ch.setId(Integer.parseInt(entry.getValue().toString()));
+            ch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
+            {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
+                    if(!isChecked){
+                        System.out.println(ch.getId() + "Id not checked");
+                        auditIDS.remove(ch.getId());
 
-            for (int i = 0;
-                 i < listInfo1.size(); i++) {
-                if (auditIDs.contains(parseIntString(ch.getId()))) {
-                    ch.setChecked(true);
-                    ll.addView(ch);
+//                        TabHost tabHost = (TabHost) findViewById(R.id.tabHost);
+//                        tabHost.getTabWidget().getChildTabViewAt(1).setClickable(true);
+
+                    }
+                    else
+                    {
+                        System.out.println(ch.getId() + "Id is checked");
+                        auditIDS.add(ch.getId());
+//                        TabHost tabHost = (TabHost) findViewById(R.id.tabHost);
+//                        tabHost.getTabWidget().getChildTabViewAt(1).setClickable(true);
+                    }
                 }
-            }
+            });
+
+            ll.addView(ch);
         }
+
+        return inflater.inflate(R.layout.activity_auditch, container, false);
     }
 }
-
 /*
-
  ll1.removeViewsInLayout(2, auditNames.size() + 1);
 
     @Override

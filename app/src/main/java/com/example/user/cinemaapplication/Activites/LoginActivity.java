@@ -54,18 +54,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
 
     public void onLogin(View view) {
 
+        Intent intent = new Intent(LoginActivity.this, SplashActivity.class);
+        startActivity(intent);
+
         AsyncHttpClient client_main = new AsyncHttpClient();
         client_main.setBasicAuth(username.getText().toString(), password.getText().toString());
         client_main.setSSLSocketFactory(MySSLSocketFactory.getFixedSocketFactory());
         client_main.get("https://soft.silverscreen.by:8443/security-1.0/webapi/auth/login/" + username.getText().toString(), null, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject responseBody) {
-
-                Intent intent = new Intent(LoginActivity.this, SplashActivity.class);
-//                System.out.println("loading audit from login");
-//                System.out.println(ListData.loadAuditData());
-                startActivity(intent);
+//                Intent intent = new Intent(LoginActivity.this, SplashActivity.class);
+//                startActivity(intent);
             }
+
+
 
 
             @Override
@@ -171,8 +173,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
                                   });
 
         //tested
-        username.setText("TestSeller");
-        password.setText("TestSellerPass");
+        username.setText("Tkachev_A");
+        password.setText("111111");
 
         setTheme(R.style.splashScreenTheme);
         super.onCreate(savedInstanceState);
