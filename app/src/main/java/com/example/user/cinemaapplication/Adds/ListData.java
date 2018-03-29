@@ -89,7 +89,8 @@ public class ListData extends Application {
 
     // private static HashMap<String,Integer> AuditData = new HashMap<>();
     //HashMap sorting
-    public HashMap<String,Integer> getAuditData(){
+    public static HashMap<String,Integer> getAuditData(){
+        System.out.println("Audit data is ->" + AuditData);
         return AuditData;
     }
 

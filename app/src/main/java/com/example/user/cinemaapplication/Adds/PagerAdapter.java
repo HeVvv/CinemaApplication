@@ -13,6 +13,7 @@ import com.example.user.cinemaapplication.Activites.QRScanActivity;
 public class PagerAdapter extends FragmentPagerAdapter {
     int mNumOfTabs;
 
+
     public PagerAdapter(FragmentManager fm, int NumOfTabs) {
         super(fm);
         this.mNumOfTabs = NumOfTabs;
@@ -28,9 +29,9 @@ public class PagerAdapter extends FragmentPagerAdapter {
             case 1:
                 QRScanActivity tab2 = new QRScanActivity();
                 return tab2;
-//            case 2:
-//                HistoryListActivity tab3 = new HistoryListActivity();
-//                return tab3;
+            case 2:
+                HistoryListActivity tab3 = new HistoryListActivity();
+                return tab3;
             default:
                 return null;
         }

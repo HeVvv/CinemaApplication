@@ -16,7 +16,10 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.user.cinemaapplication.Adds.HashMapSort;
+import com.example.user.cinemaapplication.Adds.ListData;
 import com.example.user.cinemaapplication.R;
 
 import java.util.HashMap;
@@ -64,27 +67,41 @@ public class AuditChoosingActivity extends Fragment {
         return returnString;
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final HashMap<String,Integer> listinfoXD = new HashMap<>();
-        listinfoXD.put("Зал 1",2);
-        listinfoXD.put("Зал 2",3);
-        listinfoXD.put("Зал 3",4);
-        listinfoXD.put("Vip 1",1);
-        listinfoXD.put("Зал 5",5);
+        View rootView = inflater.inflate(R.layout.activity_auditch, container, false);
 
-
-        System.out.println(listinfoXD.toString());
         System.out.println("~~~~~");
-        TextView txt = (TextView) getView().findViewById(R.id.txtInf);
-        LinearLayout ll = (LinearLayout) getView().findViewById(R.id.checkBoxField);
+
+//        final HashMap<String,Integer> listinfoXD = new HashMap<>();
+//        listinfoXD.put("Зал 1",2);
+//        listinfoXD.put("Зал 2",3);
+//        listinfoXD.put("Зал 3",4);
+//        listinfoXD.put("Vip 1",1);
+//        listinfoXD.put("Зал 5",5);
+
+
+        HashMap<String, Integer> listinfo = new HashMap<String,Integer>();
+        System.out.println(listinfo);
+        listinfo.putAll(SplashActivity.getStaticSplashActivity().getDATA());
+
+        System.out.println(SplashActivity.getStaticSplashActivity().getDATA() + " 1 ");
+        System.out.println(SplashActivity.getStaticSplashActivity().getDATA2() + " 2 ");
+
+        HashMapSort.sortByComparator(listinfo,false);
+
+        System.out.println(listinfo);
+
+        TextView txt = (TextView) rootView.findViewById(R.id.txtInf);
+        LinearLayout ll = (LinearLayout) rootView.findViewById(R.id.checkBoxField);
 
         txt.setTextSize(20);
         txt.setText("Выберите аудитории для проверки");
 
-        for (Map.Entry entry : listinfoXD.entrySet()) {
+        for (Map.Entry entry : listinfo.entrySet()) {
 
-            final CheckBox ch = new CheckBox(getView().getContext());
+            final CheckBox ch = new CheckBox(rootView.getContext());
             ch.setText(entry.getKey().toString());
             ch.setId(Integer.parseInt(entry.getValue().toString()));
             ch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
@@ -94,25 +111,24 @@ public class AuditChoosingActivity extends Fragment {
                     if(!isChecked){
                         System.out.println(ch.getId() + "Id not checked");
                         auditIDS.remove(ch.getId());
-
-//                        TabHost tabHost = (TabHost) findViewById(R.id.tabHost);
-//                        tabHost.getTabWidget().getChildTabViewAt(1).setClickable(true);
-
                     }
                     else
                     {
                         System.out.println(ch.getId() + "Id is checked");
                         auditIDS.add(ch.getId());
-//                        TabHost tabHost = (TabHost) findViewById(R.id.tabHost);
-//                        tabHost.getTabWidget().getChildTabViewAt(1).setClickable(true);
                     }
                 }
             });
-
             ll.addView(ch);
         }
+        return rootView;
+    }
 
-        return inflater.inflate(R.layout.activity_auditch, container, false);
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
     }
 }
 /*

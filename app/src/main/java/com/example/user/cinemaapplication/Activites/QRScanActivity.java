@@ -96,37 +96,38 @@ public class QRScanActivity extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        final AsyncHttpClient clientSQL = new AsyncHttpClient();
-        clientSQL.setBasicAuth(LoginActivity.getStaticLoginActivity().getUsername(), LoginActivity.getStaticLoginActivity().getPassword());
-        clientSQL.setSSLSocketFactory(MySSLSocketFactory.getFixedSocketFactory());
+        View rootView = inflater.inflate(R.layout.activity_qrscan, container, false);
+        final AsyncHttpClient clientTicket = new AsyncHttpClient();
+        clientTicket.setBasicAuth(LoginActivity.getStaticLoginActivity().getUsername(), LoginActivity.getStaticLoginActivity().getPassword());
+        clientTicket.setSSLSocketFactory(MySSLSocketFactory.getFixedSocketFactory());
 
         final List<String> ticketList = new ArrayList<>();
 
-        text = (TextView) getView().findViewById(R.id.responseInfo);
-        text.setTextAppearance(getView().getContext(), R.style.TextAppearance_AppCompat_Title);
+        text = (TextView) rootView.findViewById(R.id.responseInfo);
+        text.setTextAppearance(rootView.getContext(), R.style.TextAppearance_AppCompat_Title);
         text.setGravity(Gravity.CENTER);
 
-        responseImage = (ImageView) getView().findViewById(R.id.imageView);
+        responseImage = (ImageView) rootView.findViewById(R.id.imageView);
         //responseImage.setImageResource(R.drawable.ic_launcher_foreground);
 
-        final ListView ticketHistoryList = (ListView) getView().findViewById(R.id.ticketHistoryList);
+        final ListView ticketHistoryList = (ListView) rootView.findViewById(R.id.ticketHistoryList);
 
-        mySurfaceView = (SurfaceView) getView().findViewById(R.id.camera);
+        mySurfaceView = (SurfaceView) rootView.findViewById(R.id.camera);
         final TicketListAdapter adapter = new TicketListAdapter(QRScanActivity.staticQRScanActivity.getActivity(), ticketList);
         ticketHistoryList.setAdapter(adapter);
 
-        if (ContextCompat.checkSelfPermission(getView().getContext(), Manifest.permission.CAMERA)
+        if (ContextCompat.checkSelfPermission(rootView.getContext(), Manifest.permission.CAMERA)
                 == PackageManager.PERMISSION_DENIED) {
             ActivityCompat.requestPermissions(QRScanActivity.staticQRScanActivity.getActivity(), new String[]{Manifest.permission.CAMERA}, MY_CAMERA_REQUEST_CODE);
             //not tested
         }
-
 
         qrEader = new QREader.Builder(getActivity(), mySurfaceView, new QRDataListener() {
             @Override
             public void onDetected(final String data) {
                 if (data.equals(OLD_DATA) && Calendar.getInstance().getTime().getTime() - OLD_DATE.getTime() < 3500) {
                 } else {
+                    System.out.println("scanning" + data);
                     OLD_DATA = data;
                     OLD_DATE = Calendar.getInstance().getTime();
                     Handler mainHandler = new Handler(Looper.getMainLooper());
@@ -136,50 +137,51 @@ public class QRScanActivity extends Fragment {
 //                      String data = "826/27372/203/5//11";
 
                             String test = "1/5 6" + "/" + data;
-                            try {
-                                TicketSClass ticketSClass = new TicketSClass(test);
-                                String json = JSONUtils.parseObjectToJson(ticketSClass);
-                                StringEntity entity = null;
                                 try {
-                                    entity = new StringEntity(json);
-                                } catch (UnsupportedEncodingException e) {
-                                    e.printStackTrace();
-                                }
-                                // not tested also
-                                clientSQL.put(getActivity().getApplicationContext(), check_ticket_url, entity, "application/json", new TextHttpResponseHandler() {
-                                    @Override
-                                    public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                                        String status = responseString.substring(0, 1);
-                                        final String response = responseString.substring(2, responseString.length());
+                                    TicketSClass ticketSClass = new TicketSClass(test);
+                                    String json = JSONUtils.parseObjectToJson(ticketSClass);
+                                    StringEntity entity = null;
+                                    try {
+                                        entity = new StringEntity(json);
+                                    } catch (UnsupportedEncodingException e) {
+                                        e.printStackTrace();
+                                    }
+                                    clientTicket.put(getContext(), check_ticket_url, entity, "application/json", new TextHttpResponseHandler() {
+                                        @Override
+                                        public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                                            System.out.println("error1 " + statusCode + "~~~~" + responseString);
+                                            text.setText("Error " + statusCode);
+                                        }
 
-                                        text.post(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                text.setText(response);
+                                        @Override
+                                        public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                                            String status = responseString.substring(0, 1);
+                                            final String response = responseString.substring(2, responseString.length());
+
+                                            text.post(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    text.setText(response);
+                                                }
+                                            });
+                                            ticketList.add(response);
+                                            adapter.notifyDataSetChanged();
+                                            if (status.equals("0")) {
+                                                responseImage.setImageResource(R.drawable.response_cancel);
+                                            } else if (status.equals("1")) {
+                                                responseImage.setImageResource(R.drawable.response_ok);
+                                            } else if (status.equals("2")) {
+                                                responseImage.setImageResource(R.drawable.response_qm);
                                             }
-                                        });
-                                        ticketList.add(response);
-                                        adapter.notifyDataSetChanged();
-                                        if (status.equals("0")) {
-                                            responseImage.setImageResource(R.drawable.response_cancel);
-                                        } else if (status.equals("1")) {
-                                            responseImage.setImageResource(R.drawable.response_ok);
-                                        } else if (status.equals("2")) {
-                                            responseImage.setImageResource(R.drawable.response_qm);
+                                            if (ticketList.size() > 3) {
+                                                ticketList.subList(0, ticketList.size() - 3).clear();
+                                            }
                                         }
-                                        if (ticketList.size() > 3) {
-                                            ticketList.subList(0, ticketList.size() - 3).clear();
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onFailure(int statusCode, Header[] headers, String errorString, Throwable throwable) {
-                                        System.out.println("error1 " + statusCode + "~~~~" + errorString);
-                                    }
-                                });
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                                    });
+                                }catch (IOException e){
+                                    e.printStackTrace();
+                                    System.out.println(e);
+                                }
                         }
                     };
                     mainHandler.post(myRunnable);
@@ -192,7 +194,7 @@ public class QRScanActivity extends Fragment {
                 .width(mySurfaceView.getWidth())
                 .build();
         qrEader.initAndStart(mySurfaceView);
-        return inflater.inflate(R.layout.activity_qrscan, container, false);
+        return rootView;
     }
 }
 //    @Override

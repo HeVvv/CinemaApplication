@@ -2,6 +2,7 @@ package com.example.user.cinemaapplication.Adds;
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -16,7 +17,7 @@ public class HashMapSort
     public HashMapSort(){
     }
 
-    private static Map<String, Integer> sortByComparator(Map<String, Integer> unsortMap, final boolean order)
+    public static Map<String, Integer> sortByComparator(Map<String, Integer> unsortMap, final boolean order)
     {
 
         List<Entry<String, Integer>> list = new LinkedList<Entry<String, Integer>>(unsortMap.entrySet());

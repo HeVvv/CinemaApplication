@@ -1,13 +1,33 @@
 package com.example.user.cinemaapplication.Activites;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
+import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 
+import com.example.user.cinemaapplication.Adds.HashMapSort;
+import com.example.user.cinemaapplication.Adds.JSONUtils;
 import com.example.user.cinemaapplication.Adds.ListData;
+import com.example.user.cinemaapplication.Adds.TicketSClass;
+import com.example.user.cinemaapplication.R;
+import com.loopj.android.http.TextHttpResponseHandler;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
+
+import javax.xml.transform.Result;
+
+import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.entity.StringEntity;
+import github.nisrulz.qreader.QRDataListener;
+import github.nisrulz.qreader.QREader;
 
 /**
  * Created by User on 22.03.2018.
@@ -15,7 +35,7 @@ import java.util.HashMap;
 
 public class SplashActivity extends AppCompatActivity{
     private HashMap <String,Integer> DATA = new HashMap<>();
-
+    private HashMap <String,Integer> DATA2 = new HashMap<>();
 
     private static SplashActivity staticSplashActivity;
     public static SplashActivity getStaticSplashActivity(){
@@ -28,25 +48,15 @@ public class SplashActivity extends AppCompatActivity{
     public HashMap<String, Integer> getDATA(){
         return DATA;
     }
+    public HashMap<String, Integer> getDATA2(){
+        return DATA2;
+    }
+
 
     @Override
     public void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
+        
 
-        /* New Handler to start the Menu-Activity
-         * and close this Splash-Screen after some seconds.*/
-        new Handler().post(new Runnable(){
-            @Override
-            public void run() {
-                ListData.loadAuditData();
-
-                LoginActivity.getStaticLoginActivity().getPassword();
-
-                Intent mainIntent = new Intent(SplashActivity.this,TabActivity.class);
-                SplashActivity.this.startActivity(mainIntent);
-                SplashActivity.this.finish();
-
-            }
-        });
     }
 }
