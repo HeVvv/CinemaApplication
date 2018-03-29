@@ -56,7 +56,27 @@ public class SplashActivity extends AppCompatActivity{
     @Override
     public void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
-        
+
+
+        Handler handler1 = new Handler();
+        handler1.post(new Runnable() {
+            @Override
+            public void run() {
+                DATA = ListData.loadAuditData();
+            }
+        });
+
+        Handler handler2 = new Handler();
+        handler2.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent openMainActivity =  new Intent(SplashActivity.this, TabActivity.class);
+                startActivity(openMainActivity);
+                finish();
+            }
+        }, 1500);
+
+
 
     }
 }
