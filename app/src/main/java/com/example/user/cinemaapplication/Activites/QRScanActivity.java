@@ -21,10 +21,7 @@ import android.view.LayoutInflater;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -37,6 +34,7 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.MySSLSocketFactory;
 import com.loopj.android.http.TextHttpResponseHandler;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -53,6 +51,8 @@ import cz.msebera.android.httpclient.entity.StringEntity;
 import github.nisrulz.qreader.QRDataListener;
 import github.nisrulz.qreader.QREader;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class QRScanActivity extends Fragment {
 
     private SurfaceView mySurfaceView;
@@ -61,6 +61,7 @@ public class QRScanActivity extends Fragment {
     private String OLD_DATA = "";
     private Date OLD_DATE = Calendar.getInstance().getTime();
     private HashMap<String, Integer> list = ListData.loadAuditData();
+    private final static String FILE_NAME = "history.txt";
 
     TextView text;
     ImageView responseImage;
@@ -93,6 +94,26 @@ public class QRScanActivity extends Fragment {
         }
     }
 
+    public String getAuditoriumsIDS(){
+        Set<Integer> newset = AuditChoosingActivity.getStaticAuditChoosingActivity().getAuditIDS();
+
+        HashSet<String> strs = new HashSet<String>(newset.size());
+        for(Integer integer : newset)
+            strs.add(integer.toString());
+        StringBuilder sb = new StringBuilder();
+        String prefix = "";
+        for (String s : strs)
+        {
+            sb.append(prefix);
+            prefix = " ";
+            sb.append(s);
+        }
+
+        System.out.println(sb.toString());
+        return sb.toString();
+    }
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -116,10 +137,19 @@ public class QRScanActivity extends Fragment {
         final TicketListAdapter adapter = new TicketListAdapter(QRScanActivity.staticQRScanActivity.getActivity(), ticketList);
         ticketHistoryList.setAdapter(adapter);
 
-        if (ContextCompat.checkSelfPermission(rootView.getContext(), Manifest.permission.CAMERA)
+
+
+
+
+
+
+            if (ContextCompat.checkSelfPermission(rootView.getContext(), Manifest.permission.CAMERA)
                 == PackageManager.PERMISSION_DENIED) {
             ActivityCompat.requestPermissions(QRScanActivity.staticQRScanActivity.getActivity(), new String[]{Manifest.permission.CAMERA}, MY_CAMERA_REQUEST_CODE);
             //not tested
+            // on 1st launch asks for permission and doesnt enable cam?
+            //does that on 2nd launch
+
         }
 
         qrEader = new QREader.Builder(getActivity(), mySurfaceView, new QRDataListener() {
@@ -136,8 +166,10 @@ public class QRScanActivity extends Fragment {
                         public void run() {
 //                      String data = "826/27372/203/5//11";
 
-                            String test = "1/5 6" + "/" + data;
+                            final String test = "1/" + QRScanActivity.getStaticQRScanActivity().getAuditoriumsIDS() + "/" + data;
                                 try {
+
+                                    System.out.println(test + " put string!");
                                     TicketSClass ticketSClass = new TicketSClass(test);
                                     String json = JSONUtils.parseObjectToJson(ticketSClass);
                                     StringEntity entity = null;
@@ -147,6 +179,7 @@ public class QRScanActivity extends Fragment {
                                         e.printStackTrace();
                                     }
                                     clientTicket.put(getContext(), check_ticket_url, entity, "application/json", new TextHttpResponseHandler() {
+
                                         @Override
                                         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                                             System.out.println("error1 " + statusCode + "~~~~" + responseString);
@@ -162,6 +195,7 @@ public class QRScanActivity extends Fragment {
                                                 @Override
                                                 public void run() {
                                                     text.setText(response);
+
                                                 }
                                             });
                                             ticketList.add(response);
@@ -197,6 +231,7 @@ public class QRScanActivity extends Fragment {
         return rootView;
     }
 }
+
 //    @Override
 //    protected void onCreate(Bundle savedInstanceState) {
 //
