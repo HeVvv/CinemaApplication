@@ -43,12 +43,16 @@ public class HistoryListActivity extends android.support.v4.app.Fragment{
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootview = inflater.inflate(R.layout.activity_history,container,false);
+        View rootView = inflater.inflate(R.layout.activity_history,container,false);
 
-        textView = (TextView) rootview.findViewById(R.id.textVIEW);
+        final List<String> ticketList = new ArrayList<>();
+
+        final ListView ticketHistoryList = (ListView) rootView.findViewById(R.id.ticketHistoryList);
+        final TicketListAdapter adapter = new TicketListAdapter(getActivity(), ticketList);
+        ticketHistoryList.setAdapter(adapter);
+        textView = (TextView) rootView.findViewById(R.id.textVIEW);
 
         //broken
-        //reads only 1 existing string
         Timer myTimer = new Timer(); // Создаем таймер
         final Handler uiHandler = new Handler();
         myTimer.schedule(new TimerTask() { // Определяем задачу
@@ -57,16 +61,18 @@ public class HistoryListActivity extends android.support.v4.app.Fragment{
                 uiHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        textView.setText(FileAdapter.readFile(getContext()));
+                            ticketList.add(FileAdapter.readFile(getContext()));
+//                        textView.setText(FileAdapter.readFile(getContext()));
                     }
                 });
             };
         }, 0L, 3000 ); //
 
+        //not tested
 
-        List<String> ticketList = new ArrayList<>();
 
-        return rootview;
+
+        return rootView;
     }
 
     @Override
