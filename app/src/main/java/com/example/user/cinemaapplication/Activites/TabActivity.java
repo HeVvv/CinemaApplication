@@ -1,5 +1,6 @@
 package com.example.user.cinemaapplication.Activites;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -15,7 +16,6 @@ import com.example.user.cinemaapplication.R;
 
 
 public class TabActivity extends AppCompatActivity {
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

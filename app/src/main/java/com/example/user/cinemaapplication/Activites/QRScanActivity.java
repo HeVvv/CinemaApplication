@@ -9,6 +9,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
@@ -25,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.user.cinemaapplication.Adds.FileAdapter;
 import com.example.user.cinemaapplication.Adds.JSONUtils;
 import com.example.user.cinemaapplication.Adds.ListData;
 import com.example.user.cinemaapplication.Adds.TicketListAdapter;
@@ -34,6 +36,7 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.MySSLSocketFactory;
 import com.loopj.android.http.TextHttpResponseHandler;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -66,6 +69,8 @@ public class QRScanActivity extends Fragment {
     TextView text;
     ImageView responseImage;
 
+
+
     public String check_ticket_url = "https://soft.silverscreen.by:8443/wsglobal/webapi/check/ticket";
 
     private static QRScanActivity staticQRScanActivity;
@@ -81,7 +86,6 @@ public class QRScanActivity extends Fragment {
     public HashMap<String, Integer> getListData() {
         return list;
     }
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -114,6 +118,8 @@ public class QRScanActivity extends Fragment {
     }
 
 
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -131,15 +137,12 @@ public class QRScanActivity extends Fragment {
         responseImage = (ImageView) rootView.findViewById(R.id.imageView);
         //responseImage.setImageResource(R.drawable.ic_launcher_foreground);
 
-        final ListView ticketHistoryList = (ListView) rootView.findViewById(R.id.ticketHistoryList);
-
         mySurfaceView = (SurfaceView) rootView.findViewById(R.id.camera);
+
+
+        final ListView ticketHistoryList = (ListView) rootView.findViewById(R.id.ticketHistoryList);
         final TicketListAdapter adapter = new TicketListAdapter(QRScanActivity.staticQRScanActivity.getActivity(), ticketList);
         ticketHistoryList.setAdapter(adapter);
-
-
-
-
 
 
 
@@ -151,6 +154,11 @@ public class QRScanActivity extends Fragment {
             //does that on 2nd launch
 
         }
+
+
+
+
+
 
         qrEader = new QREader.Builder(getActivity(), mySurfaceView, new QRDataListener() {
             @Override
@@ -165,11 +173,9 @@ public class QRScanActivity extends Fragment {
                         @Override
                         public void run() {
 //                      String data = "826/27372/203/5//11";
-
                             final String test = "1/" + QRScanActivity.getStaticQRScanActivity().getAuditoriumsIDS() + "/" + data;
                                 try {
 
-                                    System.out.println(test + " put string!");
                                     TicketSClass ticketSClass = new TicketSClass(test);
                                     String json = JSONUtils.parseObjectToJson(ticketSClass);
                                     StringEntity entity = null;
@@ -198,6 +204,7 @@ public class QRScanActivity extends Fragment {
 
                                                 }
                                             });
+                                            FileAdapter.writeFile(test,getContext());
                                             ticketList.add(response);
                                             adapter.notifyDataSetChanged();
                                             if (status.equals("0")) {

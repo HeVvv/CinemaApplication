@@ -1,5 +1,6 @@
 package com.example.user.cinemaapplication.Activites;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -16,11 +17,13 @@ import com.example.user.cinemaapplication.Adds.TicketSClass;
 import com.example.user.cinemaapplication.R;
 import com.loopj.android.http.TextHttpResponseHandler;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.xml.transform.Result;
 
@@ -36,6 +39,8 @@ import github.nisrulz.qreader.QREader;
 public class SplashActivity extends AppCompatActivity{
     private HashMap <String,Integer> DATA = new HashMap<>();
     private HashMap <String,Integer> DATA2 = new HashMap<>();
+
+    Context ctx = this;
 
     private static SplashActivity staticSplashActivity;
     public static SplashActivity getStaticSplashActivity(){
@@ -56,6 +61,17 @@ public class SplashActivity extends AppCompatActivity{
     @Override
     public void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
+
+        File file1 = new File(ctx.getFilesDir(), "history.txt");
+        try {
+            if (file1.createNewFile()) {
+                System.out.println("Файл создан: " + file1.getAbsolutePath());
+            } else {
+                System.out.println("Не удалось создать файл.");
+            }
+        } catch (IOException ex) {
+            System.out.println("Creation file Error");
+        }
 
 
         Handler handler1 = new Handler();
