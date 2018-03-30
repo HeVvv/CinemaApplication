@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.user.cinemaapplication.Adds.FileAdapter;
 import com.example.user.cinemaapplication.Adds.PagerAdapter;
 import com.example.user.cinemaapplication.R;
 
@@ -23,7 +24,6 @@ public class TabActivity extends AppCompatActivity {
         setContentView(R.layout.activity_tab2);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText("Выбор аудиторий"));
         tabLayout.addTab(tabLayout.newTab().setText("Скан"));

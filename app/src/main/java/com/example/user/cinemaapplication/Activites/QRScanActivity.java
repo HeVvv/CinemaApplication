@@ -157,7 +157,7 @@ public class QRScanActivity extends Fragment {
 
 
 
-
+//        FileAdapter.deleteFile(getContext());
 
 
         qrEader = new QREader.Builder(getActivity(), mySurfaceView, new QRDataListener() {
@@ -201,10 +201,10 @@ public class QRScanActivity extends Fragment {
                                                 @Override
                                                 public void run() {
                                                     text.setText(response);
-
+                                                    FileAdapter.writeFile(response,getContext());
                                                 }
                                             });
-                                            FileAdapter.writeFile(test,getContext());
+
                                             ticketList.add(response);
                                             adapter.notifyDataSetChanged();
                                             if (status.equals("0")) {

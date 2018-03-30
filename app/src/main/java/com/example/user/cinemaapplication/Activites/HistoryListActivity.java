@@ -48,6 +48,7 @@ public class HistoryListActivity extends android.support.v4.app.Fragment{
         textView = (TextView) rootview.findViewById(R.id.textVIEW);
 
         //broken
+        //reads only 1 existing string
         Timer myTimer = new Timer(); // Создаем таймер
         final Handler uiHandler = new Handler();
         myTimer.schedule(new TimerTask() { // Определяем задачу
@@ -60,9 +61,7 @@ public class HistoryListActivity extends android.support.v4.app.Fragment{
                     }
                 });
             };
-        }, 0L, 2000 ); //
-
-
+        }, 0L, 3000 ); //
 
 
         List<String> ticketList = new ArrayList<>();
