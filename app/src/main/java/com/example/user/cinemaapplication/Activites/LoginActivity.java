@@ -54,8 +54,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
 
     public void onLogin(View view) {
 
-        Intent intent = new Intent(LoginActivity.this, SplashActivity.class);
-        startActivity(intent);
 
         AsyncHttpClient client_main = new AsyncHttpClient();
         client_main.setBasicAuth(username.getText().toString(), password.getText().toString());
@@ -63,11 +61,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
         client_main.get("https://soft.silverscreen.by:8443/security-1.0/webapi/auth/login/" + username.getText().toString(), null, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject responseBody) {
-//                Intent intent = new Intent(LoginActivity.this, SplashActivity.class);
-//                startActivity(intent);
+
+                Intent intent = new Intent(LoginActivity.this, SplashActivity.class);
+                startActivity(intent);
             }
-
-
 
 
             @Override
@@ -152,6 +149,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
 
 
         Logo = (ImageView) findViewById(R.id.logo);
+        //App logo
         Logo.setImageResource(R.drawable.response_ok);
 
 

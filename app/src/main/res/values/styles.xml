@@ -4,20 +4,21 @@
 <!-- Base application theme. -->
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme">
         <!--   your app branding color for the app bar -->
         <item name="colorPrimary">#3F51B5</item>
         <!--   darker variant for the status bar and contextual app bars -->
         <item name="colorPrimaryDark">#303F9F</item>
         <!--   theme UI controls like checkboxes and text fields -->
         <item name="colorAccent">#FF4081</item>
+    </style>
 
-    <!-- Customize your theme here. -->
-</style>
-    <style name="CustomTheme" parent="@android:style/Theme.Holo">
+    <style name="CustomTheme">
         <item name="android:listViewStyle">@style/CustomListView</item>
         <item name="android:textViewStyle">@style/CustomTextView</item>
+        <item name="android:checkboxStyle">@style/customCheckBoxStyle</item>
     </style>
+
 
     <style name="CustomListView" parent="@android:style/Widget.ListView">
         <item name="android:fastScrollEnabled">true</item>
@@ -26,10 +27,6 @@
 
     <style name="CustomTextView" parent="@android:style/Widget.TextView">
         <item name="android:typeface">monospace</item>
-        <item name="android:shadowColor">#000000</item>
-        <item name="android:shadowRadius">2.</item>
-        <item name="android:shadowDx">4</item>
-        <item name="android:shadowDy">4</item>
     </style>
 
     <style name="NoShadowButton" parent="android:style/Widget.Button">
@@ -39,4 +36,13 @@
     <style name="splashScreenTheme" parent="@android:style/Theme.DeviceDefault.Light.NoActionBar">
         <item name="android:windowBackground">@drawable/splash_screen</item>
     </style>
+
+    <style name="customCheckBoxStyle" parent="@android:style/Widget.Holo.CompoundButton.CheckBox">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">160dp</item>
+        <item name="android:textSize">30sp</item>
+        <item name="android:width">200dp</item>
+        <item name="android:height">200dp</item>
+    </style>
+
 </resources>

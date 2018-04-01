@@ -1,17 +1,16 @@
 package com.example.user.cinemaapplication.Activites;
 
-/**
- * Created by User on 28.03.2018.
- */
 
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
@@ -99,20 +98,10 @@ public class AuditChoosingActivity extends Fragment {
 
         System.out.println("~~~~~");
 
-//        final HashMap<String,Integer> listinfoXD = new HashMap<>();
-//        listinfoXD.put("Зал 1",2);
-//        listinfoXD.put("Зал 2",3);
-//        listinfoXD.put("Зал 3",4);
-//        listinfoXD.put("Vip 1",1);
-//        listinfoXD.put("Зал 5",5);
-
 
         HashMap <String,Integer> unsorted = SplashActivity.getStaticSplashActivity().getDATA();
 
         Map <String,Integer> listinfo = HashMapSort.sortByComparator(unsorted,true);
-
-        System.out.println(listinfo);
-
 
         TextView txt = (TextView) rootView.findViewById(R.id.txtInf);
         LinearLayout ll = (LinearLayout) rootView.findViewById(R.id.checkBoxField);
@@ -121,10 +110,11 @@ public class AuditChoosingActivity extends Fragment {
         txt.setText("Выберите аудитории для проверки");
 
         for (Map.Entry entry : listinfo.entrySet()) {
-
             final CheckBox ch = new CheckBox(rootView.getContext());
+
             ch.setText(entry.getKey().toString());
             ch.setId(Integer.parseInt(entry.getValue().toString()));
+
             ch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
             {
                 @Override
@@ -142,6 +132,7 @@ public class AuditChoosingActivity extends Fragment {
             });
             ll.addView(ch);
         }
+
         return rootView;
     }
 
@@ -151,6 +142,8 @@ public class AuditChoosingActivity extends Fragment {
         super.onCreate(savedInstanceState);
 
     }
+
+
 }
 /*
  ll1.removeViewsInLayout(2, auditNames.size() + 1);

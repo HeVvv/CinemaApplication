@@ -7,6 +7,7 @@ package com.example.user.cinemaapplication.Activites;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
@@ -48,6 +49,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.entity.StringEntity;
@@ -67,6 +69,7 @@ public class QRScanActivity extends Fragment {
     private final static String FILE_NAME = "history.txt";
 
     TextView text;
+    TextView textAdd;
     ImageView responseImage;
 
 
@@ -117,8 +120,16 @@ public class QRScanActivity extends Fragment {
         return sb.toString();
     }
 
+    public List<String> contentString(String s){
+        List<String> info = new ArrayList<>();
 
+        StringTokenizer st = new StringTokenizer(s, "|");
+        while(st.hasMoreTokens()){
+           info.add(st.nextToken());
+        }
 
+        return info;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -128,32 +139,36 @@ public class QRScanActivity extends Fragment {
         clientTicket.setBasicAuth(LoginActivity.getStaticLoginActivity().getUsername(), LoginActivity.getStaticLoginActivity().getPassword());
         clientTicket.setSSLSocketFactory(MySSLSocketFactory.getFixedSocketFactory());
 
-        final List<String> ticketList = new ArrayList<>();
+//        final List<String> ticketList = new ArrayList<>();
 
         text = (TextView) rootView.findViewById(R.id.responseInfo);
         text.setTextAppearance(rootView.getContext(), R.style.TextAppearance_AppCompat_Title);
         text.setGravity(Gravity.CENTER);
 
-        responseImage = (ImageView) rootView.findViewById(R.id.imageView);
-        //responseImage.setImageResource(R.drawable.ic_launcher_foreground);
+        textAdd = (TextView) rootView.findViewById(R.id.responseinfo2);
+        textAdd.setTextAppearance(rootView.getContext(),R.style.TextAppearance_AppCompat);
+        textAdd.setGravity(Gravity.CENTER);
+
+//        responseImage = (ImageView) rootView.findViewById(R.id.imageView);
+//        responseImage.setImageResource(R.drawable.ic_launcher_foreground);
 
         mySurfaceView = (SurfaceView) rootView.findViewById(R.id.camera);
 
 
-        final ListView ticketHistoryList = (ListView) rootView.findViewById(R.id.ticketHistoryList);
-        final TicketListAdapter adapter = new TicketListAdapter(QRScanActivity.staticQRScanActivity.getActivity(), ticketList);
-        ticketHistoryList.setAdapter(adapter);
+//        final ListView ticketHistoryList = (ListView) rootView.findViewById(R.id.ticketHistoryList);
+//        final TicketListAdapter adapter = new TicketListAdapter(QRScanActivity.staticQRScanActivity.getActivity(), ticketList);
+//        ticketHistoryList.setAdapter(adapter);
 
 
 
             if (ContextCompat.checkSelfPermission(rootView.getContext(), Manifest.permission.CAMERA)
                 == PackageManager.PERMISSION_DENIED) {
             ActivityCompat.requestPermissions(QRScanActivity.staticQRScanActivity.getActivity(), new String[]{Manifest.permission.CAMERA}, MY_CAMERA_REQUEST_CODE);
-            //not tested
-            // on 1st launch asks for permission and doesnt enable cam?
-            //does that on 2nd launch
-
+                Intent intent = getActivity().getIntent();
+                getActivity().finish();
+                startActivity(intent);
         }
+
 
 
 
@@ -193,30 +208,35 @@ public class QRScanActivity extends Fragment {
                                         }
 
                                         @Override
-                                        public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                                        public void onSuccess(int statusCode, Header[] headers, final String responseString) {
                                             String status = responseString.substring(0, 1);
                                             final String response = responseString.substring(2, responseString.length());
-
+                                            final List<String> info = contentString(response);
                                             text.post(new Runnable() {
                                                 @Override
                                                 public void run() {
-                                                    text.setText(response);
-                                                    FileAdapter.writeFile(response,getContext());
+                                                    text.setText(info.get(0));
+                                                    textAdd.setText(info.get(1));
+
+                                                    FileAdapter.writeFile(responseString,getContext());
+
                                                 }
                                             });
 
-                                            ticketList.add(response);
-                                            adapter.notifyDataSetChanged();
-                                            if (status.equals("0")) {
-                                                responseImage.setImageResource(R.drawable.response_cancel);
-                                            } else if (status.equals("1")) {
-                                                responseImage.setImageResource(R.drawable.response_ok);
-                                            } else if (status.equals("2")) {
-                                                responseImage.setImageResource(R.drawable.response_qm);
-                                            }
-                                            if (ticketList.size() > 3) {
-                                                ticketList.subList(0, ticketList.size() - 3).clear();
-                                            }
+//                                            ticketList.add(response);
+//                                            adapter.notifyDataSetChanged();
+
+
+//                                            if (status.equals("0")) {
+//                                                responseImage.setImageResource(R.drawable.response_cancel);
+//                                            } else if (status.equals("1")) {
+//                                                responseImage.setImageResource(R.drawable.response_ok);
+//                                            } else if (status.equals("2")) {
+//                                                responseImage.setImageResource(R.drawable.response_qm);
+//                                            }
+//                                            if (ticketList.size() > 3) {
+//                                                ticketList.subList(0, ticketList.size() - 3).clear();
+//                                            }
                                         }
                                     });
                                 }catch (IOException e){

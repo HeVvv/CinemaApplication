@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+<com.facebook.shimmer.ShimmerFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/shimmer_view_container"
+    android:layout_width="150dp"
+    android:layout_height="100dp"
+    android:layout_gravity="center">
 
-    <ImageView android:id="@+id/splashscreen" android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:src="@drawable/response_qm"
-        android:layout_gravity="center"/>
 
-    <TextView android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="Hello World, splash"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:foregroundGravity="center"
+        android:gravity="center_horizontal"
+        android:text="Loading"
+        android:textSize="40dp"/>
 
-</LinearLayout>
+</com.facebook.shimmer.ShimmerFrameLayout>

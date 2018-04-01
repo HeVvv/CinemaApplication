@@ -15,6 +15,7 @@ import com.example.user.cinemaapplication.Adds.JSONUtils;
 import com.example.user.cinemaapplication.Adds.ListData;
 import com.example.user.cinemaapplication.Adds.TicketSClass;
 import com.example.user.cinemaapplication.R;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.loopj.android.http.TextHttpResponseHandler;
 
 import java.io.File;
@@ -57,10 +58,16 @@ public class SplashActivity extends AppCompatActivity{
         return DATA2;
     }
 
-
+    //google shimmer for android
+    //maybe add as animation
     @Override
     public void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
+        setContentView(R.layout.activity_splash);
+
+        ShimmerFrameLayout container =
+                (ShimmerFrameLayout) findViewById(R.id.shimmer_view_container);
+        container.startShimmerAnimation();
 
         File file1 = new File(ctx.getFilesDir(), "history.txt");
         try {
