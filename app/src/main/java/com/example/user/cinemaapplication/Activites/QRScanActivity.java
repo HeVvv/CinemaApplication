@@ -95,7 +95,9 @@ public class QRScanActivity extends Fragment {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 1) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // perform your action here
+                Intent intent = getActivity().getIntent();
+                getActivity().finish();
+                startActivity(intent);
             } else {
             }
         }
@@ -164,12 +166,8 @@ public class QRScanActivity extends Fragment {
             if (ContextCompat.checkSelfPermission(rootView.getContext(), Manifest.permission.CAMERA)
                 == PackageManager.PERMISSION_DENIED) {
             ActivityCompat.requestPermissions(QRScanActivity.staticQRScanActivity.getActivity(), new String[]{Manifest.permission.CAMERA}, MY_CAMERA_REQUEST_CODE);
-                Intent intent = getActivity().getIntent();
-                getActivity().finish();
-                startActivity(intent);
+
         }
-
-
 
 
 //        FileAdapter.deleteFile(getContext());

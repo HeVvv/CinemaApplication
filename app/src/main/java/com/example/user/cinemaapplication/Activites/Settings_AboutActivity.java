@@ -13,9 +13,6 @@ import com.example.user.cinemaapplication.R;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * Created by User on 24.03.2018.
- */
 
 public class Settings_AboutActivity extends Activity {
 
