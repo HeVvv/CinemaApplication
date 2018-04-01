@@ -65,6 +65,7 @@ public class SplashActivity extends AppCompatActivity{
         super.onCreate(savedInstance);
         setContentView(R.layout.activity_splash);
 
+
         ShimmerFrameLayout container =
                 (ShimmerFrameLayout) findViewById(R.id.shimmer_view_container);
         container.startShimmerAnimation();
