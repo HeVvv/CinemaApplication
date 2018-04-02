@@ -35,25 +35,54 @@ public class Settings_AboutActivity extends AppCompatActivity {
     private TextView txt;
     private SurfaceView mySurfaceView;
     private Button button;
+    private Button buttonShow;
     private SurfaceView overlay;
-    private Canvas mCanvas;
-
-
+    private Button buttonRemove;
+    private LinearLayout relativelayout;
+    private ImageView response;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
 
         setContentView(R.layout.activity_settings_about);
         mySurfaceView = (SurfaceView) findViewById(R.id.cameraSettings);
-        LinearLayout ll = (LinearLayout) findViewById(R.id.overlay);
-        final ImageView iv = (ImageView) findViewById(R.id.response);
+        final LinearLayout ll = (LinearLayout) findViewById(R.id.overlay);
 
+
+        final int i = 0;
 
         button = (Button) findViewById(R.id.drawoverlay);
+        button.setText("SetImage");
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                iv.setImageResource(R.drawable.response_ok);
+                if(i == 0){
+                    response = (ImageView) findViewById(R.id.response);
+                    response.setImageResource(R.drawable.response_ok);
+                    if(response.getParent()!=null)
+                        ((ViewGroup)response.getParent()).removeView(response); // <- fix
+                    ll.addView(response);
+                }
+            }
+        });
+
+        buttonRemove = (Button) findViewById(R.id.removeoverlay);
+        buttonRemove.setText("Remove");
+        buttonRemove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                response.setVisibility(View.GONE);
+                System.out.println("Gone");
+            }
+        });
+
+        buttonShow = (Button) findViewById(R.id.showOverlay);
+
+        buttonShow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                response.setVisibility(View.VISIBLE);
+                System.out.println("Visible");
             }
         });
 

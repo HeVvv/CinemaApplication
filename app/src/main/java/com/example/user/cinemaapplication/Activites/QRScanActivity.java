@@ -27,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.dlazaro66.qrcodereaderview.QRToViewPointTransformer;
 import com.example.user.cinemaapplication.Adds.FileAdapter;
 import com.example.user.cinemaapplication.Adds.JSONUtils;
 import com.example.user.cinemaapplication.Adds.ListData;
@@ -41,6 +42,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -67,6 +69,7 @@ public class QRScanActivity extends Fragment {
     private Date OLD_DATE = Calendar.getInstance().getTime();
     private HashMap<String, Integer> list = ListData.loadAuditData();
     private final static String FILE_NAME = "history.txt";
+    private static SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
 
     TextView text;
     TextView textAdd;
@@ -134,14 +137,28 @@ public class QRScanActivity extends Fragment {
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        qrEader.stop();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        qrEader.initAndStart(mySurfaceView);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+
 
         View rootView = inflater.inflate(R.layout.activity_qrscan, container, false);
         final AsyncHttpClient clientTicket = new AsyncHttpClient();
         clientTicket.setBasicAuth(LoginActivity.getStaticLoginActivity().getUsername(), LoginActivity.getStaticLoginActivity().getPassword());
         clientTicket.setSSLSocketFactory(MySSLSocketFactory.getFixedSocketFactory());
 
-//        final List<String> ticketList = new ArrayList<>();
+        final List<String> ticketList = new ArrayList<>();
 
         text = (TextView) rootView.findViewById(R.id.responseInfo);
         text.setTextAppearance(rootView.getContext(), R.style.TextAppearance_AppCompat_Title);
@@ -151,15 +168,15 @@ public class QRScanActivity extends Fragment {
         textAdd.setTextAppearance(rootView.getContext(),R.style.TextAppearance_AppCompat);
         textAdd.setGravity(Gravity.CENTER);
 
-//        responseImage = (ImageView) rootView.findViewById(R.id.imageView);
-//        responseImage.setImageResource(R.drawable.ic_launcher_foreground);
+        responseImage = (ImageView) rootView.findViewById(R.id.imageView);
+        responseImage.setImageResource(R.drawable.ic_launcher_foreground);
 
         mySurfaceView = (SurfaceView) rootView.findViewById(R.id.camera);
 
 
-//        final ListView ticketHistoryList = (ListView) rootView.findViewById(R.id.ticketHistoryList);
-//        final TicketListAdapter adapter = new TicketListAdapter(QRScanActivity.staticQRScanActivity.getActivity(), ticketList);
-//        ticketHistoryList.setAdapter(adapter);
+        final ListView ticketHistoryList = (ListView) rootView.findViewById(R.id.ticketHistoryList);
+        final TicketListAdapter adapter = new TicketListAdapter(QRScanActivity.staticQRScanActivity.getActivity(), ticketList);
+        ticketHistoryList.setAdapter(adapter);
 
 
 
@@ -169,11 +186,10 @@ public class QRScanActivity extends Fragment {
 
         }
 
-
-        //        FileAdapter.deleteFile(getContext());
-
+        //       FileAdapter.deleteFile(getContext());
 
         qrEader = new QREader.Builder(getActivity(), mySurfaceView, new QRDataListener() {
+
             @Override
             public void onDetected(final String data) {
                 if (data.equals(OLD_DATA) && Calendar.getInstance().getTime().getTime() - OLD_DATE.getTime() < 3500) {
@@ -215,26 +231,21 @@ public class QRScanActivity extends Fragment {
                                                 public void run() {
                                                     text.setText(info.get(0));
                                                     textAdd.setText(info.get(1));
-
                                                     FileAdapter.writeFile(responseString,getContext());
-
                                                 }
                                             });
-
-//                                            ticketList.add(response);
-//                                            adapter.notifyDataSetChanged();
-
-
-//                                            if (status.equals("0")) {
-//                                                responseImage.setImageResource(R.drawable.response_cancel);
-//                                            } else if (status.equals("1")) {
-//                                                responseImage.setImageResource(R.drawable.response_ok);
-//                                            } else if (status.equals("2")) {
-//                                                responseImage.setImageResource(R.drawable.response_qm);
-//                                            }
-//                                            if (ticketList.size() > 3) {
-//                                                ticketList.subList(0, ticketList.size() - 3).clear();
-//                                            }
+                                            ticketList.add(response + " " + dateFormat.format(Calendar.getInstance().getTime()));
+                                            adapter.notifyDataSetChanged();
+                                            if (status.equals("0")) {
+                                                responseImage.setImageResource(R.drawable.response_cancel);
+                                            } else if (status.equals("1")) {
+                                                responseImage.setImageResource(R.drawable.response_ok);
+                                            } else if (status.equals("2")) {
+                                                responseImage.setImageResource(R.drawable.response_qm);
+                                            }
+                                            if (ticketList.size() > 3) {
+                                                ticketList.subList(0, ticketList.size() - 3).clear();
+                                            }
                                         }
                                     });
                                 }catch (IOException e){

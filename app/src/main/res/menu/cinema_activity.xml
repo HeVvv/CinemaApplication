@@ -20,5 +20,10 @@
             android:title = "@string/Log_off"
             app:showAsAction = "never"/>
 
+        <item
+            android:id="@+id/action_delete"
+            android:orderInCategory ="102"
+            android:title = "Delete history file"
+            app:showAsAction = "never"/>
 
 </menu>

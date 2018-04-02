@@ -51,8 +51,6 @@ public class HistoryListActivity extends android.support.v4.app.Fragment{
     Button refresh;
 
 
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, final Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.activity_history,container,false);
@@ -62,23 +60,8 @@ public class HistoryListActivity extends android.support.v4.app.Fragment{
         final ListView ticketHistoryList = (ListView) rootView.findViewById(R.id.History);
         final TicketListAdapter adapter = new TicketListAdapter(getActivity(), ticketList);
         ticketHistoryList.setAdapter(adapter);
-//        textView = (TextView) rootView.findViewById(R.id.textVIEW);
-//        refresh = (Button) rootView.findViewById(R.id.refresh);
-//        refresh.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                System.out.println("reading from file");
-//
-//                String s = FileAdapter.readFromFile(getContext());
-//                textView.setText("");
-//                textView.setText(s);
-//
-//                System.out.println("This is list history -> " + buildHistoryList(getContext()));
-//            }
-//        });
 
-        //broken
-        Timer myTimer = new Timer(); // Создаем таймер
+        Timer myTimer = new Timer();
         final Handler uiHandler = new Handler();
         myTimer.schedule(new TimerTask() { // Определяем задачу
             @Override
@@ -92,9 +75,7 @@ public class HistoryListActivity extends android.support.v4.app.Fragment{
                     }
                 });
             }
-        }, 0L, 3000 ); //
-
-        //not tested
+        }, 0L, 10000 );
 
         return rootView;
     }

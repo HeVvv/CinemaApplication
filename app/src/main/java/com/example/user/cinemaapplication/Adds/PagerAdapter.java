@@ -1,10 +1,14 @@
 package com.example.user.cinemaapplication.Adds;
 
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.util.AttributeSet;
+import android.view.MotionEvent;
 
 import com.example.user.cinemaapplication.Activites.AuditChoosingActivity;
 import com.example.user.cinemaapplication.Activites.HistoryListActivity;
@@ -12,7 +16,6 @@ import com.example.user.cinemaapplication.Activites.QRScanActivity;
 
 public class PagerAdapter extends FragmentPagerAdapter {
     int mNumOfTabs;
-
 
     public PagerAdapter(FragmentManager fm, int NumOfTabs) {
         super(fm);
@@ -36,6 +39,7 @@ public class PagerAdapter extends FragmentPagerAdapter {
                 return null;
         }
     }
+
 
     @Override
     public int getCount() {

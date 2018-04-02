@@ -23,7 +23,9 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import javax.xml.transform.Result;
@@ -39,7 +41,7 @@ import github.nisrulz.qreader.QREader;
 
 public class SplashActivity extends AppCompatActivity{
     private HashMap <String,Integer> DATA = new HashMap<>();
-    private HashMap <String,Integer> DATA2 = new HashMap<>();
+    private Set<Integer> DATA2 = new HashSet<>();
 
     Context ctx = this;
 
@@ -54,7 +56,7 @@ public class SplashActivity extends AppCompatActivity{
     public HashMap<String, Integer> getDATA(){
         return DATA;
     }
-    public HashMap<String, Integer> getDATA2(){
+    public Set<Integer> getDATA2(){
         return DATA2;
     }
 
