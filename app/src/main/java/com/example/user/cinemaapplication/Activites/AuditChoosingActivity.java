@@ -96,6 +96,16 @@ public class AuditChoosingActivity extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.activity_auditch, container, false);
 
+        // retarded solution
+//        try {
+//            if (QRScanActivity.getStaticQRScanActivity().getQReader().isCameraRunning()) {
+//                QRScanActivity.getStaticQRScanActivity().getQReader().stop();
+//            }
+//        }catch (NullPointerException e){
+//            e.printStackTrace();
+//        }
+
+
         System.out.println("~~~~~");
 
 

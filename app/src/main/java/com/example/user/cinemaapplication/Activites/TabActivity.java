@@ -24,6 +24,8 @@ import com.example.user.cinemaapplication.R;
 import java.io.File;
 import java.util.Set;
 
+import github.nisrulz.qreader.QREader;
+
 import static java.security.AccessController.getContext;
 
 
@@ -71,7 +73,11 @@ public class TabActivity extends AppCompatActivity {
         tabStrip.getChildAt(1).setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+
                 if(checkAuditsEmpty()){
+                    if(!QRScanActivity.getStaticQRScanActivity().getQReader().isCameraRunning()){
+                        QRScanActivity.getStaticQRScanActivity().getQReader().start();
+                    }
                     Toast.makeText(TabActivity.this, "Заполните аудитории для проверки!", Toast.LENGTH_SHORT).show();
                     return true;
                 }else{

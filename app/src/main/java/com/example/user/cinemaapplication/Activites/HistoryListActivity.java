@@ -33,6 +33,7 @@ package com.example.user.cinemaapplication.Activites;
     import java.util.Timer;
     import java.util.TimerTask;
 
+    import github.nisrulz.qreader.QREader;
 
 
 public class HistoryListActivity extends android.support.v4.app.Fragment{
@@ -56,6 +57,14 @@ public class HistoryListActivity extends android.support.v4.app.Fragment{
         final View rootView = inflater.inflate(R.layout.activity_history,container,false);
 
         final List<String> ticketList = buildHistoryList(getContext());
+
+//        try {
+//            if (QRScanActivity.getStaticQRScanActivity().getQReader().isCameraRunning()) {
+//                QRScanActivity.getStaticQRScanActivity().getQReader().stop();
+//            }
+//        }catch (NullPointerException e){
+//            e.printStackTrace();
+//        }
 
         final ListView ticketHistoryList = (ListView) rootView.findViewById(R.id.History);
         final TicketListAdapter adapter = new TicketListAdapter(getActivity(), ticketList);

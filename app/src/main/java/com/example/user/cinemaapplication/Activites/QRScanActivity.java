@@ -106,6 +106,10 @@ public class QRScanActivity extends Fragment {
         }
     }
 
+    public QREader getQReader(){
+        return qrEader;
+    }
+
     public String getAuditoriumsIDS(){
         Set<Integer> newset = AuditChoosingActivity.getStaticAuditChoosingActivity().getAuditIDS();
 
@@ -145,21 +149,19 @@ public class QRScanActivity extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        qrEader.initAndStart(mySurfaceView);
+        qrEader.start();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-
-
         View rootView = inflater.inflate(R.layout.activity_qrscan, container, false);
+
         final AsyncHttpClient clientTicket = new AsyncHttpClient();
         clientTicket.setBasicAuth(LoginActivity.getStaticLoginActivity().getUsername(), LoginActivity.getStaticLoginActivity().getPassword());
         clientTicket.setSSLSocketFactory(MySSLSocketFactory.getFixedSocketFactory());
 
         final List<String> ticketList = new ArrayList<>();
-
         text = (TextView) rootView.findViewById(R.id.responseInfo);
         text.setTextAppearance(rootView.getContext(), R.style.TextAppearance_AppCompat_Title);
         text.setGravity(Gravity.CENTER);
@@ -179,8 +181,7 @@ public class QRScanActivity extends Fragment {
         ticketHistoryList.setAdapter(adapter);
 
 
-
-            if (ContextCompat.checkSelfPermission(rootView.getContext(), Manifest.permission.CAMERA)
+        if (ContextCompat.checkSelfPermission(rootView.getContext(), Manifest.permission.CAMERA)
                 == PackageManager.PERMISSION_DENIED) {
             ActivityCompat.requestPermissions(QRScanActivity.staticQRScanActivity.getActivity(), new String[]{Manifest.permission.CAMERA}, MY_CAMERA_REQUEST_CODE);
 
@@ -201,57 +202,55 @@ public class QRScanActivity extends Fragment {
                     Runnable myRunnable = new Runnable() {
                         @Override
                         public void run() {
-//                      String data = "826/27372/203/5//11";
                             final String test = "1/" + QRScanActivity.getStaticQRScanActivity().getAuditoriumsIDS() + "/" + data;
+                            try {
+                                TicketSClass ticketSClass = new TicketSClass(test);
+                                String json = JSONUtils.parseObjectToJson(ticketSClass);
+                                StringEntity entity = null;
                                 try {
-
-                                    TicketSClass ticketSClass = new TicketSClass(test);
-                                    String json = JSONUtils.parseObjectToJson(ticketSClass);
-                                    StringEntity entity = null;
-                                    try {
-                                        entity = new StringEntity(json);
-                                    } catch (UnsupportedEncodingException e) {
-                                        e.printStackTrace();
-                                    }
-                                    clientTicket.put(getContext(), check_ticket_url, entity, "application/json", new TextHttpResponseHandler() {
-
-                                        @Override
-                                        public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                                            System.out.println("error1 " + statusCode + "~~~~" + responseString);
-                                            text.setText("Error " + statusCode);
-                                        }
-
-                                        @Override
-                                        public void onSuccess(int statusCode, Header[] headers, final String responseString) {
-                                            String status = responseString.substring(0, 1);
-                                            final String response = responseString.substring(2, responseString.length());
-                                            final List<String> info = contentString(response);
-                                            text.post(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    text.setText(info.get(0));
-                                                    textAdd.setText(info.get(1));
-                                                    FileAdapter.writeFile(responseString,getContext());
-                                                }
-                                            });
-                                            ticketList.add(response + " " + dateFormat.format(Calendar.getInstance().getTime()));
-                                            adapter.notifyDataSetChanged();
-                                            if (status.equals("0")) {
-                                                responseImage.setImageResource(R.drawable.response_cancel);
-                                            } else if (status.equals("1")) {
-                                                responseImage.setImageResource(R.drawable.response_ok);
-                                            } else if (status.equals("2")) {
-                                                responseImage.setImageResource(R.drawable.response_qm);
-                                            }
-                                            if (ticketList.size() > 3) {
-                                                ticketList.subList(0, ticketList.size() - 3).clear();
-                                            }
-                                        }
-                                    });
-                                }catch (IOException e){
+                                    entity = new StringEntity(json);
+                                } catch (UnsupportedEncodingException e) {
                                     e.printStackTrace();
-                                    System.out.println(e);
                                 }
+                                clientTicket.put(getContext(), check_ticket_url, entity, "application/json", new TextHttpResponseHandler() {
+
+                                    @Override
+                                    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                                        System.out.println("error1 " + statusCode + "~~~~" + responseString);
+                                        text.setText("Error " + statusCode);
+                                    }
+
+                                    @Override
+                                    public void onSuccess(int statusCode, Header[] headers, final String responseString) {
+                                        String status = responseString.substring(0, 1);
+                                        final String response = responseString.substring(2, responseString.length());
+                                        final List<String> info = contentString(response);
+                                        text.post(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                text.setText(info.get(0));
+                                                textAdd.setText(info.get(1));
+                                                FileAdapter.writeFile(responseString,getContext());
+                                            }
+                                        });
+                                        ticketList.add(response + " " + dateFormat.format(Calendar.getInstance().getTime()));
+                                        adapter.notifyDataSetChanged();
+                                        if (status.equals("0")) {
+                                            responseImage.setImageResource(R.drawable.response_cancel);
+                                        } else if (status.equals("1")) {
+                                            responseImage.setImageResource(R.drawable.response_ok);
+                                        } else if (status.equals("2")) {
+                                            responseImage.setImageResource(R.drawable.response_qm);
+                                        }
+                                        if (ticketList.size() > 3) {
+                                            ticketList.subList(0, ticketList.size() - 3).clear();
+                                        }
+                                    }
+                                });
+                            }catch (IOException e){
+                                e.printStackTrace();
+                                System.out.println(e);
+                            }
                         }
                     };
                     mainHandler.post(myRunnable);
