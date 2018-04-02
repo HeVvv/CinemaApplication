@@ -170,7 +170,7 @@ public class QRScanActivity extends Fragment {
         }
 
 
-//        FileAdapter.deleteFile(getContext());
+        //        FileAdapter.deleteFile(getContext());
 
 
         qrEader = new QREader.Builder(getActivity(), mySurfaceView, new QRDataListener() {

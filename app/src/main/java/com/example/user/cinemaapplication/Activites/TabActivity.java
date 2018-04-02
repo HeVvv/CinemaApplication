@@ -1,6 +1,7 @@
 package com.example.user.cinemaapplication.Activites;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -64,6 +65,8 @@ public class TabActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
+            Intent intent = new Intent(TabActivity.this,Settings_AboutActivity.class);
+            startActivity(intent);
             return true;
         }
 
