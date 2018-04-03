@@ -4,6 +4,7 @@
 <!-- Base application theme. -->
 
     <!-- Base application theme. -->
+
     <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
         <!--   your app branding color for the app bar -->
         <item name="colorPrimary">#3F51B5</item>
@@ -11,13 +12,16 @@
         <item name="colorPrimaryDark">#303F9F</item>
         <!--   theme UI controls like checkboxes and text fields -->
         <item name="colorAccent">#FF4081</item>
-
+        <!--<item name="android:windowBackground">@drawable/main_font</item>-->
     </style>
+
+
 
     <style name="CustomTheme">
         <item name="android:listViewStyle">@style/CustomListView</item>
         <item name="android:textViewStyle">@style/CustomTextView</item>
         <item name="android:checkboxStyle">@style/customCheckBoxStyle</item>
+
     </style>
 
     <style name="CustomListView" parent="@android:style/Widget.ListView">

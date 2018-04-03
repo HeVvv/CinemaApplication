@@ -70,6 +70,9 @@ public class QRScanActivity extends Fragment {
     private HashMap<String, Integer> list = ListData.loadAuditData();
     private final static String FILE_NAME = "history.txt";
     private static SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
+    private TicketListAdapter adapter;
+    private List<String> ticketList = new ArrayList<>();
+    private ListView ticketHistoryList;
 
     TextView text;
     TextView textAdd;
@@ -153,6 +156,23 @@ public class QRScanActivity extends Fragment {
     }
 
     @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+
+        ticketHistoryList = (ListView) getActivity().findViewById(R.id.ticketHistoryList);
+        adapter = new TicketListAdapter(getActivity(), ticketList);
+        ticketHistoryList.setAdapter(adapter);
+
+        text = (TextView) getActivity().findViewById(R.id.responseInfo);
+        text.setTextAppearance(getActivity(), R.style.TextAppearance_AppCompat_Title);
+        text.setGravity(Gravity.CENTER);
+
+        responseImage = (ImageView) getActivity().findViewById(R.id.imageView);
+        responseImage.setImageResource(R.drawable.ic_launcher_foreground);
+
+        super.onActivityCreated(savedInstanceState);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.activity_qrscan, container, false);
@@ -161,10 +181,6 @@ public class QRScanActivity extends Fragment {
         clientTicket.setBasicAuth(LoginActivity.getStaticLoginActivity().getUsername(), LoginActivity.getStaticLoginActivity().getPassword());
         clientTicket.setSSLSocketFactory(MySSLSocketFactory.getFixedSocketFactory());
 
-        final List<String> ticketList = new ArrayList<>();
-        text = (TextView) rootView.findViewById(R.id.responseInfo);
-        text.setTextAppearance(rootView.getContext(), R.style.TextAppearance_AppCompat_Title);
-        text.setGravity(Gravity.CENTER);
 
         textAdd = (TextView) rootView.findViewById(R.id.responseinfo2);
         textAdd.setTextAppearance(rootView.getContext(),R.style.TextAppearance_AppCompat);
@@ -175,19 +191,16 @@ public class QRScanActivity extends Fragment {
 
         mySurfaceView = (SurfaceView) rootView.findViewById(R.id.camera);
 
-
-        final ListView ticketHistoryList = (ListView) rootView.findViewById(R.id.ticketHistoryList);
-        final TicketListAdapter adapter = new TicketListAdapter(QRScanActivity.staticQRScanActivity.getActivity(), ticketList);
+        //ломается адаптер
+        ticketHistoryList = (ListView) rootView.findViewById(R.id.ticketHistoryList);
+        adapter = new TicketListAdapter(getActivity(), ticketList);
         ticketHistoryList.setAdapter(adapter);
-
 
         if (ContextCompat.checkSelfPermission(rootView.getContext(), Manifest.permission.CAMERA)
                 == PackageManager.PERMISSION_DENIED) {
             ActivityCompat.requestPermissions(QRScanActivity.staticQRScanActivity.getActivity(), new String[]{Manifest.permission.CAMERA}, MY_CAMERA_REQUEST_CODE);
-
         }
 
-        //       FileAdapter.deleteFile(getContext());
 
         qrEader = new QREader.Builder(getActivity(), mySurfaceView, new QRDataListener() {
 
@@ -202,8 +215,11 @@ public class QRScanActivity extends Fragment {
                     Runnable myRunnable = new Runnable() {
                         @Override
                         public void run() {
-                            final String test = "1/" + QRScanActivity.getStaticQRScanActivity().getAuditoriumsIDS() + "/" + data;
+                            String datatest = "4172/30800/232/5//11";
+//                            final String test = "1/" + QRScanActivity.getStaticQRScanActivity().getAuditoriumsIDS() + "/" + data;
+                            final String test = "1/" + QRScanActivity.getStaticQRScanActivity().getAuditoriumsIDS() + "/" + datatest;
                             try {
+
                                 TicketSClass ticketSClass = new TicketSClass(test);
                                 String json = JSONUtils.parseObjectToJson(ticketSClass);
                                 StringEntity entity = null;

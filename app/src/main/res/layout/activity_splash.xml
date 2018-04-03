@@ -3,7 +3,8 @@
     android:id="@+id/shimmer_view_container"
     android:layout_width="150dp"
     android:layout_height="100dp"
-    android:layout_gravity="center">
+    android:layout_gravity="center"
+    android:theme="@style/AppTheme">
 
 
     <TextView

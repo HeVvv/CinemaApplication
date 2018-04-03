@@ -54,7 +54,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
 
     public void onLogin(View view) {
 
-
         AsyncHttpClient client_main = new AsyncHttpClient();
         client_main.setBasicAuth(username.getText().toString(), password.getText().toString());
         client_main.setSSLSocketFactory(MySSLSocketFactory.getFixedSocketFactory());
@@ -142,15 +141,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_main);
 
-
-
         Cancel = (TextView) findViewById(R.id.cancel);
         Cancel.setOnTouchListener(this);
 
 
         Logo = (ImageView) findViewById(R.id.logo);
         //App logo
-        Logo.setImageResource(R.drawable.response_ok);
+        Logo.setImageResource(R.drawable.logo_prog);
 
 
         username = (EditText)findViewById(R.id.usernameInput);

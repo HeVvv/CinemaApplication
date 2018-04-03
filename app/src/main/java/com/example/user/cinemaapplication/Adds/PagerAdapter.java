@@ -9,10 +9,17 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+import android.view.ViewGroup;
+import android.widget.Adapter;
 
 import com.example.user.cinemaapplication.Activites.AuditChoosingActivity;
 import com.example.user.cinemaapplication.Activites.HistoryListActivity;
 import com.example.user.cinemaapplication.Activites.QRScanActivity;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static java.sql.Types.NULL;
 
 public class PagerAdapter extends FragmentPagerAdapter {
     int mNumOfTabs;
@@ -21,28 +28,63 @@ public class PagerAdapter extends FragmentPagerAdapter {
         super(fm);
         this.mNumOfTabs = NumOfTabs;
     }
+
+//    public int getItemByString(String text){
+//        switch(text){
+//            case "Выбор аудиторий":
+//                AuditChoosingActivity tab1 = new AuditChoosingActivity();
+//                return 1;
+//            case "История":
+//                HistoryListActivity tab3 = new HistoryListActivity();
+//                return 0;
+//            case "Скан":
+//                QRScanActivity tab2 = new QRScanActivity();
+//                return 2;
+//            default:
+//                return NULL;
+//        }
+//    }
     @Override
     public Fragment getItem(int position) {
 
         switch (position) {
             case 0:
-                AuditChoosingActivity tab1 = new AuditChoosingActivity();
+                HistoryListActivity tab1 = new HistoryListActivity();
                 return tab1;
-
             case 1:
-                QRScanActivity tab2 = new QRScanActivity();
+                AuditChoosingActivity tab2 = new AuditChoosingActivity();
                 return tab2;
             case 2:
-                HistoryListActivity tab3 = new HistoryListActivity();
+                QRScanActivity tab3 = new QRScanActivity();
                 return tab3;
             default:
                 return null;
         }
     }
 
+    private final List<Fragment> mFragmentList = new ArrayList<>();
+    private final List<String> mFragmentTitleList = new ArrayList<>();
+
+
+    public void addFragment(Fragment fragment, String title) {
+        mFragmentList.add(fragment);
+        mFragmentTitleList.add(title);
+    }
+
+    @Override
+    public CharSequence getPageTitle(int position) {
+        return mFragmentTitleList.get(position);
+    }
+
+    public void removeFragment(Fragment fragment,int position) {
+        mFragmentTitleList.remove(position);
+        mFragmentList.remove(fragment);
+    }
 
     @Override
     public int getCount() {
         return mNumOfTabs;
     }
+
+
 }

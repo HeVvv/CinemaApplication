@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -22,7 +23,11 @@ import com.example.user.cinemaapplication.Adds.PagerAdapter;
 import com.example.user.cinemaapplication.R;
 
 import java.io.File;
+import java.sql.SQLOutput;
+import java.util.List;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import github.nisrulz.qreader.QREader;
 
@@ -30,8 +35,9 @@ import static java.security.AccessController.getContext;
 
 
 public class TabActivity extends AppCompatActivity {
-    private boolean state;
 
+    private boolean state;
+    private PagerAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,17 +45,73 @@ public class TabActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setText("Выбор аудиторий"));
-        tabLayout.addTab(tabLayout.newTab().setText("Скан"));
+
+
+        final TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+
         tabLayout.addTab(tabLayout.newTab().setText("История"));
+        tabLayout.addTab(tabLayout.newTab().setText("Выбор аудиторий"));
+//        tabLayout.addTab(tabLayout.newTab().setText("Скан"));
 
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
+
         final CustomViewPager viewPager = (CustomViewPager) findViewById(R.id.pager);
-        final PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
+        adapter = new PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
+
+        adapter.addFragment(adapter.getItem(0), "История");
+        adapter.addFragment(adapter.getItem(1), "Выбор аудиторий");
+
         viewPager.setAdapter(adapter);
-        viewPager.setPagingEnabled(false);
+        viewPager.setPagingEnabled(true);
+
+        final LinearLayout tabStrip = ((LinearLayout) tabLayout.getChildAt(0));
+        Timer myTimer = new Timer();
+        final Handler uiHandler = new Handler();
+        myTimer.schedule(new TimerTask() { // Определяем задачу
+            @Override
+            public void run() {
+                uiHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        System.out.println("scan tab tick");
+
+                        if (!(checkAuditsEmpty())){
+                            // add
+                            System.out.println("Add");
+                            if(tabStrip.getChildCount() == 2) {
+                                tabLayout.addTab(tabLayout.newTab().setText("Scan"));
+                                adapter = new PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
+                                adapter.addFragment(adapter.getItem(2), "Скан");
+                                viewPager.setAdapter(adapter);
+                                tabLayout.getTabAt(tabLayout.getTabCount()-1).select();
+                                System.out.println("Added");
+                            }
+                        }else{
+                            //remove
+                            System.out.println("Remove");
+                            if(tabStrip.getChildCount() == 3) {
+                                try {
+                                    tabLayout.removeTabAt(2);
+                                    adapter = new PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
+                                    adapter.removeFragment(adapter.getItem(2), 2);
+                                    viewPager.setAdapter(adapter);
+                                    System.out.println("Removed");
+                                    tabLayout.getTabAt(2).select();
+                                }catch (IndexOutOfBoundsException e) {
+                                    e.printStackTrace();
+                                }
+
+                            }
+                        }
+
+                        System.out.println(tabStrip.getChildCount() + " children");
+                    }
+                });
+            }
+        }, 0L, 1000 );
+
+
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -69,25 +131,29 @@ public class TabActivity extends AppCompatActivity {
 
         });
 
-        final LinearLayout tabStrip = ((LinearLayout) tabLayout.getChildAt(0));
-        tabStrip.getChildAt(1).setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-
-                if(checkAuditsEmpty()){
-                    if(!QRScanActivity.getStaticQRScanActivity().getQReader().isCameraRunning()){
-                        QRScanActivity.getStaticQRScanActivity().getQReader().start();
-                    }
-                    Toast.makeText(TabActivity.this, "Заполните аудитории для проверки!", Toast.LENGTH_SHORT).show();
-                    return true;
-                }else{
-                    return false;
-                }
-            }
-        });
 
 
-    }
+        tabLayout.getTabAt(1).select();
+
+//        if(tabStrip.getChildCount() > 2) {
+//            tabStrip.getChildAt(2).setOnTouchListener(new View.OnTouchListener() {
+//                @Override
+//                public boolean onTouch(View v, MotionEvent event) {
+//
+//                    if (checkAuditsEmpty()) {
+//                        if (!QRScanActivity.getStaticQRScanActivity().getQReader().isCameraRunning()) {
+//                            QRScanActivity.getStaticQRScanActivity().getQReader().start();
+//                        }
+//
+//                        Toast.makeText(TabActivity.this, "Заполните аудитории для проверки!", Toast.LENGTH_SHORT).show();
+//                        return true;
+//                    } else {
+//                        return false;
+//                    }
+//                }
+//            });
+        }
+
 
 
     public boolean checkAuditsEmpty(){
