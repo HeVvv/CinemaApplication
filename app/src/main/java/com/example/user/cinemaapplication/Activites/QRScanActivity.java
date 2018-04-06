@@ -206,7 +206,7 @@ public class QRScanActivity extends Fragment {
 
             @Override
             public void onDetected(final String data) {
-                if (data.equals(OLD_DATA) && Calendar.getInstance().getTime().getTime() - OLD_DATE.getTime() < 3500) {
+                if (data.equals(OLD_DATA) && Calendar.getInstance().getTime().getTime() - OLD_DATE.getTime() < 2500) {
                 } else {
                     System.out.println("scanning" + data);
                     OLD_DATA = data;
@@ -215,9 +215,10 @@ public class QRScanActivity extends Fragment {
                     Runnable myRunnable = new Runnable() {
                         @Override
                         public void run() {
-                            String datatest = "4172/30800/232/5//11";
-//                            final String test = "1/" + QRScanActivity.getStaticQRScanActivity().getAuditoriumsIDS() + "/" + data;
-                            final String test = "1/" + QRScanActivity.getStaticQRScanActivity().getAuditoriumsIDS() + "/" + datatest;
+//                            String datatest = "4172/30800/232/5//11";
+//                            final String test = "1/" + QRScanActivity.getStaticQRScanActivity().getAuditoriumsIDS() + "/" + datatest;
+
+                            final String test = "1/" + QRScanActivity.getStaticQRScanActivity().getAuditoriumsIDS() + "/" + data;
                             try {
 
                                 TicketSClass ticketSClass = new TicketSClass(test);

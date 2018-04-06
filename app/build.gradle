@@ -31,10 +31,6 @@ dependencies {
     //compile fileTree(dir: 'libs', include: ['*.jar'])
 
 
-
-
-
-
     compile 'com.dlazaro66.qrcodereaderview:qrcodereaderview:2.0.3'
     compile 'com.facebook.shimmer:shimmer:0.1.0@aar'
     compile 'com.android.volley:volley:1.0.0'
@@ -55,7 +51,5 @@ dependencies {
     compile 'com.android.support:support-v4:27.0.2'
     compile 'com.android.support:cardview-v7:27.0.2'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
-
-
     testCompile 'junit:junit:4.12'
 }

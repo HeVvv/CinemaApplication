@@ -85,7 +85,6 @@ public class HistoryListActivity extends android.support.v4.app.Fragment{
                 });
             }
         }, 0L, 10000 );
-
         return rootView;
     }
 

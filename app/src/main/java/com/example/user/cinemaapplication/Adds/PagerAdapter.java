@@ -1,6 +1,7 @@
 package com.example.user.cinemaapplication.Adds;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -21,29 +22,16 @@ import java.util.List;
 
 import static java.sql.Types.NULL;
 
-public class PagerAdapter extends FragmentPagerAdapter {
-    int mNumOfTabs;
+public class PagerAdapter extends FragmentStatePagerAdapter {
 
-    public PagerAdapter(FragmentManager fm, int NumOfTabs) {
+    private List<Fragment> mFragmentList = new ArrayList<>();
+    private List<String> mFragmentTitleList = new ArrayList<>();
+
+    public PagerAdapter(FragmentManager fm, List<Fragment> fragmentList) {
         super(fm);
-        this.mNumOfTabs = NumOfTabs;
+        this.mFragmentList = fragmentList;
     }
 
-//    public int getItemByString(String text){
-//        switch(text){
-//            case "Выбор аудиторий":
-//                AuditChoosingActivity tab1 = new AuditChoosingActivity();
-//                return 1;
-//            case "История":
-//                HistoryListActivity tab3 = new HistoryListActivity();
-//                return 0;
-//            case "Скан":
-//                QRScanActivity tab2 = new QRScanActivity();
-//                return 2;
-//            default:
-//                return NULL;
-//        }
-//    }
     @Override
     public Fragment getItem(int position) {
 
@@ -62,13 +50,15 @@ public class PagerAdapter extends FragmentPagerAdapter {
         }
     }
 
-    private final List<Fragment> mFragmentList = new ArrayList<>();
-    private final List<String> mFragmentTitleList = new ArrayList<>();
-
+    @Override
+    public int getCount() {
+        return mFragmentList.size();
+    }
 
     public void addFragment(Fragment fragment, String title) {
         mFragmentList.add(fragment);
         mFragmentTitleList.add(title);
+        notifyDataSetChanged();
     }
 
     @Override
@@ -79,12 +69,6 @@ public class PagerAdapter extends FragmentPagerAdapter {
     public void removeFragment(Fragment fragment,int position) {
         mFragmentTitleList.remove(position);
         mFragmentList.remove(fragment);
+        notifyDataSetChanged();
     }
-
-    @Override
-    public int getCount() {
-        return mNumOfTabs;
-    }
-
-
 }

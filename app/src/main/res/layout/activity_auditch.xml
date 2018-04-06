@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="2dp"
-    android:theme="@style/CustomTheme">
+    android:theme="@style/MainTheme">
 
     <TextView
         android:id="@+id/txtInf"

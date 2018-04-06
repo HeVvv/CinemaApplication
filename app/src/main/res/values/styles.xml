@@ -1,9 +1,6 @@
 
 <resources>
 
-<!-- Base application theme. -->
-
-    <!-- Base application theme. -->
 
     <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
         <!--   your app branding color for the app bar -->
@@ -12,16 +9,20 @@
         <item name="colorPrimaryDark">#303F9F</item>
         <!--   theme UI controls like checkboxes and text fields -->
         <item name="colorAccent">#FF4081</item>
-        <!--<item name="android:windowBackground">@drawable/main_font</item>-->
+        <!--<item name="android:background">@drawable/main_font</item>-->
     </style>
 
 
+    <style name="MainTheme" parent="ThemeOverlay.AppCompat.ActionBar">
+        <item name="colorPrimary">#3F51B5</item>
+        <item name="colorPrimaryDark">#303F9F</item>
+        <item name="colorAccent">#FF4081</item>
+        <!--<item name="android:windowBackground">@drawable/main_font</item>-->
+        <!--<item name="android:background">@drawable/main_font</item>-->
 
-    <style name="CustomTheme">
         <item name="android:listViewStyle">@style/CustomListView</item>
         <item name="android:textViewStyle">@style/CustomTextView</item>
         <item name="android:checkboxStyle">@style/customCheckBoxStyle</item>
-
     </style>
 
     <style name="CustomListView" parent="@android:style/Widget.ListView">
@@ -31,33 +32,19 @@
 
     <style name="CustomTextView" parent="@android:style/Widget.TextView">
         <item name="android:typeface">monospace</item>
+        <item name="android:color">#FBFBFB</item>
     </style>
-
-    <style name="NoShadowButton" parent="android:style/Widget.Button">
-        <item name="android:stateListAnimator">@null</item>
-    </style>
-
 
     <style name="customCheckBoxStyle" parent="@android:style/Widget.Holo.CompoundButton.CheckBox">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">160dp</item>
+        <item name="android:textViewStyle">@style/CustomTextView</item>
         <item name="android:textSize">30sp</item>
-        <item name="android:width">200dp</item>
-        <item name="android:height">200dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">30dp</item>
     </style>
-
 
     <style name="splashScreenTheme" parent="@android:style/Theme.DeviceDefault.Light.NoActionBar">
-        <item name="android:windowBackground">@drawable/splash_screen</item>
+        <!--<item name="android:background">@drawable/main_font</item>-->
     </style>
 
-
-    <style name="Theme.AppCompat.Translucent">
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:colorBackgroundCacheHint">@null</item>
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowAnimationStyle">@android:style/Animation</item>
-    </style>
 
 </resources>
