@@ -40,7 +40,6 @@ public class AuditChoosingActivity extends Fragment {
     private Set<Integer> auditIDS = new HashSet<>();
 
 
-
     private static AuditChoosingActivity staticAuditChoosingActivity;
     public static AuditChoosingActivity getStaticAuditChoosingActivity(){
         return staticAuditChoosingActivity;
@@ -133,7 +132,6 @@ public class AuditChoosingActivity extends Fragment {
             });
             ll.addView(ch);
         }
-
         return rootView;
     }
 

@@ -171,7 +171,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
         username.setText("Tkachev_A");
         password.setText("111111");
 
-        setTheme(R.style.splashScreenTheme);
+
         super.onCreate(savedInstanceState);
     }
 

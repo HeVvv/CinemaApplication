@@ -2,6 +2,7 @@ package com.example.user.cinemaapplication.Activites;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -14,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -34,9 +36,9 @@ import github.nisrulz.qreader.QREader;
 public class TabActivity extends AppCompatActivity {
 
     private boolean state;
-    private PagerAdapter adapter;
-    private TabLayout.Tab scanTab;
-    public List<Fragment> fragmentList = new ArrayList<>();
+    private Fragment frag_scan = new QRScanActivity();
+    private Fragment frag_history = new HistoryListActivity();
+    private Fragment frag_choose = new AuditChoosingActivity();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,70 +48,61 @@ public class TabActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
-        final TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         final CustomViewPager viewPager = (CustomViewPager) findViewById(R.id.pager);
 
-        PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager(),fragmentList);
+        final TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
 
-        tabLayout.addTab(tabLayout.newTab().setText("История"));
-        adapter.addFragment(adapter.getItem(0),"История");
-
-        tabLayout.addTab(tabLayout.newTab().setText("Выбор залов"));
-        adapter.addFragment(adapter.getItem(1),"Выбор залов");
+        final PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(frag_history,"История");
+        adapter.addFragment(frag_choose,"Выбор");
 
         viewPager.setAdapter(adapter);
+        tabLayout.setupWithViewPager(viewPager);
 
+        //lagging a bit, adding only at the end of list
+        //possibly add addFragmentAt, removeFragmentAt
 
-        System.out.println("remove");
-
-        tabLayout.removeTabAt(1);
-        adapter.removeFragment(adapter.getItem(1),1);
-        adapter = new PagerAdapter(getSupportFragmentManager(),fragmentList);
-        viewPager.setAdapter(adapter);
-
-//        final LinearLayout tabStrip = ((LinearLayout) tabLayout.getChildAt(0));
-//        Timer myTimer = new Timer();
-//        final Handler uiHandler = new Handler();
-//        myTimer.schedule(new TimerTask() { // Определяем задачу
-//            @Override
-//            public void run() {
-//                uiHandler.post(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        System.out.println("scan tab tick");
-//                        if (!(checkAuditsEmpty())){
-//                            // add
-//                            System.out.println("Add");
-//                            if(tabStrip.getChildCount() == 2) {
-//                                tabLayout.addTab(tabLayout.newTab().setText("Scan"));
-//                                adapter = new PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
-//                                adapter.addFragment(adapter.getItem(2),"Скан");
-//                                viewPager.setAdapter(adapter);
-//                                tabLayout.getTabAt(tabLayout.getTabCount()-1).select();
-//                                System.out.println("Added");
-//                            }
-//                        }else{
-//                            //remove
-//                            System.out.println("Remove");
-//                            if(tabStrip.getChildCount() == 3) {
-//                                try {
-//                                    tabLayout.removeTabAt(2);
-//                                    adapter.removeFragment(adapter.getItem(2),2);
-//                                    adapter = new PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
-//                                    viewPager.setAdapter(adapter);
-//                                    System.out.println("Removed");
-////                                    tabLayout.getTabAt(2).select();
-//                                }catch (IndexOutOfBoundsException e) {
-//                                    e.printStackTrace();
-//                                }
-//
-//                            }
-//                        }
-//                    }
-//                });
-//            }
-//        }, 0L, 2000 );
+        final LinearLayout tabStrip = ((LinearLayout) tabLayout.getChildAt(0));
+        Timer myTimer = new Timer();
+        final Handler uiHandler = new Handler();
+        myTimer.schedule(new TimerTask() { // Определяем задачу
+            @Override
+            public void run() {
+                uiHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        System.out.println("scan tab tick");
+                        if (!(checkAuditsEmpty())){
+                            // add
+                            if(tabStrip.getChildCount() == 2) {
+                                adapter.addFragment(frag_scan, "Скан");
+                                adapter.notifyDataSetChanged();
+                                viewPager.setAdapter(adapter);
+                                try {
+                                    tabLayout.getTabAt(1).select();
+                                }catch (NullPointerException e){
+                                    e.printStackTrace();
+                                }
+                                System.out.println("added");
+                            }
+                        }else{
+                            //remove
+                            if(tabStrip.getChildCount() == 3) {
+                                adapter.removeFragment(frag_scan, "Скан");
+                                adapter.notifyDataSetChanged();
+                                viewPager.setAdapter(adapter);
+                                try {
+                                    tabLayout.getTabAt(1).select();
+                                }catch (NullPointerException e){
+                                    e.printStackTrace();
+                                }
+                                System.out.println("removed");
+                            }
+                        }
+                    }
+                });
+            }
+        }, 0L, 2000 );
 
 
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
@@ -130,8 +123,11 @@ public class TabActivity extends AppCompatActivity {
             }
 
         });
-
-//        tabLayout.getTabAt(1).select();
+        try {
+            tabLayout.getTabAt(1).select();
+        }catch (NullPointerException e){
+            e.printStackTrace();
+        }
     }
 
 
@@ -173,7 +169,6 @@ public class TabActivity extends AppCompatActivity {
             startActivity(intent);
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 }
