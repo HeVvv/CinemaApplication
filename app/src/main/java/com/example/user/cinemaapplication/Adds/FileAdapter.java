@@ -24,13 +24,14 @@ import static android.content.Context.MODE_PRIVATE;
 import static android.provider.Telephony.Mms.Part.FILENAME;
 
 public class FileAdapter {
-
+    //a lot of exceptions, check
     private static Context context = AuditChoosingActivity.getStaticAuditChoosingActivity().getContext();
 
 
     private static File myFilewrite = new File(context.getFilesDir() + "/" + "history.txt");
     private static File myFileread = new File(context.getFilesDir() + "/" + "history.txt");
     private static SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
+
     public static void writeFile(String s,Context context) {
         try {
             
@@ -86,9 +87,11 @@ public class FileAdapter {
         StringBuilder stringBuilder = new StringBuilder();
 
         try {
-            //br = new BufferedReader(new FileReader(FILENAME));
+            //br = new BufferedReader(new FileReader(FILENAME);
 
-                fr = new FileReader(context.getFilesDir() + "/" + "history.txt");
+
+                String filename = context.getFilesDir()+"/"+"history.txt";
+                fr = new FileReader(filename);
                 br = new BufferedReader(fr);
 
 

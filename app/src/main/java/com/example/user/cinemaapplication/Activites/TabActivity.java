@@ -132,7 +132,7 @@ public class TabActivity extends AppCompatActivity {
 
 
     public boolean checkAuditsEmpty(){
-        try {
+        try {   
             state = AuditChoosingActivity.getStaticAuditChoosingActivity().getAuditIDS().isEmpty();
         }catch (NullPointerException e){
             e.printStackTrace();
