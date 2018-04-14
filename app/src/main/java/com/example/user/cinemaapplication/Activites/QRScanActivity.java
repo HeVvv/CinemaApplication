@@ -27,6 +27,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.caverock.androidsvg.SVG;
+import com.caverock.androidsvg.SVGImageView;
 import com.dlazaro66.qrcodereaderview.QRToViewPointTransformer;
 import com.example.user.cinemaapplication.Adds.FileAdapter;
 import com.example.user.cinemaapplication.Adds.JSONUtils;
@@ -139,7 +141,6 @@ public class QRScanActivity extends Fragment {
         while(st.hasMoreTokens()){
            info.add(st.nextToken());
         }
-
         return info;
     }
 
@@ -167,7 +168,9 @@ public class QRScanActivity extends Fragment {
         text.setGravity(Gravity.CENTER);
 
         responseImage = (ImageView) getActivity().findViewById(R.id.imageView);
-        responseImage.setImageResource(R.drawable.ic_launcher_foreground);
+        responseImage.setImageDrawable(null);
+
+//        responseImage.setImageResource(R.drawable.ic_launcher_foreground);
 
         super.onActivityCreated(savedInstanceState);
     }
@@ -176,7 +179,6 @@ public class QRScanActivity extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.activity_qrscan, container, false);
-
         final AsyncHttpClient clientTicket = new AsyncHttpClient();
         clientTicket.setBasicAuth(LoginActivity.getStaticLoginActivity().getUsername(), LoginActivity.getStaticLoginActivity().getPassword());
         clientTicket.setSSLSocketFactory(MySSLSocketFactory.getFixedSocketFactory());
@@ -187,7 +189,8 @@ public class QRScanActivity extends Fragment {
         textAdd.setGravity(Gravity.CENTER);
 
         responseImage = (ImageView) rootView.findViewById(R.id.imageView);
-        responseImage.setImageResource(R.drawable.ic_launcher_foreground);
+        responseImage.setImageDrawable(null);
+//        responseImage.setImageResource(R.drawable.ic_launcher_foreground);
 
         mySurfaceView = (SurfaceView) rootView.findViewById(R.id.camera);
 
@@ -250,14 +253,14 @@ public class QRScanActivity extends Fragment {
                                                 FileAdapter.writeFile(responseString,getContext());
                                             }
                                         });
-                                        ticketList.add(response + " " + dateFormat.format(Calendar.getInstance().getTime()));
+                                        ticketList.add(responseString + "|" + dateFormat.format(Calendar.getInstance().getTime()));
                                         adapter.notifyDataSetChanged();
                                         if (status.equals("0")) {
-                                            responseImage.setImageResource(R.drawable.response_cancel);
+                                            responseImage.setImageResource(R.drawable.cancel);
                                         } else if (status.equals("1")) {
-                                            responseImage.setImageResource(R.drawable.response_ok);
+                                            responseImage.setImageResource(R.drawable.accept);
                                         } else if (status.equals("2")) {
-                                            responseImage.setImageResource(R.drawable.response_qm);
+                                            responseImage.setImageResource(R.drawable.exclam);
                                         }
                                         if (ticketList.size() > 3) {
                                             ticketList.subList(0, ticketList.size() - 3).clear();

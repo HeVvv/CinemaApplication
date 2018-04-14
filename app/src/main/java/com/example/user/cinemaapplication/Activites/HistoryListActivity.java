@@ -58,24 +58,20 @@ public class HistoryListActivity extends android.support.v4.app.Fragment{
 
         final List<String> ticketList = buildHistoryList(getContext());
 
-//        try {
-//            if (QRScanActivity.getStaticQRScanActivity().getQReader().isCameraRunning()) {
-//                QRScanActivity.getStaticQRScanActivity().getQReader().stop();
-//            }
-//        }catch (NullPointerException e){
-//            e.printStackTrace();
-//        }
+        final List<String> emptyList = new ArrayList<>();
+        emptyList.add("История пуста.");
 
+        final TicketListAdapter adapter;
         final ListView ticketHistoryList = (ListView) rootView.findViewById(R.id.History);
-        final TicketListAdapter adapter = new TicketListAdapter(getActivity(), ticketList);
+
+        adapter = new TicketListAdapter(getActivity(), ticketList);
         ticketHistoryList.setAdapter(adapter);
 
-        Timer myTimer = new Timer();
-        final Handler uiHandler = new Handler();
-        myTimer.schedule(new TimerTask() { // Определяем задачу
+        final Handler mainHandler = new Handler(Looper.getMainLooper());
+        Runnable myRunnable = new Runnable() { // Определяем задачу
             @Override
             public void run() {
-                uiHandler.post(new Runnable() {
+                mainHandler.post(new Runnable() {
                     @Override
                     public void run() {
                         List<String> ticketList = buildHistoryList(getContext());
@@ -84,18 +80,17 @@ public class HistoryListActivity extends android.support.v4.app.Fragment{
                     }
                 });
             }
-        }, 0L, 10000 );
+        };
+        mainHandler.post(myRunnable);
         return rootView;
     }
 
-    public List<String> buildHistoryList(Context context){
 
+    public List<String> buildHistoryList(Context context){
         String strs = FileAdapter.readFromFile(context);
         List<String> historyList = new ArrayList<String>(Arrays.asList(strs.split("\n")));
         return historyList;
-
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

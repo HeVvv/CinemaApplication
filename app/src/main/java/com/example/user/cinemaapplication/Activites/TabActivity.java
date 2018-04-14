@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.style.TabStopSpan;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -39,6 +40,10 @@ public class TabActivity extends AppCompatActivity {
     private Fragment frag_scan = new QRScanActivity();
     private Fragment frag_history = new HistoryListActivity();
     private Fragment frag_choose = new AuditChoosingActivity();
+    private PagerAdapter adapter;
+    private CustomViewPager viewPager;
+    private TabLayout tabLayout;
+    private LinearLayout tabStrip;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,62 +53,64 @@ public class TabActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        final CustomViewPager viewPager = (CustomViewPager) findViewById(R.id.pager);
+        viewPager = (CustomViewPager) findViewById(R.id.pager);
 
-        final TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+        tabLayout = (TabLayout) findViewById(R.id.tab_layout);
 
-        final PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager());
+        adapter = new PagerAdapter(getSupportFragmentManager());
         adapter.addFragment(frag_history,"История");
         adapter.addFragment(frag_choose,"Выбор");
 
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
 
-        //lagging a bit, adding only at the end of list
-        //possibly add addFragmentAt, removeFragmentAt
+        tabStrip = ((LinearLayout) tabLayout.getChildAt(0));
 
-        final LinearLayout tabStrip = ((LinearLayout) tabLayout.getChildAt(0));
         Timer myTimer = new Timer();
         final Handler uiHandler = new Handler();
-        myTimer.schedule(new TimerTask() { // Определяем задачу
+        final Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                uiHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        System.out.println("scan tab tick");
-                        if (!(checkAuditsEmpty())){
-                            // add
-                            if(tabStrip.getChildCount() == 2) {
-                                adapter.addFragment(frag_scan, "Скан");
-                                adapter.notifyDataSetChanged();
-                                viewPager.setAdapter(adapter);
-                                try {
-                                    tabLayout.getTabAt(1).select();
-                                }catch (NullPointerException e){
-                                    e.printStackTrace();
-                                }
-                                System.out.println("added");
-                            }
-                        }else{
-                            //remove
-                            if(tabStrip.getChildCount() == 3) {
-                                adapter.removeFragment(frag_scan, "Скан");
-                                adapter.notifyDataSetChanged();
-                                viewPager.setAdapter(adapter);
-                                try {
-                                    tabLayout.getTabAt(1).select();
-                                }catch (NullPointerException e){
-                                    e.printStackTrace();
-                                }
-                                System.out.println("removed");
-                            }
+                System.out.println("scan tab tick");
+                if (!(checkAuditsEmpty())){
+                    // add
+                    if(tabStrip.getChildCount() == 2) {
+                        adapter.addFragment(frag_scan, "Скан");
+                        adapter.notifyDataSetChanged();
+                        viewPager.setAdapter(adapter);
+                        try {
+                            tabLayout.getTabAt(1).select();
+                        }catch (NullPointerException e){
+                            e.printStackTrace();
                         }
+                        System.out.println("added");
                     }
-                });
+                }else{
+                    //remove
+                    if(tabStrip.getChildCount() == 3) {
+                        adapter.removeFragment(frag_scan, "Скан");
+                        adapter.notifyDataSetChanged();
+                        viewPager.setAdapter(adapter);
+                        try {
+                            tabLayout.getTabAt(1).select();
+                        }catch (NullPointerException e){
+                            e.printStackTrace();
+                        }
+                        System.out.println("removed");
+                    }
+                }
             }
-        }, 0L, 2000 );
+        };
 
+        myTimer.scheduleAtFixedRate(new TimerTask() { // Определяем задачу
+            @Override
+            public void run() {
+                uiHandler.post(runnable);
+
+            }
+        }, 0L, 3500 );
+
+        uiHandler.removeCallbacks(runnable);
 
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -130,6 +137,39 @@ public class TabActivity extends AppCompatActivity {
         }
     }
 
+    public Runnable tabControl = new Runnable() {
+        @Override
+        public void run() {
+            System.out.println("scan tab tick");
+            if (!(checkAuditsEmpty())){
+                // add
+                if(tabStrip.getChildCount() == 2) {
+                    adapter.addFragment(frag_scan, "Скан");
+                    adapter.notifyDataSetChanged();
+                    viewPager.setAdapter(adapter);
+                    try {
+                        tabLayout.getTabAt(1).select();
+                    }catch (NullPointerException e){
+                        e.printStackTrace();
+                    }
+                    System.out.println("added");
+                }
+            }else{
+                //remove
+                if(tabStrip.getChildCount() == 3) {
+                    adapter.removeFragment(frag_scan, "Скан");
+                    adapter.notifyDataSetChanged();
+                    viewPager.setAdapter(adapter);
+                    try {
+                        tabLayout.getTabAt(1).select();
+                    }catch (NullPointerException e){
+                        e.printStackTrace();
+                    }
+                    System.out.println("removed");
+                }
+            }
+        }
+    };
 
     public boolean checkAuditsEmpty(){
         try {   
@@ -165,7 +205,7 @@ public class TabActivity extends AppCompatActivity {
         }
 
         if( id == R.id.Log_off){
-            Intent intent = new Intent(TabActivity.this,Settings_AboutActivity.class);
+            Intent intent = new Intent(TabActivity.this,LoginActivity.class);
             startActivity(intent);
             return true;
         }

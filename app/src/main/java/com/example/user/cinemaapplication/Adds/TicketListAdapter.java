@@ -14,8 +14,10 @@ import android.widget.TextView;
 
 import com.example.user.cinemaapplication.R;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 public class TicketListAdapter extends  ArrayAdapter<String>{
     private final Activity context;
@@ -28,8 +30,20 @@ public class TicketListAdapter extends  ArrayAdapter<String>{
     }
 
     static class ViewHolder {
-        //public ImageView imageView;
-        public TextView textView;
+        public ImageView imageView;
+        public TextView mainInfo;
+        public TextView time;
+        public TextView additionalinfo;
+    }
+
+    public List<String> contentString(String s){
+        List<String> info = new ArrayList<>();
+
+        StringTokenizer st = new StringTokenizer(s, "|");
+        while(st.hasMoreTokens()){
+            info.add(st.nextToken());
+        }
+        return info;
     }
 
     @Nullable
@@ -52,25 +66,36 @@ public class TicketListAdapter extends  ArrayAdapter<String>{
         View rowView = convertView;
         if (rowView == null) {
             LayoutInflater inflater = context.getLayoutInflater();
-            rowView = inflater.inflate(R.layout.list_text, null, true);
+            rowView = inflater.inflate(R.layout.list_item_layout, null, true);
             holder = new ViewHolder();
-            holder.textView = (TextView) rowView.findViewById(R.id.label);
-           //holder.imageView = (ImageView) rowView.findViewById(R.id.icon);
+
+            holder.mainInfo = (TextView) rowView.findViewById(R.id.mainInfo);
+            holder.additionalinfo = (TextView) rowView.findViewById(R.id.additionalInfo);
+            holder.time = (TextView) rowView.findViewById(R.id.time);
+
+            holder.imageView = (ImageView) rowView.findViewById(R.id.responseImage);
+
             rowView.setTag(holder);
         } else {
             holder = (ViewHolder) rowView.getTag();
         }
-        holder.textView.setText(info.get(position));
-//        String s = info.get(position);
-//        if(s.endsWith("3")){
-//            holder.imageView.setImageResource(R.mipmap.active);
-//        }
-//        if(s.endsWith("5")){
-//            holder.imageView.setImageResource(R.mipmap.sold);
-//        }
-//        if(s.endsWith("7")){
-//            holder.imageView.setImageResource(R.mipmap.reserved);
-//        }
+        String toParse = info.get(position);
+        List<String> items = contentString(toParse);
+        if(!items.isEmpty()) {
+            holder.mainInfo.setText(items.get(1));
+            holder.additionalinfo.setText(items.get(2));
+            holder.time.setText(items.get(3));
+        }
+        String s = info.get(position);
+        if(s.startsWith("0")){
+            holder.imageView.setImageResource(R.drawable.cancel);
+        }
+        if(s.startsWith("1")){
+            holder.imageView.setImageResource(R.drawable.accept);
+        }
+        if(s.startsWith("2")){
+            holder.imageView.setImageResource(R.drawable.exclam);
+        }
         return rowView;
     }
 }

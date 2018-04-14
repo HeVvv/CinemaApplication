@@ -37,7 +37,7 @@ public class FileAdapter {
             
             String lineseparator = System.getProperty("line.separator");
             BufferedWriter writer = new BufferedWriter(new FileWriter(myFilewrite,true));  // После чего создаем поток для записи
-            writer.write((s + "---" + dateFormat.format(Calendar.getInstance().getTime()) + lineseparator));
+            writer.write((s + "|" + dateFormat.format(Calendar.getInstance().getTime()) + lineseparator));
             writer.flush();
             writer.close();
         } catch (Exception e) {
@@ -79,13 +79,10 @@ public class FileAdapter {
         }
     }
 
-
     public static String readFromFile(Context context){
-
         BufferedReader br = null;
         FileReader fr = null;
         StringBuilder stringBuilder = new StringBuilder();
-
         try {
             //br = new BufferedReader(new FileReader(FILENAME);
 
@@ -126,7 +123,7 @@ public class FileAdapter {
             }
 
         }
-
+        
         return stringBuilder.toString();
     }
 }
