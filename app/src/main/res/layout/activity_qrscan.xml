@@ -9,10 +9,10 @@
     <TextView
         android:id="@+id/responseInfo"
         android:layout_width="368dp"
-        android:layout_height="63dp"
+        android:layout_height="85dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="8dp"
         android:gravity="center"
         android:text=""
         app:layout_constraintEnd_toEndOf="parent"
@@ -23,13 +23,14 @@
     <TextView
         android:id="@+id/responseinfo2"
         android:layout_width="368dp"
-        android:layout_height="46dp"
+        android:layout_height="65dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text=""
         android:gravity="center"
+        android:text=""
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/responseInfo" />
 
@@ -39,28 +40,30 @@
         android:layout_height="150dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="370dp"
-        android:layout_height="264dp"
-        android:layout_marginBottom="8dp"
+        android:layout_height="223dp"
+        android:layout_marginBottom="32dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/responseinfo2">
+        app:layout_constraintTop_toBottomOf="@+id/responseinfo2"
+        app:layout_constraintVertical_bias="0.0">
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="160dp"
-            android:layout_height="160dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
+            android:layout_width="175dp"
+            android:layout_height="175dp"
+            android:layout_marginBottom="32dp"
+            android:layout_marginEnd="5dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_weight="1"
@@ -72,18 +75,20 @@
 
         <SurfaceView
             android:id="@+id/camera"
-            android:layout_width="164dp"
-            android:layout_height="204dp"
+            android:layout_width="175dp"
+            android:layout_height="175dp"
             android:layout_gravity="bottom|left"
-            android:layout_marginBottom="8dp"
-            android:layout_marginStart="16dp"
+            android:layout_marginBottom="32dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginStart="5dp"
             android:layout_marginTop="8dp"
             android:layout_weight="1"
             android:keepScreenOn="true"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/imageView"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.276" />
+            app:layout_constraintVertical_bias="0.48" />
     </android.support.constraint.ConstraintLayout>
 
 

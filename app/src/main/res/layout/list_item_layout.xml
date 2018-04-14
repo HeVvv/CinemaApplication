@@ -9,19 +9,22 @@
     <LinearLayout
         android:id="@+id/lll"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="40dp"
         android:orientation="vertical"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="98dp">
 
         <LinearLayout
+            android:id="@+id/mainan"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
             <LinearLayout
-                android:layout_width="80dp"
+                android:layout_width="60dp"
                 android:layout_height="match_parent"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="3dp"
                 android:layout_weight="1"
                 android:orientation="horizontal">
 
@@ -35,13 +38,14 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="40dp"
                 android:layout_weight="1"
                 android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="28dp"
+                    android:layout_height="22dp"
+                    android:layout_marginTop="-5dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -49,23 +53,26 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:text="TextView"
                         android:gravity="start"
-                        android:textSize="20sp"/>
+                        android:text="mainInfo"
+                        android:textSize="18sp" />
 
                     <TextView
                         android:id="@+id/time"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_marginLeft="0dp"
+                        android:layout_marginRight="5dp"
                         android:layout_weight="3"
-                        android:text="TextView"
                         android:gravity="end"
-                        android:textSize="22sp"/>
+                        android:text="00:00"
+                        android:textSize="20sp" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="22dp"
+                    android:layout_height="38dp"
+                    android:layout_marginBottom="-3dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -73,9 +80,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:text="TextView"
                         android:gravity="start"
-                        android:textSize="16sp"/>
+                        android:text="additionalInfo"
+                        android:textSize="14sp" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
