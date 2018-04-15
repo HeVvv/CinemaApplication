@@ -1,20 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="2dp"
     android:theme="@style/MainTheme">
 
-    <TextView
-        android:id="@+id/txtInf"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="" />
-
     <LinearLayout
         android:id="@+id/checkBoxField"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"></LinearLayout>
-</LinearLayout>
+        android:orientation="vertical">
+
+    </LinearLayout>
+</ScrollView>

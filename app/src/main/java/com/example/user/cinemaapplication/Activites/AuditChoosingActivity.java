@@ -3,6 +3,7 @@ package com.example.user.cinemaapplication.Activites;
 
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,6 +15,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -98,23 +100,26 @@ public class AuditChoosingActivity extends Fragment {
 
         System.out.println("~~~~~");
 
-
         HashMap <String,Integer> unsorted = SplashActivity.getStaticSplashActivity().getDATA();
 
         Map <String,Integer> listinfo = HashMapSort.sortByComparator(unsorted,true);
 
-        TextView txt = (TextView) rootView.findViewById(R.id.txtInf);
+//        TextView txt = (TextView) rootView.findViewById(R.id.txtInf);
         LinearLayout ll = (LinearLayout) rootView.findViewById(R.id.checkBoxField);
-
-        txt.setTextSize(20);
-        txt.setText("Выберите аудитории для проверки");
+        ll.setPadding(5,5,5,5);
+//        txt.setTextSize(20);
+//        txt.setText("Выберите аудитории для проверки");
 
         for (Map.Entry entry : listinfo.entrySet()) {
             final CheckBox ch = new CheckBox(rootView.getContext());
+            final TextView tx = new TextView(rootView.getContext());
+
+            tx.setSingleLine();
 
             ch.setText(entry.getKey().toString());
             ch.setId(Integer.parseInt(entry.getValue().toString()));
-
+            ch.setBackgroundColor(Color.parseColor("#999999"));
+            ch.setPadding(10,10,10,10);
             ch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
             {
                 @Override
@@ -131,6 +136,7 @@ public class AuditChoosingActivity extends Fragment {
                 }
             });
             ll.addView(ch);
+            ll.addView(tx);
         }
         return rootView;
     }

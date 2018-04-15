@@ -78,7 +78,6 @@
         app:layout_constraintVertical_bias="0.0">
         <!--android:theme="@style/Theme.AppCompat.Translucent"-->
 
-
         <ImageView
             android:id="@+id/response"
             android:layout_width="match_parent"
@@ -89,12 +88,8 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:adjustViewBounds="false"
-            android:foregroundGravity="center"
-            app:srcCompat="@drawable/ic_launcher_foreground" />
+            android:foregroundGravity="center" />
 
     </LinearLayout>
-
-
-
 
 </android.support.constraint.ConstraintLayout>

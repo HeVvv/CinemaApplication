@@ -1,9 +1,5 @@
 package com.example.user.cinemaapplication.Activites;
 
-/**
- * Created by User on 28.03.2018.
- */
-
 
 import android.Manifest;
 import android.content.Context;
@@ -26,9 +22,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.caverock.androidsvg.SVG;
-import com.caverock.androidsvg.SVGImageView;
 import com.dlazaro66.qrcodereaderview.QRToViewPointTransformer;
 import com.example.user.cinemaapplication.Adds.FileAdapter;
 import com.example.user.cinemaapplication.Adds.JSONUtils;
@@ -223,8 +218,9 @@ public class QRScanActivity extends Fragment {
 
                             final String test = "1/" + QRScanActivity.getStaticQRScanActivity().getAuditoriumsIDS() + "/" + data;
                             try {
+                                try {
+                                    TicketSClass ticketSClass = new TicketSClass(test);
 
-                                TicketSClass ticketSClass = new TicketSClass(test);
                                 String json = JSONUtils.parseObjectToJson(ticketSClass);
                                 StringEntity entity = null;
                                 try {
@@ -267,6 +263,10 @@ public class QRScanActivity extends Fragment {
                                         }
                                     }
                                 });
+                                }catch(NumberFormatException e){
+                                    e.printStackTrace();
+                                    Toast.makeText(getActivity().getApplicationContext(), "Неверный вормат QR кода!",Toast.LENGTH_LONG).show();
+                                }
                             }catch (IOException e){
                                 e.printStackTrace();
                                 System.out.println(e);
