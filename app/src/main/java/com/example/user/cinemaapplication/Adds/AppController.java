@@ -26,6 +26,10 @@ public class AppController extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        FontsOverride.setDefaultFont(this, "MONOSPACE", "Fontfabric - UniNeueBook.otf");
+//        FontsOverride.setDefaultFont(this, "MONOSPACE", "MyFontAsset2.ttf");
+        FontsOverride.setDefaultFont(this, "SERIF", "Fontfabric - UniNeueRegular.otf");
+//        FontsOverride.setDefaultFont(this, "SANS_SERIF", "MyFontAsset4.ttf");
         mInstance = this;
     }
 

@@ -8,7 +8,7 @@
 
     <TextView
         android:id="@+id/responseInfo"
-        android:layout_width="360dp"
+        android:layout_width="wrap_content"
         android:layout_height="59dp"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
@@ -16,13 +16,13 @@
         android:gravity="center"
         android:text="Ожидание сканирования"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ticketHistoryList" />
 
     <TextView
         android:id="@+id/responseinfo2"
-        android:layout_width="360dp"
+        android:layout_width="wrap_content"
         android:layout_height="57dp"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
@@ -39,7 +39,7 @@
         android:layout_height="150dp"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -48,8 +48,8 @@
         android:layout_width="360dp"
         android:layout_height="197dp"
         android:layout_marginBottom="32dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginStart="20dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -59,12 +59,12 @@
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="170dp"
-            android:layout_height="170dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:layout_marginBottom="32dp"
-            android:layout_marginEnd="10dp"
+            android:layout_marginEnd="20dp"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="32dp"
             android:layout_weight="1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

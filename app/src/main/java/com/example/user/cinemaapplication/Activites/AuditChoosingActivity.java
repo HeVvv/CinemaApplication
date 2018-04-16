@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -106,7 +107,7 @@ public class AuditChoosingActivity extends Fragment {
 
 //        TextView txt = (TextView) rootView.findViewById(R.id.txtInf);
         LinearLayout ll = (LinearLayout) rootView.findViewById(R.id.checkBoxField);
-        ll.setPadding(5,5,5,5);
+        ll.setPadding(5,10,5,5);
 //        txt.setTextSize(20);
 //        txt.setText("Выберите аудитории для проверки");
 
@@ -114,12 +115,11 @@ public class AuditChoosingActivity extends Fragment {
             final CheckBox ch = new CheckBox(rootView.getContext());
             final TextView tx = new TextView(rootView.getContext());
 
-            tx.setSingleLine();
 
             ch.setText(entry.getKey().toString());
             ch.setId(Integer.parseInt(entry.getValue().toString()));
-            ch.setBackgroundColor(Color.parseColor("#999999"));
-            ch.setPadding(10,10,10,10);
+            ch.setBackgroundColor(Color.argb(55,51,51,51));
+//            ch.setPadding(2,2,2,2);
             ch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
             {
                 @Override
@@ -136,7 +136,6 @@ public class AuditChoosingActivity extends Fragment {
                 }
             });
             ll.addView(ch);
-            ll.addView(tx);
         }
         return rootView;
     }

@@ -2,6 +2,7 @@ package com.example.user.cinemaapplication.Adds;
 
 import android.app.Activity;
 import android.app.Application;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -60,6 +61,7 @@ public class TicketListAdapter extends  ArrayAdapter<String>{
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // ViewHolder буферизирует оценку различных полей шаблона элемента
+
         ViewHolder holder;
         // Очищает сущетсвующий шаблон, если параметр задан
         // Работает только если базовый шаблон для всех классов один и тот же
@@ -67,6 +69,7 @@ public class TicketListAdapter extends  ArrayAdapter<String>{
         if (rowView == null) {
             LayoutInflater inflater = context.getLayoutInflater();
             rowView = inflater.inflate(R.layout.list_item_layout, null, true);
+            rowView.setBackgroundColor(Color.argb(55,51,51,51));
             holder = new ViewHolder();
 
             holder.mainInfo = (TextView) rowView.findViewById(R.id.mainInfo);

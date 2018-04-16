@@ -45,6 +45,18 @@ public class TabActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private LinearLayout tabStrip;
 
+    private int[] tabIcons = {
+            R.drawable.tickets,
+            R.drawable.video_camera,
+            R.drawable.barcode
+    };
+
+    private void setupTabIcons() {
+        tabLayout.getTabAt(0).setIcon(tabIcons[0]);
+        tabLayout.getTabAt(1).setIcon(tabIcons[1]);
+        tabLayout.getTabAt(2).setIcon(tabIcons[2]);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +75,8 @@ public class TabActivity extends AppCompatActivity {
 
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
+        tabLayout.getTabAt(0).setIcon(tabIcons[0]);
+        tabLayout.getTabAt(1).setIcon(tabIcons[1]);
 
         tabStrip = ((LinearLayout) tabLayout.getChildAt(0));
 
@@ -78,6 +92,7 @@ public class TabActivity extends AppCompatActivity {
                         adapter.addFragment(frag_scan, "Скан");
                         adapter.notifyDataSetChanged();
                         viewPager.setAdapter(adapter);
+                        setupTabIcons();
                         try {
                             tabLayout.getTabAt(1).select();
                         }catch (NullPointerException e){
@@ -91,6 +106,9 @@ public class TabActivity extends AppCompatActivity {
                         adapter.removeFragment(frag_scan, "Скан");
                         adapter.notifyDataSetChanged();
                         viewPager.setAdapter(adapter);
+                            tabLayout.getTabAt(0).setIcon(tabIcons[0]);
+                            tabLayout.getTabAt(1).setIcon(tabIcons[1]);
+
                         try {
                             tabLayout.getTabAt(1).select();
                         }catch (NullPointerException e){

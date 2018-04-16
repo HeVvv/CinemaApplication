@@ -6,14 +6,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Activites.TabActivity"
-    android:statusBarColor="#515151">
+    android:statusBarColor="#515151"
+    android:theme="@style/AppTheme">
 
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:color="#515151"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="30dp"
         android:layout_alignParentTop="true"
         android:elevation="6dp"
         app:popupTheme="@style/ThemeOverlay.AppCompat" />

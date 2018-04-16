@@ -32,8 +32,7 @@
                     android:id="@+id/responseImage"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    app:srcCompat="@drawable/cancel" />
+                    android:layout_weight="1" />
             </LinearLayout>
 
             <LinearLayout
@@ -45,7 +44,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="22dp"
-                    android:layout_marginTop="-5dp"
+                    android:layout_marginTop="-1dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -54,7 +53,6 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="start"
-                        android:text="mainInfo"
                         android:textSize="18sp" />
 
                     <TextView
@@ -65,7 +63,6 @@
                         android:layout_marginRight="5dp"
                         android:layout_weight="3"
                         android:gravity="end"
-                        android:text="00:00"
                         android:textSize="20sp" />
                 </LinearLayout>
 
@@ -73,15 +70,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="38dp"
                     android:layout_marginBottom="-3dp"
+                    android:layout_marginTop="-1dp"
                     android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/additionalInfo"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_marginTop="-1dp"
                         android:layout_weight="1"
                         android:gravity="start"
-                        android:text="additionalInfo"
                         android:textSize="14sp" />
                 </LinearLayout>
             </LinearLayout>

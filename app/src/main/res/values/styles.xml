@@ -10,12 +10,14 @@
         <!--   theme UI controls like checkboxes and text fields -->
         <item name="colorAccent">#FF4081</item>
         <item name="android:textViewStyle">@style/CustomTextView</item>
+        <item name="android:checkboxStyle">@style/customCheckBoxStyle</item>
     </style>
 
     <style name="MainTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="colorPrimary">#3F51B5</item>
         <item name="colorPrimaryDark">#303F9F</item>
         <item name="colorAccent">#FF4081</item>
+
         <!--<item name="android:windowBackground">@drawable/main_font</item>-->
         <!--<item name="android:background">@drawable/main_font</item>-->
         <item name="android:listViewStyle">@style/CustomListView</item>
@@ -29,9 +31,11 @@
     </style>
 
     <style name="CustomTextView" parent="@android:style/Widget.TextView">
-        <item name="android:typeface">monospace</item>
+        <item name="android:typeface">serif</item>
         <item name="android:color">#fbfbfb</item>
     </style>
+
+
 
     <style name="customToolBar" parent="@android:style/Widget.Toolbar">
         <item name="android:background">@drawable/main_font</item>
@@ -44,11 +48,12 @@
     <style name="customCheckBoxStyle" parent="@android:style/Widget.Holo.CompoundButton.CheckBox">
         <item name="android:textViewStyle">@style/CustomTextView</item>
         <item name="android:textSize">30sp</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">30dp</item>
+        <item name="android:layout_height">350dp</item>
+        <item name="android:height">350dp</item>
+        <item name="android:minHeight">50dp</item>
     </style>
 
-    <style name="splashScreenTheme" parent="@android:style/Theme.DeviceDefault.Light.NoActionBar">
+    <style name="splashScreenTheme" parent="Theme.AppCompat.NoActionBar">
         <!--<item name="android:background">@drawable/main_font</item>-->
         <item name="android:colorPrimaryDark">#515151</item>
         <item name="android:actionBarSize">0dp</item>

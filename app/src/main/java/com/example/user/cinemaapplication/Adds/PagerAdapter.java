@@ -48,7 +48,7 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return mFragmentTitleList.get(position);
+            return null;
         }
 
         public void removeFragment(Fragment fragment,String title){
@@ -56,52 +56,3 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
             mFragmentTitleList.remove(title);
         }
 }
-
-
-//    private List<Fragment> mFragmentList = new ArrayList<>();
-//    private List<String> mFragmentTitleList = new ArrayList<>();
-//
-//    public PagerAdapter(FragmentManager fm, List<Fragment> fragmentList) {
-//        super(fm);
-//        this.mFragmentList = fragmentList;
-//    }
-//
-//    @Override
-//    public Fragment getItem(int position) {
-//
-//        switch (position) {
-//            case 0:
-//                HistoryListActivity tab1 = new HistoryListActivity();
-//                return tab1;
-//            case 1:
-//                AuditChoosingActivity tab2 = new AuditChoosingActivity();
-//                return tab2;
-//            case 2:
-//                QRScanActivity tab3 = new QRScanActivity();
-//                return tab3;
-//            default:
-//                return null;
-//        }
-//    }
-//
-//    @Override
-//    public int getCount() {
-//        return mFragmentList.size();
-//    }
-//
-//    public void addFragment(Fragment fragment, String title) {
-//        mFragmentList.add(fragment);
-//        mFragmentTitleList.add(title);
-//        notifyDataSetChanged();
-//    }
-//
-//    @Override
-//    public CharSequence getPageTitle(int position) {
-//        return mFragmentTitleList.get(position);
-//    }
-//
-//    public void removeFragment(Fragment fragment,int position) {
-//        mFragmentTitleList.remove(position);
-//        mFragmentList.remove(fragment);
-//        notifyDataSetChanged();
-//    }

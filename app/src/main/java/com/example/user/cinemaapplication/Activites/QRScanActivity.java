@@ -5,6 +5,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -158,9 +159,11 @@ public class QRScanActivity extends Fragment {
         adapter = new TicketListAdapter(getActivity(), ticketList);
         ticketHistoryList.setAdapter(adapter);
 
+
         text = (TextView) getActivity().findViewById(R.id.responseInfo);
         text.setTextAppearance(getActivity(), R.style.TextAppearance_AppCompat_Title);
         text.setGravity(Gravity.CENTER);
+        text.setTextColor(Color.rgb(51,51,51));
 
         responseImage = (ImageView) getActivity().findViewById(R.id.imageView);
         responseImage.setImageDrawable(null);
@@ -182,6 +185,7 @@ public class QRScanActivity extends Fragment {
         textAdd = (TextView) rootView.findViewById(R.id.responseinfo2);
         textAdd.setTextAppearance(rootView.getContext(),R.style.TextAppearance_AppCompat);
         textAdd.setGravity(Gravity.CENTER);
+        textAdd.setTextColor(Color.rgb(51,51,51));
 
         responseImage = (ImageView) rootView.findViewById(R.id.imageView);
         responseImage.setImageDrawable(null);
