@@ -43,6 +43,7 @@ public class SplashActivity extends AppCompatActivity{
     private HashMap <String,Integer> DATA = new HashMap<>();
     private Set<Integer> DATA2 = new HashSet<>();
 
+
     Context ctx = this;
 
     private static SplashActivity staticSplashActivity;
@@ -64,7 +65,9 @@ public class SplashActivity extends AppCompatActivity{
     //maybe add as animation
     @Override
     public void onCreate(Bundle savedInstance) {
+
         super.onCreate(savedInstance);
+        setTheme(R.style.Theme_AppCompat_NoActionBar);
         setContentView(R.layout.activity_splash);
 
         ShimmerFrameLayout container =
@@ -96,6 +99,7 @@ public class SplashActivity extends AppCompatActivity{
             @Override
             public void run() {
                 Intent openMainActivity =  new Intent(SplashActivity.this, TabActivity.class);
+
                 startActivity(openMainActivity);
                 finish();
             }

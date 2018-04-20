@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -44,12 +45,21 @@ public class TabActivity extends AppCompatActivity {
     private CustomViewPager viewPager;
     private TabLayout tabLayout;
     private LinearLayout tabStrip;
-
+    private int CINEMA_ID = 2; // arena
     private int[] tabIcons = {
             R.drawable.tickets,
             R.drawable.video_camera,
             R.drawable.barcode
     };
+
+    private static TabActivity staticTabActivity;
+    public static TabActivity getStaticTabActivity(){
+        return staticTabActivity;
+    }
+    public TabActivity(){
+        staticTabActivity = this;
+    }
+
 
     private void setupTabIcons() {
         tabLayout.getTabAt(0).setIcon(tabIcons[0]);
@@ -60,7 +70,18 @@ public class TabActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(CINEMA_ID == 1){
+            setTheme(R.style.AppThemeArena);
+            setTitle("Arena Minsk");
+        }
+
+        if(CINEMA_ID == 2){
+            setTheme(R.style.AppThemeVelcom);
+            setTitle("Velcom Minsk");
+        }
+
         setContentView(R.layout.activity_tab2);
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -225,6 +246,27 @@ public class TabActivity extends AppCompatActivity {
         if( id == R.id.Log_off){
             Intent intent = new Intent(TabActivity.this,LoginActivity.class);
             startActivity(intent);
+            return true;
+        }
+        if( id == R.id.setTheme1){
+
+            getApplication().setTheme(R.style.AppThemeVelcom);
+            TaskStackBuilder.create(this)
+                    .addNextIntent(new Intent(this, TabActivity.class))
+                    .addNextIntent(getIntent())
+                    .startActivities();
+            this.setTitle("Velcom Минск");
+
+            return true;
+        }
+        if( id == R.id.setTheme2){
+
+            getApplication().setTheme(R.style.AppThemeArena);
+            TaskStackBuilder.create(this)
+                    .addNextIntent(new Intent(this, TabActivity.class))
+                    .addNextIntent(getIntent())
+                    .startActivities();
+            this.setTitle("Арена Минск");
             return true;
         }
         return super.onOptionsItemSelected(item);

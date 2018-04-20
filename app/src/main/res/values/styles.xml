@@ -2,21 +2,38 @@
 <resources>
 
 
-    <style name="AppTheme" parent ="Theme.AppCompat.NoActionBar">
+    <style name="AppThemeArena" parent ="Theme.AppCompat.NoActionBar">
+
+        <item name="android:label">Arena Minsk</item>
+        <item name="android:textViewStyle">@style/CustomTextView</item>
+        <item name="android:checkboxStyle">@style/customCheckBoxStyle</item>
         <!--   your app branding color for the app bar -->
         <item name="colorPrimary">#515151</item>
         <!--   darker variant for the status bar and contextual app bars -->
         <item name="colorPrimaryDark">#515151</item>
         <!--   theme UI controls like checkboxes and text fields -->
-        <item name="colorAccent">#FF4081</item>
+        <item name="android:colorAccent">#FF4081</item>
+
+    </style>
+
+    <style name="AppThemeVelcom" parent ="Theme.AppCompat.NoActionBar">
+
+        <item name="android:label">Velcom Minsk</item>
         <item name="android:textViewStyle">@style/CustomTextView</item>
         <item name="android:checkboxStyle">@style/customCheckBoxStyle</item>
+        <!--   your app branding color for the app bar -->
+        <item name="android:colorPrimary">#515151</item>
+        <!--   darker variant for the status bar and contextual app bars -->
+        <item name="android:colorPrimaryDark">#515151</item>
+        <!--   theme UI controls like checkboxes and text fields -->
+        <item name="colorAccent">#fbfb00</item>
+
     </style>
 
     <style name="MainTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="colorPrimary">#3F51B5</item>
         <item name="colorPrimaryDark">#303F9F</item>
-        <item name="colorAccent">#FF4081</item>
+        <item name="android:colorAccent">#FF4081</item>
 
         <!--<item name="android:windowBackground">@drawable/main_font</item>-->
         <!--<item name="android:background">@drawable/main_font</item>-->
@@ -39,6 +56,7 @@
 
     <style name="customToolBar" parent="@android:style/Widget.Toolbar">
         <item name="android:background">@drawable/main_font</item>
+        <item name="android:text"> Cinema </item>
     </style>
 
     <style name="customTabLayout" parent="@android:style/Widget.TabWidget">
@@ -52,6 +70,7 @@
         <item name="android:height">350dp</item>
         <item name="android:minHeight">50dp</item>
     </style>
+
 
     <style name="splashScreenTheme" parent="Theme.AppCompat.NoActionBar">
         <!--<item name="android:background">@drawable/main_font</item>-->

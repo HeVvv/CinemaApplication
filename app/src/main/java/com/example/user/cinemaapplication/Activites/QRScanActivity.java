@@ -167,9 +167,7 @@ public class QRScanActivity extends Fragment {
 
         responseImage = (ImageView) getActivity().findViewById(R.id.imageView);
         responseImage.setImageDrawable(null);
-
 //        responseImage.setImageResource(R.drawable.ic_launcher_foreground);
-
         super.onActivityCreated(savedInstanceState);
     }
 

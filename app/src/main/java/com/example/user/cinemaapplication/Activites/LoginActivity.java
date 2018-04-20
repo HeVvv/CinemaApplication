@@ -139,6 +139,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.Theme_AppCompat_NoActionBar);
         setContentView(R.layout.activity_main);
 
         Cancel = (TextView) findViewById(R.id.cancel);
