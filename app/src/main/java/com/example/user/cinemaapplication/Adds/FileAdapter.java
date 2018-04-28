@@ -1,6 +1,8 @@
 package com.example.user.cinemaapplication.Adds;
 
 import android.content.Context;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.user.cinemaapplication.Activites.AuditChoosingActivity;
 import com.example.user.cinemaapplication.Activites.QRScanActivity;
@@ -15,7 +17,9 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -25,12 +29,15 @@ import static android.provider.Telephony.Mms.Part.FILENAME;
 
 public class FileAdapter {
     //a lot of exceptions, check
-    private static Context context = AuditChoosingActivity.getStaticAuditChoosingActivity().getContext();
+//    private static Context context = AuditChoosingActivity.getStaticAuditChoosingActivity().getContext();
 
 
-    private static File myFilewrite = new File(context.getFilesDir() + "/" + "history.txt");
-    private static File myFileread = new File(context.getFilesDir() + "/" + "history.txt");
+    private static File myFilewrite = new File(TabActivity.getStaticTabActivity().getApplication().getFilesDir() + "/" + "history.txt");
+    private static File myFileread = new File(TabActivity.getStaticTabActivity().getApplication().getFilesDir() + "/" + "history.txt");
+
+
     private static SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
+
 
     public static void writeFile(String s,Context context) {
         try {
@@ -79,15 +86,13 @@ public class FileAdapter {
         }
     }
 
-    public static String readFromFile(Context context){
+    public static String readFromFile(String filename){
         BufferedReader br = null;
         FileReader fr = null;
         StringBuilder stringBuilder = new StringBuilder();
         try {
             //br = new BufferedReader(new FileReader(FILENAME);
 
-
-                String filename = context.getFilesDir()+"/"+"history.txt";
                 fr = new FileReader(filename);
                 br = new BufferedReader(fr);
 
@@ -126,4 +131,5 @@ public class FileAdapter {
         
         return stringBuilder.toString();
     }
+
 }

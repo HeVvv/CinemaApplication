@@ -87,7 +87,7 @@ public class HistoryListActivity extends android.support.v4.app.Fragment{
 
 
     public List<String> buildHistoryList(Context context){
-        String strs = FileAdapter.readFromFile(context);
+        String strs = FileAdapter.readFromFile(context.getFilesDir() + "/" + "history.txt");
         List<String> historyList = new ArrayList<String>(Arrays.asList(strs.split("\n")));
         return historyList;
     }

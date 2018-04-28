@@ -86,6 +86,18 @@ public class SplashActivity extends AppCompatActivity{
         }
 
 
+        File file2 = new File(ctx.getFilesDir(), "ID.txt");
+        try {
+            if (file1.createNewFile()) {
+                System.out.println("Файл создан: " + file1.getAbsolutePath());
+            } else {
+                System.out.println("Не удалось создать файл.");
+            }
+        } catch (IOException ex) {
+            System.out.println("Creation file Error");
+        }
+
+
         Handler handler1 = new Handler();
         handler1.post(new Runnable() {
             @Override

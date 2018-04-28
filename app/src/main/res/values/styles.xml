@@ -34,9 +34,6 @@
         <item name="colorPrimary">#3F51B5</item>
         <item name="colorPrimaryDark">#303F9F</item>
         <item name="android:colorAccent">#FF4081</item>
-
-        <!--<item name="android:windowBackground">@drawable/main_font</item>-->
-        <!--<item name="android:background">@drawable/main_font</item>-->
         <item name="android:listViewStyle">@style/CustomListView</item>
         <item name="android:textViewStyle">@style/CustomTextView</item>
         <item name="android:checkboxStyle">@style/customCheckBoxStyle</item>
@@ -51,8 +48,6 @@
         <item name="android:typeface">serif</item>
         <item name="android:color">#fbfbfb</item>
     </style>
-
-
 
     <style name="customToolBar" parent="@android:style/Widget.Toolbar">
         <item name="android:background">@drawable/main_font</item>

@@ -71,6 +71,7 @@ public class QRScanActivity extends Fragment {
     private TicketListAdapter adapter;
     private List<String> ticketList = new ArrayList<>();
     private ListView ticketHistoryList;
+    private int ID_DEVICE;
 
     TextView text;
     TextView textAdd;
@@ -174,6 +175,11 @@ public class QRScanActivity extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+
+        ID_DEVICE = Integer.parseInt((FileAdapter.readFromFile(getContext().getFilesDir()+"/"+ "ID.txt")).trim());
+
+        System.out.println(ID_DEVICE);
+
         View rootView = inflater.inflate(R.layout.activity_qrscan, container, false);
         final AsyncHttpClient clientTicket = new AsyncHttpClient();
         clientTicket.setBasicAuth(LoginActivity.getStaticLoginActivity().getUsername(), LoginActivity.getStaticLoginActivity().getPassword());
@@ -216,9 +222,9 @@ public class QRScanActivity extends Fragment {
                         @Override
                         public void run() {
 //                            String datatest = "4172/30800/232/5//11";
-//                            final String test = "1/" + QRScanActivity.getStaticQRScanActivity().getAuditoriumsIDS() + "/" + datatest;
+//                            final String test = "1/" + QRScanActivity.getStaticQRS    canActivity().getAuditoriumsIDS() + "/" + datatest;
 
-                            final String test = "1/" + QRScanActivity.getStaticQRScanActivity().getAuditoriumsIDS() + "/" + data;
+                            final String test = ID_DEVICE + "/" + QRScanActivity.getStaticQRScanActivity().getAuditoriumsIDS() + "/" + data;
                             try {
                                 try {
                                     TicketSClass ticketSClass = new TicketSClass(test);
@@ -267,7 +273,7 @@ public class QRScanActivity extends Fragment {
                                 });
                                 }catch(NumberFormatException e){
                                     e.printStackTrace();
-                                    Toast.makeText(getActivity().getApplicationContext(), "Неверный вормат QR кода!",Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getActivity().getApplicationContext(), "Неверный формат QR кода!",Toast.LENGTH_LONG).show();
                                 }
                             }catch (IOException e){
                                 e.printStackTrace();
