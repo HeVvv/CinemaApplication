@@ -1,14 +1,22 @@
 package com.example.user.cinemaapplication.Activites;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.AttributeSet;
+import android.view.View;
+import android.widget.Toast;
 
 import com.example.user.cinemaapplication.Adds.FileAdapter;
 import com.example.user.cinemaapplication.Adds.HashMapSort;
@@ -39,7 +47,7 @@ import github.nisrulz.qreader.QREader;
 public class SplashActivity extends AppCompatActivity{
     private HashMap <String,Integer> DATA = new HashMap<>();
     private Set<Integer> DATA2 = new HashSet<>();
-
+    private int MY_CAMERA_REQUEST_CODE = 101;
 
     Context ctx = this;
 
@@ -58,6 +66,7 @@ public class SplashActivity extends AppCompatActivity{
         return DATA2;
     }
 
+
     @Override
     public void onCreate(Bundle savedInstance) {
 
@@ -69,6 +78,7 @@ public class SplashActivity extends AppCompatActivity{
                 (ShimmerFrameLayout) findViewById(R.id.shimmer_view_container);
         container.startShimmerAnimation();
 
+
         File historyFile = new File(ctx.getFilesDir(), "history.txt");
         try {
             if (historyFile.createNewFile()) {
@@ -79,7 +89,6 @@ public class SplashActivity extends AppCompatActivity{
         } catch (IOException ex) {
             System.out.println("Creation file Error");
         }
-
 
         File file1 = new File(ctx.getFilesDir(), "ID.txt");
         try {

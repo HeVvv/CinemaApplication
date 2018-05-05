@@ -83,9 +83,9 @@ public class ListData extends Application {
         staticListData = this;
     }
 
-    final static String url12 = "https://soft.silverscreen.by:8443/wscinema/webapi/auditoriums";
-    final static String url22 = "https://soft.silverscreen.by:8443/wscinema/webapi/show/auditorium/";
-
+    final static String url12 = "https://inlogic.org:8443/wscinema/webapi/auditoriums";
+    final static String url22 = "https://inlogic.org:8443/wscinema/webapi/show/auditorium/";
+    final static String urlTheaterInfo = "https://inlogic.org:8443/wsglobal/webapi/theater/android";
 
     // private static HashMap<String,Integer> AuditData = new HashMap<>();
     //HashMap sorting
@@ -196,6 +196,7 @@ public class ListData extends Application {
             });
         return AuditData;
     }
+
     public static void loadData(final HashMap<String,Integer> data){
         System.out.println("Loading list.");
         final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
@@ -226,51 +227,31 @@ public class ListData extends Application {
         });
     }
 
-        // dont use, not testsed
-    public static String executePost(String targetURL, String urlParameters) {
-        HttpURLConnection connection = null;
+    public void loadTheaterInfo(){
+        System.out.println("Loading cinema info.");
 
-        try {
-            //Create connection
-            URL url = new URL(targetURL);
-            connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
-            connection.setRequestProperty("Content-Type",
-                    "application/x-www-form-urlencoded");
+        final AsyncHttpClient client_loadTheaterInfo = new AsyncHttpClient();
+        client_loadTheaterInfo.setBasicAuth(LoginActivity.getStaticLoginActivity().getUsername(), LoginActivity.getStaticLoginActivity().getPassword());
+        client_loadTheaterInfo.setSSLSocketFactory(MySSLSocketFactory.getFixedSocketFactory());
+        client_loadTheaterInfo.get(urlTheaterInfo, null, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, final JSONArray responseSessionBody) {
+                try {
 
-            connection.setRequestProperty("Content-Length",
-                    Integer.toString(urlParameters.getBytes().length));
-            connection.setRequestProperty("Content-Language", "en-US");
 
-            connection.setUseCaches(false);
-            connection.setDoOutput(true);
-
-            //Send request
-            DataOutputStream wr = new DataOutputStream(
-                    connection.getOutputStream());
-            wr.writeBytes(urlParameters);
-            wr.close();
-
-            //Get Response
-            InputStream is = connection.getInputStream();
-            BufferedReader rd = new BufferedReader(new InputStreamReader(is));
-            StringBuilder response = new StringBuilder(); // or StringBuffer if Java version 5+
-            String line;
-            while ((line = rd.readLine()) != null) {
-                response.append(line);
-                response.append('\r');
+                } catch (Exception e) {
+                    System.out.println("Outer Url/Json error! " + statusCode + " " + responseSessionBody.toString());
+                    e.printStackTrace();
+                }
             }
-            rd.close();
-            return response.toString();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        } finally {
-            if (connection != null) {
-                connection.disconnect();
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                System.out.println("error" + statusCode + "~~~~" + errorResponse);
             }
-        }
+        });
     }
+
 }
 
 //

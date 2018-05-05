@@ -2,13 +2,21 @@ package com.example.user.cinemaapplication.Activites;
 
 
 
+import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
+import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.CompoundButtonCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
@@ -44,7 +52,7 @@ public class AuditChoosingActivity extends Fragment {
     private int XD = 0;
     private HashMap<String,Integer> listInfo1 = new HashMap<String,Integer>();
     private Set<Integer> auditIDS = new HashSet<>();
-
+    private int MY_CAMERA_REQUEST_CODE = 102;
 
     private static AuditChoosingActivity staticAuditChoosingActivity;
     public static AuditChoosingActivity getStaticAuditChoosingActivity(){
@@ -104,16 +112,39 @@ public class AuditChoosingActivity extends Fragment {
                 ColorStateList(states, colors));
     }
 
-    private static int getThemeAccentColor (final Context context) {
-        final TypedValue value = new TypedValue ();
-        context.getTheme ().resolveAttribute (R.attr.colorAccent, value, true);
-        return value.data;
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 1) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(AuditChoosingActivity.getStaticAuditChoosingActivity().getContext(),"permission granted", Toast.LENGTH_SHORT).show();
+                Intent intent = getActivity().getIntent();
+                getActivity().finish();
+                startActivity(intent);
+                getActivity().recreate();
+            } else {
+                Toast.makeText(AuditChoosingActivity.getStaticAuditChoosingActivity().getContext(),"permission not granted", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+
+    private int fetchAccentColor() {
+        TypedValue typedValue = new TypedValue();
+        TypedArray a = getContext().obtainStyledAttributes(typedValue.data, new int[] { R.attr.colorAccent });
+        int color = a.getColor(0, 0);
+        a.recycle();
+        return color;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.activity_auditch, container, false);
 
+        if (ContextCompat.checkSelfPermission(rootView.getContext(), Manifest.permission.CAMERA)
+                == PackageManager.PERMISSION_DENIED) {
+            requestPermissions(new String[]{Manifest.permission.CAMERA}, MY_CAMERA_REQUEST_CODE);
+        }
 
         System.out.println("~~~~~");
 
@@ -131,6 +162,7 @@ public class AuditChoosingActivity extends Fragment {
             ch.setText(entry.getKey().toString());
             ch.setId(Integer.parseInt(entry.getValue().toString()));
             ch.setBackgroundColor(Color.argb(55,51,51,51));
+            setCheckBoxColor(ch,fetchAccentColor(),Color.WHITE);
             ch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
             {
                 @Override
@@ -146,8 +178,6 @@ public class AuditChoosingActivity extends Fragment {
                     }
                 }
             });
-            System.out.println(getThemeAccentColor(rootView.getContext()));
-            setCheckBoxColor(ch,getThemeAccentColor(rootView.getContext()),Color.WHITE);
             ll.addView(ch);
         }
         return rootView;

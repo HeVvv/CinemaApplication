@@ -57,7 +57,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
         AsyncHttpClient client_main = new AsyncHttpClient();
         client_main.setBasicAuth(username.getText().toString(), password.getText().toString());
         client_main.setSSLSocketFactory(MySSLSocketFactory.getFixedSocketFactory());
-        client_main.get("https://soft.silverscreen.by:8443/security-1.0/webapi/auth/login/" + username.getText().toString(), null, new JsonHttpResponseHandler() {
+        client_main.get("https://inlogic.org:8443/security-1.0/webapi/auth/login/" + username.getText().toString(), null, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject responseBody) {
 

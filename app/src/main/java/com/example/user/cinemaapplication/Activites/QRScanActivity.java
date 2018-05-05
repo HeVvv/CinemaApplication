@@ -180,6 +180,11 @@ public class QRScanActivity extends Fragment {
         clientTicket.setBasicAuth(LoginActivity.getStaticLoginActivity().getUsername(), LoginActivity.getStaticLoginActivity().getPassword());
         clientTicket.setSSLSocketFactory(MySSLSocketFactory.getFixedSocketFactory());
 
+        if (ContextCompat.checkSelfPermission(rootView.getContext(), Manifest.permission.CAMERA)
+                == PackageManager.PERMISSION_DENIED) {
+            ActivityCompat.requestPermissions(QRScanActivity.staticQRScanActivity.getActivity(), new String[]{Manifest.permission.CAMERA}, MY_CAMERA_REQUEST_CODE);
+        }
+
         try {
             ID_DEVICE = Integer.parseInt((FileAdapter.readFromFile(getContext().getFilesDir() + "/" + "ID.txt")).trim());
         }catch (NumberFormatException e){
@@ -209,7 +214,7 @@ public class QRScanActivity extends Fragment {
 
             @Override
             public void onDetected(final String data) {
-                if (data.equals(OLD_DATA) && Calendar.getInstance().getTime().getTime() - OLD_DATE.getTime() < 2500) {
+                if((data.equals(OLD_DATA) && Calendar.getInstance().getTime().getTime() - OLD_DATE.getTime() < 2500)){
                 } else {
                     System.out.println("scanning" + data);
                     OLD_DATA = data;

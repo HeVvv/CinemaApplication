@@ -45,7 +45,7 @@ public class TabActivity extends AppCompatActivity {
     private CustomViewPager viewPager;
     private TabLayout tabLayout;
     private LinearLayout tabStrip;
-    private int CINEMA_ID = 1; // arena
+    private int CINEMA_ID = 2; // velcom
     private int[] tabIcons = {
             R.drawable.tickets,
             R.drawable.video_camera,
@@ -82,7 +82,6 @@ public class TabActivity extends AppCompatActivity {
         }
 
         setContentView(R.layout.activity_tab2);
-
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
