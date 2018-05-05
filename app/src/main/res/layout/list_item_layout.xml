@@ -53,6 +53,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="start"
+                        android:text="Список пуст"
                         android:textSize="18sp" />
 
                     <TextView

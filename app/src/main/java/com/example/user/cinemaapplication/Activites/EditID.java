@@ -1,6 +1,7 @@
 package com.example.user.cinemaapplication.Activites;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +18,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.util.Set;
 
 public class EditID extends AppCompatActivity {
 
@@ -47,6 +49,9 @@ public class EditID extends AppCompatActivity {
                 return true;
             case R.id.action_save:
                 saveFile(FILENAME);
+                Intent intent = new Intent(EditID.this, Settings_AboutActivity.class);
+                Toast.makeText(getApplication(),"ID for device is set!",Toast.LENGTH_SHORT).show();
+                startActivity(intent);
                 return true;
             default:
                 return true;

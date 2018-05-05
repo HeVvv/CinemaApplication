@@ -45,7 +45,7 @@ public class TabActivity extends AppCompatActivity {
     private CustomViewPager viewPager;
     private TabLayout tabLayout;
     private LinearLayout tabStrip;
-    private int CINEMA_ID = 2; // arena
+    private int CINEMA_ID = 1; // arena
     private int[] tabIcons = {
             R.drawable.tickets,
             R.drawable.video_camera,
@@ -76,6 +76,7 @@ public class TabActivity extends AppCompatActivity {
         }
 
         if(CINEMA_ID == 2){
+//            setTheme(R.style.MainTheme);
             setTheme(R.style.AppThemeVelcom);
             setTitle("Velcom Minsk");
         }
@@ -237,84 +238,12 @@ public class TabActivity extends AppCompatActivity {
             startActivity(intent);
             return true;
         }
-        if( id == R.id.action_delete){
-            FileAdapter.deleteFile(TabActivity.this);
-            System.out.println("Deleted histoty file!");
-            return true;
-        }
 
         if( id == R.id.Log_off){
             Intent intent = new Intent(TabActivity.this,LoginActivity.class);
             startActivity(intent);
             return true;
         }
-        if( id == R.id.setTheme1){
-
-            getApplication().setTheme(R.style.AppThemeVelcom);
-            TaskStackBuilder.create(this)
-                    .addNextIntent(new Intent(this, TabActivity.class))
-                    .addNextIntent(getIntent())
-                    .startActivities();
-            this.setTitle("Velcom Минск");
-
-            return true;
-        }
-        if( id == R.id.setTheme2){
-
-            getApplication().setTheme(R.style.AppThemeArena);
-            TaskStackBuilder.create(this)
-                    .addNextIntent(new Intent(this, TabActivity.class))
-                    .addNextIntent(getIntent())
-                    .startActivities();
-            this.setTitle("Арена Минск");
-            return true;
-        }
         return super.onOptionsItemSelected(item);
     }
 }
-
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.cinema_activity,menu);
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        int id = item.getItemId();
-//        switch(id){
-//            case R.id.action_settings:
-//                Intent intentSettings = new Intent(this, AuditChoosingActivity.class);
-//                startActivity(intentSettings);
-//                return true;
-//            case R.id.action_qrScan:
-//                Intent intentQR = new Intent(this, QRScanActivity.class);
-//                startActivity(intentQR);
-//                return true;
-//            case R.id.Log_off:
-//                Intent intentLogOff = new Intent(this, LoginActivity.class);
-//                startActivity(intentLogOff);
-//                return true;
-//            default:
-//                return super.onOptionsItemSelected(item);
-//        }
-//    }
-
-
-//        if(tabStrip.getChildCount() > 2) {
-//            tabStrip.getChildAt(2).setOnTouchListener(new View.OnTouchListener() {
-//                @Override
-//                public boolean onTouch(View v, MotionEvent event) {
-//
-//                    if (checkAuditsEmpty()) {
-//                        if (!QRScanActivity.getStaticQRScanActivity().getQReader().isCameraRunning()) {
-//                            QRScanActivity.getStaticQRScanActivity().getQReader().start();
-//                        }
-//
-//                        Toast.makeText(TabActivity.this, "Заполните аудитории для проверки!", Toast.LENGTH_SHORT).show();
-//                        return true;
-//                    } else {
-//                        return false;
-//                    }
-//                }
-//            });

@@ -10,6 +10,7 @@ import android.os.Message;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 
+import com.example.user.cinemaapplication.Adds.FileAdapter;
 import com.example.user.cinemaapplication.Adds.HashMapSort;
 import com.example.user.cinemaapplication.Adds.JSONUtils;
 import com.example.user.cinemaapplication.Adds.ListData;
@@ -35,10 +36,6 @@ import cz.msebera.android.httpclient.entity.StringEntity;
 import github.nisrulz.qreader.QRDataListener;
 import github.nisrulz.qreader.QREader;
 
-/**
- * Created by User on 22.03.2018.
- */
-
 public class SplashActivity extends AppCompatActivity{
     private HashMap <String,Integer> DATA = new HashMap<>();
     private Set<Integer> DATA2 = new HashSet<>();
@@ -61,8 +58,6 @@ public class SplashActivity extends AppCompatActivity{
         return DATA2;
     }
 
-    //google shimmer for android
-    //maybe add as animation
     @Override
     public void onCreate(Bundle savedInstance) {
 
@@ -74,10 +69,10 @@ public class SplashActivity extends AppCompatActivity{
                 (ShimmerFrameLayout) findViewById(R.id.shimmer_view_container);
         container.startShimmerAnimation();
 
-        File file1 = new File(ctx.getFilesDir(), "history.txt");
+        File historyFile = new File(ctx.getFilesDir(), "history.txt");
         try {
-            if (file1.createNewFile()) {
-                System.out.println("Файл создан: " + file1.getAbsolutePath());
+            if (historyFile.createNewFile()) {
+                System.out.println("Файл создан: " + historyFile.getAbsolutePath());
             } else {
                 System.out.println("Не удалось создать файл.");
             }
@@ -86,7 +81,7 @@ public class SplashActivity extends AppCompatActivity{
         }
 
 
-        File file2 = new File(ctx.getFilesDir(), "ID.txt");
+        File file1 = new File(ctx.getFilesDir(), "ID.txt");
         try {
             if (file1.createNewFile()) {
                 System.out.println("Файл создан: " + file1.getAbsolutePath());

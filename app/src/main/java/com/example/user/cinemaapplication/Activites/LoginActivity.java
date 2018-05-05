@@ -147,7 +147,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
 
 
         Logo = (ImageView) findViewById(R.id.logo);
-        //App logo
         Logo.setImageResource(R.drawable.logo_prog);
 
 

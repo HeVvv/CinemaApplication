@@ -13,7 +13,7 @@
         android:id="@+id/toolbar"
         android:color="#515151"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="40dp"
         android:layout_alignParentTop="true"
         android:elevation="6dp"
         app:popupTheme="@style/ThemeOverlay.AppCompat" />
@@ -23,7 +23,7 @@
         android:background="@drawable/mainfon2"
         android:id="@+id/tab_layout"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
+        android:layout_height="40dp"
         android:layout_below="@+id/toolbar"
         android:elevation="6dp" />
 
@@ -34,8 +34,6 @@
         android:layout_height="fill_parent"
         android:layout_below="@id/tab_layout"
         android:background="@drawable/mainfon2">
-
-
 
     </com.example.user.cinemaapplication.Adds.CustomViewPager>
 

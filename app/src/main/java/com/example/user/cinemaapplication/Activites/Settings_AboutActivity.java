@@ -46,7 +46,6 @@ public class Settings_AboutActivity extends AppCompatActivity {
     public static final String APP_PREFERENCES_COUNTER = "counter";
 
 
-
     private static Settings_AboutActivity staticSettings_AboutActivity;
     public static Settings_AboutActivity getStaticSettings_AboutActivityt(){
         return staticSettings_AboutActivity;
@@ -77,8 +76,8 @@ public class Settings_AboutActivity extends AppCompatActivity {
             txtLogin.setText("Логин : " + LoginActivity.getStaticLoginActivity().getUsername());
 
 
-        Button btn = (Button) findViewById(R.id.changeID);
-        btn.setOnClickListener(new View.OnClickListener() {
+        Button btnID = (Button) findViewById(R.id.changeID);
+        btnID.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Settings_AboutActivity.this, EditID.class);
@@ -86,6 +85,16 @@ public class Settings_AboutActivity extends AppCompatActivity {
             }
         });
 
+
+        Button btnHistory = (Button) findViewById(R.id.deleteHistory);
+        btnHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FileAdapter.deleteFile(Settings_AboutActivity.this);
+                Toast.makeText(getApplication(),"Файл истории удален!",Toast.LENGTH_LONG).show();
+                System.out.println("Deleted histoty file!");
+            }
+        });
         super.onCreate(savedInstanceState);
     }
 }

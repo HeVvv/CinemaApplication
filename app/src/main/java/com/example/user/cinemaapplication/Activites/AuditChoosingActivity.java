@@ -3,12 +3,15 @@ package com.example.user.cinemaapplication.Activites;
 
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.CompoundButtonCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -94,6 +97,19 @@ public class AuditChoosingActivity extends Fragment {
         return sortedHashMap;
     }
 
+    private void setCheckBoxColor(CheckBox checkBox, int checkedColor, int uncheckedColor) {
+        int states[][] = {{android.R.attr.state_checked}, {}};
+        int colors[] = {checkedColor, uncheckedColor};
+        CompoundButtonCompat.setButtonTintList(checkBox, new
+                ColorStateList(states, colors));
+    }
+
+    private static int getThemeAccentColor (final Context context) {
+        final TypedValue value = new TypedValue ();
+        context.getTheme ().resolveAttribute (R.attr.colorAccent, value, true);
+        return value.data;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.activity_auditch, container, false);
@@ -105,21 +121,16 @@ public class AuditChoosingActivity extends Fragment {
 
         Map <String,Integer> listinfo = HashMapSort.sortByComparator(unsorted,true);
 
-//        TextView txt = (TextView) rootView.findViewById(R.id.txtInf);
         LinearLayout ll = (LinearLayout) rootView.findViewById(R.id.checkBoxField);
         ll.setPadding(5,10,5,5);
-//        txt.setTextSize(20);
-//        txt.setText("Выберите аудитории для проверки");
+
 
         for (Map.Entry entry : listinfo.entrySet()) {
             final CheckBox ch = new CheckBox(rootView.getContext());
-            final TextView tx = new TextView(rootView.getContext());
-
 
             ch.setText(entry.getKey().toString());
             ch.setId(Integer.parseInt(entry.getValue().toString()));
             ch.setBackgroundColor(Color.argb(55,51,51,51));
-//            ch.setPadding(2,2,2,2);
             ch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
             {
                 @Override
@@ -135,6 +146,8 @@ public class AuditChoosingActivity extends Fragment {
                     }
                 }
             });
+            System.out.println(getThemeAccentColor(rootView.getContext()));
+            setCheckBoxColor(ch,getThemeAccentColor(rootView.getContext()),Color.WHITE);
             ll.addView(ch);
         }
         return rootView;

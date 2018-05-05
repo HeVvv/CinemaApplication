@@ -2,7 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-
         <item
             android:id="@+id/action_settings"
             android:orderInCategory="100"
@@ -13,23 +12,5 @@
             android:orderInCategory ="10000"
             android:title = "@string/Log_off"
             app:showAsAction = "never"/>
-        <item
-            android:id="@+id/action_delete"
-            android:orderInCategory ="102"
-            android:title = "Delete history file"
-            app:showAsAction = "never"/>
-
-        <item
-            android:id="@+id/setTheme1"
-            android:orderInCategory ="103"
-            android:title = "Set Theme 1"
-            app:showAsAction = "never"/>
-
-        <item
-            android:id="@+id/setTheme2"
-            android:orderInCategory ="104"
-            android:title = "Set Theme 2"
-            app:showAsAction = "never"/>
-
 
 </menu>
