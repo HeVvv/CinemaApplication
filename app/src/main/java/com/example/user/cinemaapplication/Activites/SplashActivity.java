@@ -30,6 +30,7 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -48,6 +49,8 @@ public class SplashActivity extends AppCompatActivity{
     private HashMap <String,Integer> DATA = new HashMap<>();
     private Set<Integer> DATA2 = new HashSet<>();
     private int MY_CAMERA_REQUEST_CODE = 101;
+    private HashMap<Integer,String> THEATER_DATA = new HashMap<>();
+    private List<String> THEATER_COLOR = new ArrayList<>();
 
     Context ctx = this;
 
@@ -62,10 +65,13 @@ public class SplashActivity extends AppCompatActivity{
     public HashMap<String, Integer> getDATA(){
         return DATA;
     }
-    public Set<Integer> getDATA2(){
-        return DATA2;
-    }
 
+    public HashMap<Integer, String> getTHEATER_DATA() {
+        return THEATER_DATA;
+    }
+    public List<String> getTHEATER_COLOR(){
+        return THEATER_COLOR;
+    }
 
     @Override
     public void onCreate(Bundle savedInstance) {
@@ -107,6 +113,8 @@ public class SplashActivity extends AppCompatActivity{
             @Override
             public void run() {
                 DATA = ListData.loadAuditData();
+                THEATER_DATA = ListData.loadTheaterInfo();
+                THEATER_COLOR = ListData.loadTheaterColor();
             }
         });
 
@@ -119,9 +127,7 @@ public class SplashActivity extends AppCompatActivity{
                 startActivity(openMainActivity);
                 finish();
             }
-        }, 1500);
-
-
+        }, 3500);
 
     }
 }

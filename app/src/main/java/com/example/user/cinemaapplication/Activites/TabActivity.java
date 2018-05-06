@@ -17,8 +17,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Space;
 import android.widget.Toast;
 
 import com.example.user.cinemaapplication.Adds.CustomViewPager;
@@ -28,7 +30,9 @@ import com.example.user.cinemaapplication.R;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -45,7 +49,7 @@ public class TabActivity extends AppCompatActivity {
     private CustomViewPager viewPager;
     private TabLayout tabLayout;
     private LinearLayout tabStrip;
-    private int CINEMA_ID = 2; // velcom
+    private int CINEMA_ID = 3; // velcom
     private int[] tabIcons = {
             R.drawable.tickets,
             R.drawable.video_camera,
@@ -62,23 +66,29 @@ public class TabActivity extends AppCompatActivity {
 
 
     private void setupTabIcons() {
-        tabLayout.getTabAt(0).setIcon(tabIcons[0]);
-        tabLayout.getTabAt(1).setIcon(tabIcons[1]);
-        tabLayout.getTabAt(2).setIcon(tabIcons[2]);
+        tabLayout.getTabAt(0).setIcon(tabIcons[1]);
+        tabLayout.getTabAt(1).setIcon(tabIcons[2]);
+        tabLayout.getTabAt(2).setIcon(tabIcons[0]);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(CINEMA_ID == 1){
-            setTheme(R.style.AppThemeArena);
-            setTitle("Arena Minsk");
-        }
 
-        if(CINEMA_ID == 2){
-//            setTheme(R.style.MainTheme);
+        HashMap<Integer,String> theater_data = SplashActivity.getStaticSplashActivity().getTHEATER_DATA();
+        List<String> theater_color = SplashActivity.getStaticSplashActivity().getTHEATER_COLOR();
+
+
+        for (Map.Entry entry : theater_data.entrySet()) {
+            if(Integer.parseInt(entry.getKey().toString()) == CINEMA_ID) {
+                setTitle(entry.getValue().toString());
+            }
+        }
+        if((CINEMA_ID == 2) || (CINEMA_ID == 1)){
+            setTheme(R.style.AppThemeArena);
+        }
+        if(CINEMA_ID == 3){
             setTheme(R.style.AppThemeVelcom);
-            setTitle("Velcom Minsk");
         }
 
         setContentView(R.layout.activity_tab2);
@@ -91,13 +101,13 @@ public class TabActivity extends AppCompatActivity {
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);
 
         adapter = new PagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(frag_history,"История");
         adapter.addFragment(frag_choose,"Выбор");
+        adapter.addFragment(frag_history,"История");
 
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
-        tabLayout.getTabAt(0).setIcon(tabIcons[0]);
-        tabLayout.getTabAt(1).setIcon(tabIcons[1]);
+        tabLayout.getTabAt(0).setIcon(tabIcons[1]);
+        tabLayout.getTabAt(1).setIcon(tabIcons[0]);
 
         tabStrip = ((LinearLayout) tabLayout.getChildAt(0));
 
@@ -106,16 +116,22 @@ public class TabActivity extends AppCompatActivity {
         final Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                System.out.println("scan tab tick");
                 if (!(checkAuditsEmpty())){
                     // add
                     if(tabStrip.getChildCount() == 2) {
+                        adapter.removeFragment(frag_history,"История");
                         adapter.addFragment(frag_scan, "Скан");
-                        adapter.notifyDataSetChanged();
+                        adapter.addFragment(frag_history,"История");
+
+                        try{
+                            adapter.notifyDataSetChanged();
+                        }catch (IllegalStateException e){
+                            e.printStackTrace();
+                        }
                         viewPager.setAdapter(adapter);
                         setupTabIcons();
                         try {
-                            tabLayout.getTabAt(1).select();
+//                            tabLayout.getTabAt(1).select();
                         }catch (NullPointerException e){
                             e.printStackTrace();
                         }
@@ -125,13 +141,17 @@ public class TabActivity extends AppCompatActivity {
                     //remove
                     if(tabStrip.getChildCount() == 3) {
                         adapter.removeFragment(frag_scan, "Скан");
-                        adapter.notifyDataSetChanged();
+                        try{
+                            adapter.notifyDataSetChanged();
+                        }catch (IllegalStateException e){
+                            e.printStackTrace();
+                        }
                         viewPager.setAdapter(adapter);
-                            tabLayout.getTabAt(0).setIcon(tabIcons[0]);
-                            tabLayout.getTabAt(1).setIcon(tabIcons[1]);
+                            tabLayout.getTabAt(0).setIcon(tabIcons[1]);
+                            tabLayout.getTabAt(1).setIcon(tabIcons[0]);
 
                         try {
-                            tabLayout.getTabAt(1).select();
+//                            tabLayout.getTabAt(1).select();
                         }catch (NullPointerException e){
                             e.printStackTrace();
                         }
@@ -147,7 +167,7 @@ public class TabActivity extends AppCompatActivity {
                 uiHandler.post(runnable);
 
             }
-        }, 0L, 3500 );
+        }, 0L, 1500 );
 
         uiHandler.removeCallbacks(runnable);
 
@@ -170,45 +190,45 @@ public class TabActivity extends AppCompatActivity {
 
         });
         try {
-            tabLayout.getTabAt(1).select();
+            tabLayout.getTabAt(0).select();
         }catch (NullPointerException e){
             e.printStackTrace();
         }
     }
 
-    public Runnable tabControl = new Runnable() {
-        @Override
-        public void run() {
-            System.out.println("scan tab tick");
-            if (!(checkAuditsEmpty())){
-                // add
-                if(tabStrip.getChildCount() == 2) {
-                    adapter.addFragment(frag_scan, "Скан");
-                    adapter.notifyDataSetChanged();
-                    viewPager.setAdapter(adapter);
-                    try {
-                        tabLayout.getTabAt(1).select();
-                    }catch (NullPointerException e){
-                        e.printStackTrace();
-                    }
-                    System.out.println("added");
-                }
-            }else{
-                //remove
-                if(tabStrip.getChildCount() == 3) {
-                    adapter.removeFragment(frag_scan, "Скан");
-                    adapter.notifyDataSetChanged();
-                    viewPager.setAdapter(adapter);
-                    try {
-                        tabLayout.getTabAt(1).select();
-                    }catch (NullPointerException e){
-                        e.printStackTrace();
-                    }
-                    System.out.println("removed");
-                }
-            }
-        }
-    };
+//    public Runnable tabControl = new Runnable() {
+//        @Override
+//        public void run() {
+//            System.out.println("scan tab tick");
+//            if (!(checkAuditsEmpty())){
+//                // add
+//                if(tabStrip.getChildCount() == 2) {
+//                    adapter.addFragment(frag_scan, "Скан");
+//                    adapter.notifyDataSetChanged();
+//                    viewPager.setAdapter(adapter);
+//                    try {
+//                        tabLayout.getTabAt(1).select();
+//                    }catch (NullPointerException e){
+//                        e.printStackTrace();
+//                    }
+//                    System.out.println("added");
+//                }
+//            }else{
+//                //remove
+//                if(tabStrip.getChildCount() == 3) {
+//                    adapter.removeFragment(frag_scan, "Скан");
+//                    adapter.notifyDataSetChanged();
+//                    viewPager.setAdapter(adapter);
+//                    try {
+//                        tabLayout.getTabAt(1).select();
+//                    }catch (NullPointerException e){
+//                        e.printStackTrace();
+//                    }
+//                    System.out.println("removed");
+//                }
+//            }
+//        }
+//    };
 
     public boolean checkAuditsEmpty(){
         try {   
@@ -233,14 +253,19 @@ public class TabActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
-            Intent intent = new Intent(TabActivity.this,Settings_AboutActivity.class);
+            Intent intent = new Intent(TabActivity.this,Pass_CheckActivity.class);
             startActivity(intent);
             return true;
         }
 
         if( id == R.id.Log_off){
-            Intent intent = new Intent(TabActivity.this,LoginActivity.class);
-            startActivity(intent);
+            Intent i = new Intent(TabActivity.this,LoginActivity.class);
+            i.addCategory(Intent.CATEGORY_HOME);
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(i);
+//            Intent intent = new Intent(TabActivity.this,LoginActivity.class);
+//
+//            startActivity(intent);
             return true;
         }
         return super.onOptionsItemSelected(item);

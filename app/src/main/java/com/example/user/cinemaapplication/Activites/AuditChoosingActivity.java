@@ -13,6 +13,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -34,6 +35,7 @@ import android.widget.Toast;
 import com.example.user.cinemaapplication.Adds.HashMapSort;
 import com.example.user.cinemaapplication.Adds.ListData;
 import com.example.user.cinemaapplication.R;
+import com.google.android.gms.vision.text.Line;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -137,6 +139,8 @@ public class AuditChoosingActivity extends Fragment {
         return color;
     }
 
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.activity_auditch, container, false);
@@ -153,7 +157,7 @@ public class AuditChoosingActivity extends Fragment {
         Map <String,Integer> listinfo = HashMapSort.sortByComparator(unsorted,true);
 
         LinearLayout ll = (LinearLayout) rootView.findViewById(R.id.checkBoxField);
-        ll.setPadding(5,10,5,5);
+        ll.setPadding(5,5,5,5);
 
 
         for (Map.Entry entry : listinfo.entrySet()) {

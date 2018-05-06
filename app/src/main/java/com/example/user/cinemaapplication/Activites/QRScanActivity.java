@@ -159,7 +159,6 @@ public class QRScanActivity extends Fragment {
         adapter = new TicketListAdapter(getActivity(), ticketList);
         ticketHistoryList.setAdapter(adapter);
 
-
         text = (TextView) getActivity().findViewById(R.id.responseInfo);
         text.setTextAppearance(getActivity(), R.style.TextAppearance_AppCompat_Title);
         text.setGravity(Gravity.CENTER);
@@ -214,7 +213,8 @@ public class QRScanActivity extends Fragment {
 
             @Override
             public void onDetected(final String data) {
-                if((data.equals(OLD_DATA) && Calendar.getInstance().getTime().getTime() - OLD_DATE.getTime() < 2500)){
+                if( (  (data.equals(OLD_DATA)) && (Calendar.getInstance().getTime().getTime() - OLD_DATE.getTime() < 2500)  ) ){
+
                 } else {
                     System.out.println("scanning" + data);
                     OLD_DATA = data;

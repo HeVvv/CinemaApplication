@@ -7,6 +7,7 @@
     <string name="action_qrScan">QR Scan</string>
     <string name="Log_off">Log off</string>
     <string name="Cancel">Отмена</string>
+    <string name="Exit">Выход</string>
 
     <string-array name="CinemaList">
         <item>Кинотеатр 1</item>

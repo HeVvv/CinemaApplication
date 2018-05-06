@@ -9,6 +9,7 @@ import android.util.Log;
 import com.example.user.cinemaapplication.Classes.AuditoriumsClass;
 import com.example.user.cinemaapplication.Classes.SessionClass;
 import com.example.user.cinemaapplication.Activites.LoginActivity;
+import com.example.user.cinemaapplication.Classes.TheaterClass;
 import com.google.gson.Gson;
 import com.loopj.android.http.AsyncHttpClient;
 
@@ -73,7 +74,9 @@ public class ListData extends Application {
 
     private static HashMap<String,Integer> AuditData = new HashMap<>();
     private static HashMap<String, List<String>> expDetails = new HashMap<>();
-
+    private static HashMap<Integer, List<String>> TheaterInfo = new HashMap<>();
+    private static HashMap<Integer,String> TheaterID_Name = new HashMap<>();
+    private static List<String> TheaterColor = new ArrayList<>();
 
     private static ListData staticListData;
     public static ListData getStaticListData() {
@@ -197,38 +200,8 @@ public class ListData extends Application {
         return AuditData;
     }
 
-    public static void loadData(final HashMap<String,Integer> data){
-        System.out.println("Loading list.");
-        final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
-        final AsyncHttpClient client_loadAuditData = new AsyncHttpClient();
-        client_loadAuditData.setBasicAuth(LoginActivity.getStaticLoginActivity().getUsername(), LoginActivity.getStaticLoginActivity().getPassword());
-        client_loadAuditData.setSSLSocketFactory(MySSLSocketFactory.getFixedSocketFactory());
-        client_loadAuditData.get(url12, null, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, final JSONArray responseSessionBody) {
-                try {
-                    System.out.println("~~~~");
-                    List<AuditoriumsClass> auditClass = new ArrayList<>();
-                    for (int i = 0; i < responseSessionBody.length(); i++) {
-                        auditClass = JSONUtils.toList(AuditoriumsClass.class, responseSessionBody.toString());
-                        data.put(auditClass.get(i).getAcronym(), auditClass.get(i).getId());
-                    }
-                } catch (Exception e) {
-                    // TODO Auto-generated catch block
-                    System.out.println("Outer Url/Json error! " + statusCode + " " + responseSessionBody.toString());
-                    e.printStackTrace();
-                }
-            }
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
-                System.out.println("error" + statusCode + "~~~~" + errorResponse);
-            }
-        });
-    }
 
-    public void loadTheaterInfo(){
-        System.out.println("Loading cinema info.");
+    public static HashMap<Integer,String> loadTheaterInfo(){
 
         final AsyncHttpClient client_loadTheaterInfo = new AsyncHttpClient();
         client_loadTheaterInfo.setBasicAuth(LoginActivity.getStaticLoginActivity().getUsername(), LoginActivity.getStaticLoginActivity().getPassword());
@@ -237,7 +210,17 @@ public class ListData extends Application {
             @Override
             public void onSuccess(int statusCode, Header[] headers, final JSONArray responseSessionBody) {
                 try {
+                    List<TheaterClass> theaterClasses = new ArrayList<>();
+                    for(int i = 0; i < responseSessionBody.length(); i++){
+                        theaterClasses = JSONUtils.toList(TheaterClass.class,responseSessionBody.toString());
+                        TheaterID_Name.put(theaterClasses.get(i).getId(),theaterClasses.get(i).getName());
+                    }
+                    System.out.println("Theater names -> ");
+                    System.out.println(TheaterID_Name);
 
+                    System.out.println("~~~~~~~~~~~~");
+//                    System.out.println("Theater colors -> ");
+//                    System.out.println(TheaterColor);
 
                 } catch (Exception e) {
                     System.out.println("Outer Url/Json error! " + statusCode + " " + responseSessionBody.toString());
@@ -250,26 +233,38 @@ public class ListData extends Application {
                 System.out.println("error" + statusCode + "~~~~" + errorResponse);
             }
         });
+        return TheaterID_Name;
     }
 
+    public static List<String> loadTheaterColor(){
+
+        final AsyncHttpClient client_loadTheaterInfo = new AsyncHttpClient();
+        client_loadTheaterInfo.setBasicAuth(LoginActivity.getStaticLoginActivity().getUsername(), LoginActivity.getStaticLoginActivity().getPassword());
+        client_loadTheaterInfo.setSSLSocketFactory(MySSLSocketFactory.getFixedSocketFactory());
+        client_loadTheaterInfo.get(urlTheaterInfo, null, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, final JSONArray responseSessionBody) {
+                try {
+                    List<TheaterClass> theaterClasses = new ArrayList<>();
+                    for(int i = 0; i < responseSessionBody.length(); i++){
+                        theaterClasses = JSONUtils.toList(TheaterClass.class,responseSessionBody.toString());
+                        TheaterColor.add(theaterClasses.get(i).getColor());
+                    }
+
+                    System.out.println("Theater colors -> ");
+                    System.out.println(TheaterColor);
+
+                } catch (Exception e) {
+                    System.out.println("Outer Url/Json error! " + statusCode + " " + responseSessionBody.toString());
+                    e.printStackTrace();
+                }
+            }
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                System.out.println("error" + statusCode + "~~~~" + errorResponse);
+            }
+        });
+        return TheaterColor;
+    }
 }
-
-//
-//    HttpResponse response = null;
-//        try {
-//                HttpClient client = new DefaultHttpClient();
-//                HttpGet request = new HttpGet();
-//                request.setURI(new URI(uri));
-//                request.addHeader("Authorisation", "Basic + ");
-//                response = client.execute(request);
-//                } catch (URISyntaxException e) {
-//                e.printStackTrace();
-//                } catch (ClientProtocolException e) {
-//                // TODO Auto-generated catch block
-//                e.printStackTrace();
-//                } catch (IOException e) {
-//                // TODO Auto-generated catch block
-//                e.printStackTrace();
-//                }
-//                return response.getEntity().getContent();;
-

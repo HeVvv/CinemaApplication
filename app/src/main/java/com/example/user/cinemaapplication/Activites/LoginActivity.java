@@ -60,7 +60,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
         client_main.get("https://inlogic.org:8443/security-1.0/webapi/auth/login/" + username.getText().toString(), null, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject responseBody) {
-
                 Intent intent = new Intent(LoginActivity.this, SplashActivity.class);
                 startActivity(intent);
             }
@@ -132,8 +131,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        username.setText("");
-        password.setText("");
+        finishAndRemoveTask();
         return true;
     }
 
