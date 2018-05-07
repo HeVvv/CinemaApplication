@@ -24,6 +24,7 @@ import com.example.user.cinemaapplication.R;
 import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -90,7 +91,8 @@ public class Settings_AboutActivity extends AppCompatActivity {
         btnHistory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FileAdapter.deleteFile(Settings_AboutActivity.this);
+                File historyFile = new File(getApplication().getApplicationContext().getFilesDir(), "history.txt");
+                FileAdapter.deleteFile(historyFile);
                 Toast.makeText(getApplication(),"Файл истории удален!",Toast.LENGTH_LONG).show();
                 System.out.println("Deleted histoty file!");
             }

@@ -7,8 +7,9 @@
             android:orderInCategory="100"
             android:title="@string/action_settings"
             app:showAsAction="never"/>
+
         <item
-            android:id="@+id/Log_off"
+            android:id="@+id/exit"
             android:orderInCategory ="10000"
             android:title = "@string/Log_off"
             app:showAsAction = "never"/>

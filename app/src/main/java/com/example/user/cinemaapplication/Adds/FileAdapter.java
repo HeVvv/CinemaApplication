@@ -32,8 +32,8 @@ public class FileAdapter {
 //    private static Context context = AuditChoosingActivity.getStaticAuditChoosingActivity().getContext();
 
 
-    private static File myFilewrite = new File(TabActivity.getStaticTabActivity().getApplication().getFilesDir() + "/" + "history.txt");
-    private static File myFileread = new File(TabActivity.getStaticTabActivity().getApplication().getFilesDir() + "/" + "history.txt");
+    private static File myFilewrite = new File( "history.txt");
+    private static File myFileread = new File("history.txt");
 
 
     private static SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
@@ -77,12 +77,14 @@ public class FileAdapter {
         return stringBuilder.toString();
     }
 
-    public static void deleteFile(Context context){
-        File file = new File(context.getFilesDir() + "/" + "history.txt");
+    public static void deleteFile(File file){
+
         boolean deleted = file.delete();
 
         if(deleted){
-            System.out.println("Deleted file " + context.getFilesDir() + "/" + "history.txt");
+            System.out.println("Deleted file " + file.getName());
+        }else{
+            System.out.println("Couldnt delete file!");
         }
     }
 
@@ -95,7 +97,6 @@ public class FileAdapter {
 
                 fr = new FileReader(filename);
                 br = new BufferedReader(fr);
-
 
             String sCurrentLine;
 
@@ -128,7 +129,6 @@ public class FileAdapter {
             }
 
         }
-        
         return stringBuilder.toString();
     }
 

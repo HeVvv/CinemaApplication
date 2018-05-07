@@ -48,8 +48,6 @@ public class HistoryListActivity extends android.support.v4.app.Fragment{
         staticHistoryListActivity = this;
     }
 
-    TextView textView;
-    Button refresh;
 
 
     @Override
@@ -68,7 +66,7 @@ public class HistoryListActivity extends android.support.v4.app.Fragment{
         ticketHistoryList.setAdapter(adapter);
 
         final Handler mainHandler = new Handler(Looper.getMainLooper());
-        Runnable myRunnable = new Runnable() { // Определяем задачу
+        Runnable myRunnable = new Runnable() {
             @Override
             public void run() {
                 mainHandler.post(new Runnable() {
@@ -76,7 +74,6 @@ public class HistoryListActivity extends android.support.v4.app.Fragment{
                     public void run() {
                         List<String> ticketList = buildHistoryList(getContext());
                         adapter.notifyDataSetChanged();
-                        System.out.println("timer tick");
                     }
                 });
             }

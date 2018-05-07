@@ -56,7 +56,7 @@ public class TicketActivity extends AppCompatActivity {
                 Intent intentSettings = new Intent(this, AuditChoosingActivity.class);
                 startActivity(intentSettings);
                 return true;
-            case R.id.Log_off:
+            case R.id.exit:
                 Intent intentLogOff = new Intent(this, LoginActivity.class);
                 startActivity(intentLogOff);
                 return true;

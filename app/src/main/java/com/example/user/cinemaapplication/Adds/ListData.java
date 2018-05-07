@@ -97,14 +97,6 @@ public class ListData extends Application {
         return AuditData;
     }
 
-    public String getUrl12(){
-        return url12;
-    }
-
-    public HashMap<String,List<String>> getExpDetails(){
-        return expDetails;
-    }
-
     //loading ExpListView with sessions info
     public static HashMap<String, List<String>> loadListData() {
         System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
@@ -158,7 +150,6 @@ public class ListData extends Application {
                     e.printStackTrace();
                 }
             }
-
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
@@ -171,7 +162,6 @@ public class ListData extends Application {
     //loading data for settings activity
     public static HashMap<String,Integer> loadAuditData(){
         System.out.println("Loading list.");
-        final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
         final AsyncHttpClient client_loadAuditData = new AsyncHttpClient();
             client_loadAuditData.setBasicAuth(LoginActivity.getStaticLoginActivity().getUsername(), LoginActivity.getStaticLoginActivity().getPassword());
             client_loadAuditData.setSSLSocketFactory(MySSLSocketFactory.getFixedSocketFactory());
@@ -215,13 +205,6 @@ public class ListData extends Application {
                         theaterClasses = JSONUtils.toList(TheaterClass.class,responseSessionBody.toString());
                         TheaterID_Name.put(theaterClasses.get(i).getId(),theaterClasses.get(i).getName());
                     }
-                    System.out.println("Theater names -> ");
-                    System.out.println(TheaterID_Name);
-
-                    System.out.println("~~~~~~~~~~~~");
-//                    System.out.println("Theater colors -> ");
-//                    System.out.println(TheaterColor);
-
                 } catch (Exception e) {
                     System.out.println("Outer Url/Json error! " + statusCode + " " + responseSessionBody.toString());
                     e.printStackTrace();
@@ -250,7 +233,6 @@ public class ListData extends Application {
                         theaterClasses = JSONUtils.toList(TheaterClass.class,responseSessionBody.toString());
                         TheaterColor.add(theaterClasses.get(i).getColor());
                     }
-
                     System.out.println("Theater colors -> ");
                     System.out.println(TheaterColor);
 

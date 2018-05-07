@@ -30,8 +30,15 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -73,6 +80,19 @@ public class SplashActivity extends AppCompatActivity{
         return THEATER_COLOR;
     }
 
+    public boolean isFirstDayOfTheMonth(Date date){
+
+        if(date == null){
+            return false;
+        }
+        Calendar c = new GregorianCalendar();
+        c.setTime(date);
+        if(c.get(Calendar.DAY_OF_MONTH) == 1){
+            return true;
+        }
+
+        return false;
+    }
     @Override
     public void onCreate(Bundle savedInstance) {
 
@@ -84,8 +104,21 @@ public class SplashActivity extends AppCompatActivity{
                 (ShimmerFrameLayout) findViewById(R.id.shimmer_view_container);
         container.startShimmerAnimation();
 
-
         File historyFile = new File(ctx.getFilesDir(), "history.txt");
+
+        //добавить проверку на разовое удаление
+        Date threshhold = new Date(111111111111L);
+
+        if((isFirstDayOfTheMonth(Calendar.getInstance().getTime()))){
+            FileAdapter.deleteFile(historyFile);
+
+        }
+        //BasicFileAttributes
+//
+//        Path path = historyFile.toPath();
+//
+//        BasicFileAttributes attr = Files.readAttributes(path,BasicFileAttributes.class);
+
         try {
             if (historyFile.createNewFile()) {
                 System.out.println("Файл создан: " + historyFile.getAbsolutePath());
@@ -123,7 +156,6 @@ public class SplashActivity extends AppCompatActivity{
             @Override
             public void run() {
                 Intent openMainActivity =  new Intent(SplashActivity.this, TabActivity.class);
-
                 startActivity(openMainActivity);
                 finish();
             }

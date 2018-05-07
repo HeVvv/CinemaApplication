@@ -258,7 +258,7 @@ public class TabActivity extends AppCompatActivity {
             return true;
         }
 
-        if( id == R.id.Log_off){
+        if( id == R.id.exit){
             Intent i = new Intent(TabActivity.this,LoginActivity.class);
             i.addCategory(Intent.CATEGORY_HOME);
             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

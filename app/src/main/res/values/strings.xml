@@ -3,21 +3,17 @@
     <string name="submitPassBtn">Подтвердить</string>
     <string name="StaffInfo">Логин:</string>
     <string name="PassInfo">Пароль:</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Настройки</string>
     <string name="action_qrScan">QR Scan</string>
-    <string name="Log_off">Log off</string>
+    <string name="Log_off">Выход</string>
     <string name="Cancel">Отмена</string>
     <string name="Exit">Выход</string>
 
-    <string-array name="CinemaList">
-        <item>Кинотеатр 1</item>
-        <item>Кинотеатр 2</item>
-        <item>Кинотеатр 3</item>
-    </string-array>
 
     <string-array name="StaffList">
         <item>Работник 1</item>
         <item>Работник 2</item>
         <item>Работник 3</item>
     </string-array>
+
 </resources>
