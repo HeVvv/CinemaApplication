@@ -241,6 +241,8 @@ public class QRScanActivity extends Fragment {
                                 clientTicket.put(getContext(), check_ticket_url, entity, "application/json", new TextHttpResponseHandler() {
 
                                     @Override
+
+
                                     public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                                         System.out.println("error1 " + statusCode + "~~~~" + responseString);
                                         text.setText("Error " + statusCode);
