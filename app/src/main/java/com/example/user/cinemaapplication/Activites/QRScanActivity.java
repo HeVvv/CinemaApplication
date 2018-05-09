@@ -259,7 +259,9 @@ public class QRScanActivity extends Fragment {
                                                 FileAdapter.writeFile(appended,historyfile);
                                                 Typeface type = Typeface.createFromAsset(getActivity().getAssets(),"Fontfabric - UniNeueBlack.otf");
                                                 glassesCount.setTypeface(type);
-
+                                                int color = Color.argb(10,0,0,0);
+                                                glassesCount.setShadowLayer(3,0,0,Color.BLACK);
+                                                glassesCount.setTextColor(color);
                                                 glassesCount.setText(info.get(2));
                                             }
                                         });
