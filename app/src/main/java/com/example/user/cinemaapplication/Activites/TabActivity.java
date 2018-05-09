@@ -13,6 +13,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.style.TabStopSpan;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -25,8 +26,10 @@ import android.widget.Toast;
 
 import com.example.user.cinemaapplication.Adds.CustomViewPager;
 import com.example.user.cinemaapplication.Adds.FileAdapter;
+import com.example.user.cinemaapplication.Adds.ListData;
 import com.example.user.cinemaapplication.Adds.PagerAdapter;
 import com.example.user.cinemaapplication.R;
+import com.example.user.cinemaapplication.enums.Theater;
 
 
 import java.util.ArrayList;
@@ -36,6 +39,7 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import cz.msebera.android.httpclient.impl.conn.SystemDefaultRoutePlanner;
 import github.nisrulz.qreader.QREader;
 
 
@@ -49,7 +53,8 @@ public class TabActivity extends AppCompatActivity {
     private CustomViewPager viewPager;
     private TabLayout tabLayout;
     private LinearLayout tabStrip;
-    private int CINEMA_ID = 3; // velcom
+    private int THEATER_ID;
+
     private int[] tabIcons = {
             R.drawable.tickets,
             R.drawable.video_camera,
@@ -77,21 +82,34 @@ public class TabActivity extends AppCompatActivity {
 
         HashMap<Integer,String> theater_data = SplashActivity.getStaticSplashActivity().getTHEATER_DATA();
         List<String> theater_color = SplashActivity.getStaticSplashActivity().getTHEATER_COLOR();
+//
+//        System.out.println(LoginActivity.getStaticLoginActivity().getTHEATER_COLOR());
+//        System.out.println(LoginActivity.getStaticLoginActivity().getTHEATER_DATA());
+//        System.out.println(LoginActivity.getStaticLoginActivity().getTHEATER_ID());
 
+        THEATER_ID = ListData.getTheaterId();
 
+        System.out.println(THEATER_ID + " THEATER ID ON TAB");
         for (Map.Entry entry : theater_data.entrySet()) {
-            if(Integer.parseInt(entry.getKey().toString()) == CINEMA_ID) {
+            if(Integer.parseInt(entry.getKey().toString()) == THEATER_ID) {
+                System.out.println("Entry ->" + entry.getValue());
                 setTitle(entry.getValue().toString());
             }
         }
-        if((CINEMA_ID == 2) || (CINEMA_ID == 1)){
+
+        if((THEATER_ID == 2) || (THEATER_ID == 1)){
             setTheme(R.style.AppThemeArena);
         }
-        if(CINEMA_ID == 3){
+        if(THEATER_ID == 3){
             setTheme(R.style.AppThemeVelcom);
         }
 
+        if(THEATER_ID == 0){
+            setTheme(R.style.Theme_AppCompat_NoActionBar);
+        }
+
         setContentView(R.layout.activity_tab2);
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

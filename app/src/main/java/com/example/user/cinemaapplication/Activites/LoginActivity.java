@@ -1,5 +1,6 @@
 package com.example.user.cinemaapplication.Activites;
 
+import com.example.user.cinemaapplication.Adds.FileAdapter;
 import com.example.user.cinemaapplication.Adds.ListData;
 import com.example.user.cinemaapplication.R;
 import com.loopj.android.http.*;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -33,6 +35,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
     private int DEVICE_NUMBER = 1;
     private TextView Cancel;
     private ImageView Logo;
+
+
+    private List<String> THEATER_COLOR = new ArrayList<>();
+    private int THEATER_ID;
+    private HashMap <String,Integer> DATA = new HashMap<>();
+    private HashMap<Integer,String> THEATER_DATA = new HashMap<>();
 
 
     private static LoginActivity staticLoginActivity;
@@ -52,6 +60,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
         return password.getText().toString();
     }
 
+    public HashMap<String, Integer> getDATA(){
+        return DATA;
+    }
+
+    public int getTHEATER_ID(){
+        return THEATER_ID;
+    }
+    public HashMap<Integer, String> getTHEATER_DATA() {
+        return THEATER_DATA;
+    }
+    public List<String> getTHEATER_COLOR(){
+        return THEATER_COLOR;
+    }
+
     public void onLogin(View view) {
 
         AsyncHttpClient client_main = new AsyncHttpClient();
@@ -62,9 +84,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
             public void onSuccess(int statusCode, Header[] headers, JSONObject responseBody) {
                 Intent intent = new Intent(LoginActivity.this, SplashActivity.class);
                 startActivity(intent);
+
             }
-
-
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 if (statusCode == 401){

@@ -1,11 +1,11 @@
 package com.example.user.cinemaapplication.Adds;
 
 import android.app.Activity;
-import android.app.Application;
 import android.graphics.Color;
-import android.support.annotation.NonNull;
+import android.graphics.Typeface;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+import android.text.SpannableString;
+import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +17,6 @@ import com.example.user.cinemaapplication.R;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.StringTokenizer;
 
 public class TicketListAdapter extends  ArrayAdapter<String>{
@@ -35,6 +34,7 @@ public class TicketListAdapter extends  ArrayAdapter<String>{
         public TextView mainInfo;
         public TextView time;
         public TextView additionalinfo;
+        public TextView glassesCount;
     }
 
     public List<String> contentString(String s){
@@ -75,7 +75,7 @@ public class TicketListAdapter extends  ArrayAdapter<String>{
             holder.mainInfo = (TextView) rowView.findViewById(R.id.mainInfo);
             holder.additionalinfo = (TextView) rowView.findViewById(R.id.additionalInfo);
             holder.time = (TextView) rowView.findViewById(R.id.time);
-
+            holder.glassesCount = (TextView) rowView.findViewById(R.id.imageView);
             holder.imageView = (ImageView) rowView.findViewById(R.id.responseImage);
 
             rowView.setTag(holder);
@@ -85,10 +85,24 @@ public class TicketListAdapter extends  ArrayAdapter<String>{
         String toParse = info.get(position);
         List<String> items = contentString(toParse);
         if(!items.isEmpty()) {
-            holder.mainInfo.setText(items.get(1));
-            holder.additionalinfo.setText(items.get(2));
-            holder.time.setText(items.get(3));
+            if(items.size() == 4){
+                holder.mainInfo.setText(items.get(1));
+                holder.additionalinfo.setText(items.get(2));
+                holder.glassesCount.setText(" ");
+                holder.time.setText(items.get(3));
+            }
+            if(items.size() == 5){
+
+                SpannableString str = new SpannableString(items.get(3));
+                str.setSpan(new StyleSpan(Typeface.BOLD),0,str.length(),0);
+
+                holder.mainInfo.setText(items.get(1));
+                holder.additionalinfo.setText(items.get(2));
+                holder.glassesCount.setText(str);
+                holder.time.setText(items.get(4));
+            }
         }
+
         String s = info.get(position);
         if(s.startsWith("0")){
             holder.imageView.setImageResource(R.drawable.cancel);
@@ -98,6 +112,9 @@ public class TicketListAdapter extends  ArrayAdapter<String>{
         }
         if(s.startsWith("2")){
             holder.imageView.setImageResource(R.drawable.exclam);
+        }
+        if(s.startsWith("3")){
+            holder.imageView.setImageResource(R.drawable.glasses);
         }
         return rowView;
     }

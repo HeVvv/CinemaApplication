@@ -2,21 +2,19 @@ package com.example.user.cinemaapplication.Activites;
 
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
+import android.text.SpannableString;
+import android.text.style.StyleSpan;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.SurfaceView;
@@ -27,7 +25,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.dlazaro66.qrcodereaderview.QRToViewPointTransformer;
 import com.example.user.cinemaapplication.Adds.FileAdapter;
 import com.example.user.cinemaapplication.Adds.JSONUtils;
 import com.example.user.cinemaapplication.Adds.ListData;
@@ -39,7 +36,6 @@ import com.loopj.android.http.MySSLSocketFactory;
 import com.loopj.android.http.TextHttpResponseHandler;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
@@ -49,7 +45,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
@@ -57,8 +52,6 @@ import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.entity.StringEntity;
 import github.nisrulz.qreader.QRDataListener;
 import github.nisrulz.qreader.QREader;
-
-import static android.content.Context.MODE_PRIVATE;
 
 public class QRScanActivity extends Fragment {
 
@@ -74,6 +67,7 @@ public class QRScanActivity extends Fragment {
     private List<String> ticketList = new ArrayList<>();
     private ListView ticketHistoryList;
     private int ID_DEVICE;
+    private TextView glassesCount;
 
     TextView text;
     TextView textAdd;
@@ -81,7 +75,7 @@ public class QRScanActivity extends Fragment {
 
 
 
-    public String check_ticket_url = "https://soft.silverscreen.by:8443/wsglobal/webapi/check/ticket";
+    public String check_ticket_url = "https://inlogic.org:8443/wsglobal/webapi/check/ticket";
 
     private static QRScanActivity staticQRScanActivity;
 
@@ -159,6 +153,7 @@ public class QRScanActivity extends Fragment {
         adapter = new TicketListAdapter(getActivity(), ticketList);
         ticketHistoryList.setAdapter(adapter);
 
+        glassesCount = (TextView) getActivity().findViewById(R.id.glassesCount);
         text = (TextView) getActivity().findViewById(R.id.responseInfo);
         text.setTextAppearance(getActivity(), R.style.TextAppearance_AppCompat_Title);
         text.setGravity(Gravity.CENTER);
@@ -196,6 +191,7 @@ public class QRScanActivity extends Fragment {
         textAdd.setTextAppearance(rootView.getContext(),R.style.TextAppearance_AppCompat);
         textAdd.setGravity(Gravity.CENTER);
         textAdd.setTextColor(Color.rgb(51,51,51));
+        glassesCount = (TextView) getActivity().findViewById(R.id.glassesCount);
 
         responseImage = (ImageView) rootView.findViewById(R.id.imageView);
         responseImage.setImageDrawable(null);
@@ -208,6 +204,8 @@ public class QRScanActivity extends Fragment {
 
 
 
+
+        final File historyfile = new File(getContext().getFilesDir() + "/history.txt");
 
         qrEader = new QREader.Builder(getActivity(), mySurfaceView, new QRDataListener() {
 
@@ -241,8 +239,6 @@ public class QRScanActivity extends Fragment {
                                 clientTicket.put(getContext(), check_ticket_url, entity, "application/json", new TextHttpResponseHandler() {
 
                                     @Override
-
-
                                     public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                                         System.out.println("error1 " + statusCode + "~~~~" + responseString);
                                         text.setText("Error " + statusCode);
@@ -250,15 +246,23 @@ public class QRScanActivity extends Fragment {
 
                                     @Override
                                     public void onSuccess(int statusCode, Header[] headers, final String responseString) {
-                                        String status = responseString.substring(0, 1);
-                                        final String response = responseString.substring(2, responseString.length());
+                                        final String appended = responseString.concat(" ");
+                                        System.out.println(appended);
+                                        String status = appended.substring(0, 1);
+                                        final String response = appended.substring(2, appended.length());
                                         final List<String> info = contentString(response);
                                         text.post(new Runnable() {
                                             @Override
                                             public void run() {
                                                 text.setText(info.get(0));
                                                 textAdd.setText(info.get(1));
-                                                FileAdapter.writeFile(responseString,getContext());
+                                                FileAdapter.writeFile(appended,historyfile);
+                                                SpannableString str = new SpannableString(info.get(2));
+
+//                                                SpannableString str = new SpannableString("333");
+
+                                                str.setSpan(new StyleSpan(Typeface.BOLD),0,str.length(),0);
+                                                glassesCount.setText(str);
                                             }
                                         });
                                         ticketList.add(responseString + "|" + dateFormat.format(Calendar.getInstance().getTime()));
@@ -269,6 +273,8 @@ public class QRScanActivity extends Fragment {
                                             responseImage.setImageResource(R.drawable.accept);
                                         } else if (status.equals("2")) {
                                             responseImage.setImageResource(R.drawable.exclam);
+                                        } else if(status.equals("3")){
+                                            responseImage.setImageResource(R.drawable.glasses);
                                         }
                                         if (ticketList.size() > 3) {
                                             ticketList.subList(0, ticketList.size() - 3).clear();

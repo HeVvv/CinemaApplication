@@ -53,11 +53,14 @@ import github.nisrulz.qreader.QRDataListener;
 import github.nisrulz.qreader.QREader;
 
 public class SplashActivity extends AppCompatActivity{
-    private HashMap <String,Integer> DATA = new HashMap<>();
+
     private Set<Integer> DATA2 = new HashSet<>();
     private int MY_CAMERA_REQUEST_CODE = 101;
-    private HashMap<Integer,String> THEATER_DATA = new HashMap<>();
     private List<String> THEATER_COLOR = new ArrayList<>();
+        private int THEATER_ID;
+
+    private HashMap <String,Integer> DATA = new HashMap<>();
+    private HashMap<Integer,String> THEATER_DATA = new HashMap<>();
 
     Context ctx = this;
 
@@ -73,6 +76,9 @@ public class SplashActivity extends AppCompatActivity{
         return DATA;
     }
 
+    public int getTHEATER_ID(){
+        return THEATER_ID;
+    }
     public HashMap<Integer, String> getTHEATER_DATA() {
         return THEATER_DATA;
     }
@@ -109,12 +115,10 @@ public class SplashActivity extends AppCompatActivity{
         //добавить проверку на разовое удаление
         Date threshhold = new Date(111111111111L);
 
-        if((isFirstDayOfTheMonth(Calendar.getInstance().getTime()))){
+        if((isFirstDayOfTheMonth(Calendar.getInstance().getTime()))) {
             FileAdapter.deleteFile(historyFile);
-
         }
-        //BasicFileAttributes
-//
+
 //        Path path = historyFile.toPath();
 //
 //        BasicFileAttributes attr = Files.readAttributes(path,BasicFileAttributes.class);
@@ -140,26 +144,63 @@ public class SplashActivity extends AppCompatActivity{
             System.out.println("Creation file Error");
         }
 
+        //подрезать под один запрос в gettheaterbydeviceID
+        final Handler mainHandler = new Handler(Looper.getMainLooper());
 
-        Handler handler1 = new Handler();
-        handler1.post(new Runnable() {
+        final String str = FileAdapter.readFromFile(getApplication().getFilesDir()+ "/" + "ID.txt");
+        final int device_id = Integer.parseInt(str.trim());
+        System.out.println("device id->" + device_id);
+        mainHandler.post(new Runnable() {
             @Override
             public void run() {
+                if (!(str.isEmpty())) {
+                    THEATER_ID = ListData.getTheaterByDEVICE_ID(device_id);
+                }
                 DATA = ListData.loadAuditData();
                 THEATER_DATA = ListData.loadTheaterInfo();
                 THEATER_COLOR = ListData.loadTheaterColor();
             }
         });
 
-        Handler handler2 = new Handler();
-        handler2.postDelayed(new Runnable() {
+//        mainHandler.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                DATA = ListData.loadAuditData();
+//                mainHandler.sendEmptyMessage(2);
+//
+//            }
+//
+//        });
+//
+//        mainHandler.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                THEATER_DATA = ListData.loadTheaterInfo();
+//                THEATER_COLOR = ListData.loadTheaterColor();
+//                mainHandler.sendEmptyMessage(3);
+//
+//            }
+//        });
+
+//        SplashActivity.this.runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                if (!(str.isEmpty())) {
+//                    THEATER_ID = ListData.getTheaterByDEVICE_ID(device_id);
+//                    System.out.println("getting theater id");
+//                }
+//
+//            }
+//        });
+
+        mainHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent openMainActivity =  new Intent(SplashActivity.this, TabActivity.class);
+                Intent openMainActivity = new Intent(SplashActivity.this, TabActivity.class);
+                System.out.println("Theater id on splash = " + LoginActivity.getStaticLoginActivity().getTHEATER_ID());
                 startActivity(openMainActivity);
                 finish();
             }
-        }, 3500);
-
+        }, 6500);
     }
 }

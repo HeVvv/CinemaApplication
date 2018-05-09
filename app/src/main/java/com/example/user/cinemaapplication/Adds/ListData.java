@@ -6,11 +6,14 @@ import android.net.Uri;
 import android.util.Log;
 
 
+import com.example.user.cinemaapplication.Activites.AuditChoosingActivity;
 import com.example.user.cinemaapplication.Classes.AuditoriumsClass;
+import com.example.user.cinemaapplication.Classes.SalespointsClass;
 import com.example.user.cinemaapplication.Classes.SessionClass;
 import com.example.user.cinemaapplication.Activites.LoginActivity;
 import com.example.user.cinemaapplication.Classes.TheaterClass;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.loopj.android.http.AsyncHttpClient;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -77,6 +80,7 @@ public class ListData extends Application {
     private static HashMap<Integer, List<String>> TheaterInfo = new HashMap<>();
     private static HashMap<Integer,String> TheaterID_Name = new HashMap<>();
     private static List<String> TheaterColor = new ArrayList<>();
+    private static int THEATER_ID;
 
     private static ListData staticListData;
     public static ListData getStaticListData() {
@@ -89,12 +93,19 @@ public class ListData extends Application {
     final static String url12 = "https://inlogic.org:8443/wscinema/webapi/auditoriums";
     final static String url22 = "https://inlogic.org:8443/wscinema/webapi/show/auditorium/";
     final static String urlTheaterInfo = "https://inlogic.org:8443/wsglobal/webapi/theater/android";
+    final static String urlConn = "https://inlogic.org:8443/wsglobal/webapi/salespoints/android/"; // + device_id
 
     // private static HashMap<String,Integer> AuditData = new HashMap<>();
     //HashMap sorting
     public static HashMap<String,Integer> getAuditData(){
         System.out.println("Audit data is ->" + AuditData);
         return AuditData;
+    }
+    public static int getTheaterId(){
+        return THEATER_ID;
+    }
+    public static HashMap<Integer,String> getTheaterID_Name(){
+        return TheaterID_Name;
     }
 
     //loading ExpListView with sessions info
@@ -138,10 +149,23 @@ public class ListData extends Application {
                             }
 
                             @Override
+                            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                                super.onFailure(statusCode, headers, responseString, throwable);
+                                System.out.println("error" + statusCode + "~~~~" + responseString);
+                            }
+
+                            @Override
+                            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                                super.onFailure(statusCode, headers, throwable, errorResponse);
+                                System.out.println("error" + statusCode + "~~~~" + errorResponse);
+                            }
+
+                            @Override
                             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
                                 super.onFailure(statusCode, headers, throwable, errorResponse);
                                 System.out.println("error" + statusCode + "~~~~" + errorResponse);
                             }
+
                         });
                     }
                 } catch (Exception e) {
@@ -150,6 +174,18 @@ public class ListData extends Application {
                     e.printStackTrace();
                 }
             }
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                super.onFailure(statusCode, headers, responseString, throwable);
+                System.out.println("error" + statusCode + "~~~~" + responseString);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                System.out.println("error" + statusCode + "~~~~" + errorResponse);
+            }
+
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
@@ -173,7 +209,9 @@ public class ListData extends Application {
                         List<AuditoriumsClass> auditClass = new ArrayList<>();
                         for (int i = 0; i < responseSessionBody.length(); i++) {
                             auditClass = JSONUtils.toList(AuditoriumsClass.class, responseSessionBody.toString());
-                            AuditData.put(auditClass.get(i).getAcronym(), auditClass.get(i).getId());
+//                            if(auditClass.get(i).getTheater() == ListData.getTheaterId()){
+                                AuditData.put(auditClass.get(i).getAcronym(), auditClass.get(i).getId());
+//                            }
                         }
                     } catch (Exception e) {
                         // TODO Auto-generated catch block
@@ -181,6 +219,18 @@ public class ListData extends Application {
                         e.printStackTrace();
                     }
                 }
+                @Override
+                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                    super.onFailure(statusCode, headers, responseString, throwable);
+                    System.out.println("error" + statusCode + "~~~~" + responseString);
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                    super.onFailure(statusCode, headers, throwable, errorResponse);
+                    System.out.println("error" + statusCode + "~~~~" + errorResponse);
+                }
+
                 @Override
                 public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
                     super.onFailure(statusCode, headers, throwable, errorResponse);
@@ -204,12 +254,25 @@ public class ListData extends Application {
                     for(int i = 0; i < responseSessionBody.length(); i++){
                         theaterClasses = JSONUtils.toList(TheaterClass.class,responseSessionBody.toString());
                         TheaterID_Name.put(theaterClasses.get(i).getId(),theaterClasses.get(i).getName());
+                        System.out.println(TheaterID_Name);
                     }
                 } catch (Exception e) {
                     System.out.println("Outer Url/Json error! " + statusCode + " " + responseSessionBody.toString());
                     e.printStackTrace();
                 }
             }
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                super.onFailure(statusCode, headers, responseString, throwable);
+                System.out.println("error" + statusCode + "~~~~" + responseString);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                System.out.println("error" + statusCode + "~~~~" + errorResponse);
+            }
+
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
@@ -233,14 +296,25 @@ public class ListData extends Application {
                         theaterClasses = JSONUtils.toList(TheaterClass.class,responseSessionBody.toString());
                         TheaterColor.add(theaterClasses.get(i).getColor());
                     }
-                    System.out.println("Theater colors -> ");
-                    System.out.println(TheaterColor);
 
                 } catch (Exception e) {
                     System.out.println("Outer Url/Json error! " + statusCode + " " + responseSessionBody.toString());
                     e.printStackTrace();
                 }
             }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                super.onFailure(statusCode, headers, responseString, throwable);
+                System.out.println("error" + statusCode + "~~~~" + responseString);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                System.out.println("error" + statusCode + "~~~~" + errorResponse);
+            }
+
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
@@ -248,5 +322,49 @@ public class ListData extends Application {
             }
         });
         return TheaterColor;
+    }
+
+    public static int getTheaterByDEVICE_ID(int device_id){
+        System.out.println("Getting theater id");
+        final AsyncHttpClient client_theater_device = new AsyncHttpClient();
+        client_theater_device.setBasicAuth(LoginActivity.getStaticLoginActivity().getUsername(), LoginActivity.getStaticLoginActivity().getPassword());
+        client_theater_device.setSSLSocketFactory(MySSLSocketFactory.getFixedSocketFactory());
+        client_theater_device.get(urlConn + device_id, null, new JsonHttpResponseHandler() {
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject responseSessionBody) {
+                try {
+                    SalespointsClass salespointsClasses = new SalespointsClass();
+                    for(int i = 0; i < responseSessionBody.length(); i++){
+                        salespointsClasses = JSONUtils.parseJsonToObject(responseSessionBody.toString(),SalespointsClass.class);
+                        THEATER_ID = salespointsClasses.getTheater();
+                        System.out.println("got theater id" + THEATER_ID);
+                    }
+                } catch (Exception e) {
+                    System.out.println("Outer Url/Json error! " + statusCode + " " + responseSessionBody.toString());
+                    e.printStackTrace();
+                }
+            }
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                super.onFailure(statusCode, headers, responseString, throwable);
+                System.out.println("error" + statusCode + "~~~~" + responseString);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                System.out.println("error" + statusCode + "~~~~" + errorResponse);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                System.out.println("error" + statusCode + "~~~~" + errorResponse);
+            }
+
+        });
+        System.out.println(THEATER_ID + "~~");
+        return THEATER_ID;
     }
 }

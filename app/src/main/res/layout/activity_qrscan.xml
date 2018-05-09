@@ -47,7 +47,6 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="360dp"
         android:layout_height="197dp"
-        android:layout_marginBottom="8dp"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
@@ -55,23 +54,42 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/responseinfo2"
-        app:layout_constraintVertical_bias="0.058">
+        app:layout_constraintVertical_bias="1.0">
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="150dp"
+        <FrameLayout
+            android:layout_width="154dp"
             android:layout_height="150dp"
-            android:layout_marginBottom="32dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="32dp"
-            android:layout_weight="1"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toEndOf="@+id/camera"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0"
-            app:srcCompat="@mipmap/active_round" />
+            app:layout_constraintVertical_bias="0.384">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="154dp"
+                android:layout_height="150dp"
+                android:layout_gravity="center|clip_vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/camera"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0"
+                app:srcCompat="@mipmap/active_round" />
+
+            <TextView
+                android:id="@+id/glassesCount"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical|center_horizontal"
+                android:textColor="#161616"
+                android:textSize="60sp"
+                tools:text="33" />
+        </FrameLayout>
 
         <SurfaceView
             android:id="@+id/camera"

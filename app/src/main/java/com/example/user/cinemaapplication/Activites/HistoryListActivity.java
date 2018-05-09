@@ -48,7 +48,7 @@ public class HistoryListActivity extends android.support.v4.app.Fragment{
         staticHistoryListActivity = this;
     }
 
-
+    private String strs;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, final Bundle savedInstanceState) {
@@ -84,8 +84,13 @@ public class HistoryListActivity extends android.support.v4.app.Fragment{
 
 
     public List<String> buildHistoryList(Context context){
-        String strs = FileAdapter.readFromFile(context.getFilesDir() + "/" + "history.txt");
-        List<String> historyList = new ArrayList<String>(Arrays.asList(strs.split("\n")));
+            try {
+                strs = FileAdapter.readFromFile(context.getFilesDir() + "/" + "history.txt");
+            }catch (NullPointerException e){
+                e.printStackTrace();
+            }
+            List<String> historyList = new ArrayList<String>(Arrays.asList(strs.split("\n")));
+
         return historyList;
     }
 

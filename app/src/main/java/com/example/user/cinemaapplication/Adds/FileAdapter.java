@@ -39,11 +39,11 @@ public class FileAdapter {
     private static SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
 
 
-    public static void writeFile(String s,Context context) {
+    public static void writeFile(String s,File file) {
         try {
             
             String lineseparator = System.getProperty("line.separator");
-            BufferedWriter writer = new BufferedWriter(new FileWriter(myFilewrite,true));  // После чего создаем поток для записи
+            BufferedWriter writer = new BufferedWriter(new FileWriter(file,true));  // После чего создаем поток для записи
             writer.write((s + "|" + dateFormat.format(Calendar.getInstance().getTime()) + lineseparator));
             writer.flush();
             writer.close();
@@ -53,29 +53,29 @@ public class FileAdapter {
     }
 
 
-    public static String readFile(Context context) {
-
-        StringBuilder stringBuilder = new StringBuilder();
-
-        try {
-            FileInputStream inputStream = new FileInputStream(myFileread);
-
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-
-            String line;
-
-            while ((line = bufferedReader.readLine()) != null) {
-                stringBuilder.append(line);
-                stringBuilder.append("~@~");
-            }
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return stringBuilder.toString();
-    }
+//    public static String readFile(Context context) {
+//
+//        StringBuilder stringBuilder = new StringBuilder();
+//
+//        try {
+//            FileInputStream inputStream = new FileInputStream(myFileread);
+//
+//            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+//
+//            String line;
+//
+//            while ((line = bufferedReader.readLine()) != null) {
+//                stringBuilder.append(line);
+//                stringBuilder.append("~@~");
+//            }
+//
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return stringBuilder.toString();
+//    }
 
     public static void deleteFile(File file){
 
