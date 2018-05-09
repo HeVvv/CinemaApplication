@@ -88,16 +88,19 @@ public class TicketListAdapter extends  ArrayAdapter<String>{
             if(items.size() == 4){
                 holder.mainInfo.setText(items.get(1));
                 holder.additionalinfo.setText(items.get(2));
+                Typeface type = Typeface.createFromAsset(getContext().getAssets(),"Fontfabric - UniNeueBook.otf");
+                SpannableString str = new SpannableString(items.get(3));
                 holder.glassesCount.setText(" ");
                 holder.time.setText(items.get(3));
             }
             if(items.size() == 5){
 
+                Typeface type = Typeface.createFromAsset(getContext().getAssets(),"Fontfabric - UniNeueBook.otf");
                 SpannableString str = new SpannableString(items.get(3));
                 str.setSpan(new StyleSpan(Typeface.BOLD),0,str.length(),0);
-
                 holder.mainInfo.setText(items.get(1));
                 holder.additionalinfo.setText(items.get(2));
+                holder.glassesCount.setTypeface(type);
                 holder.glassesCount.setText(str);
                 holder.time.setText(items.get(4));
             }

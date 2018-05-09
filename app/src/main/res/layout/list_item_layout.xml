@@ -32,18 +32,18 @@
                     android:id="@+id/responseImage"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                     />
+                    app:srcCompat="@drawable/glasses" />
 
                 <TextView
                     android:id="@+id/imageView"
-                    android:layout_width="60dp"
+                    android:layout_width="27dp"
                     android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="4dp"
-                    android:text="33"
-                    android:textSize="18sp"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:paddingLeft="-1dp"
+                    android:text="3"
                     android:textColor="#161616"
-                    tools:text="33" />
+                    android:textSize="15sp"
+                    tools:text="3" />
 
             </FrameLayout>
 

@@ -147,15 +147,17 @@ public class SplashActivity extends AppCompatActivity{
         //подрезать под один запрос в gettheaterbydeviceID
         final Handler mainHandler = new Handler(Looper.getMainLooper());
 
-        final String str = FileAdapter.readFromFile(getApplication().getFilesDir()+ "/" + "ID.txt");
-        final int device_id = Integer.parseInt(str.trim());
-        System.out.println("device id->" + device_id);
+
         mainHandler.post(new Runnable() {
             @Override
             public void run() {
+                final String str = FileAdapter.readFromFile(getApplication().getFilesDir()+ "/" + "ID.txt");
                 if (!(str.isEmpty())) {
+                    final int device_id = Integer.parseInt(str.trim());
+                    System.out.println("device id->" + device_id);
                     THEATER_ID = ListData.getTheaterByDEVICE_ID(device_id);
                 }
+
                 DATA = ListData.loadAuditData();
                 THEATER_DATA = ListData.loadTheaterInfo();
                 THEATER_COLOR = ListData.loadTheaterColor();

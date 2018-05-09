@@ -257,12 +257,10 @@ public class QRScanActivity extends Fragment {
                                                 text.setText(info.get(0));
                                                 textAdd.setText(info.get(1));
                                                 FileAdapter.writeFile(appended,historyfile);
-                                                SpannableString str = new SpannableString(info.get(2));
+                                                Typeface type = Typeface.createFromAsset(getActivity().getAssets(),"Fontfabric - UniNeueBlack.otf");
+                                                glassesCount.setTypeface(type);
 
-//                                                SpannableString str = new SpannableString("333");
-
-                                                str.setSpan(new StyleSpan(Typeface.BOLD),0,str.length(),0);
-                                                glassesCount.setText(str);
+                                                glassesCount.setText(info.get(2));
                                             }
                                         });
                                         ticketList.add(responseString + "|" + dateFormat.format(Calendar.getInstance().getTime()));

@@ -209,9 +209,9 @@ public class ListData extends Application {
                         List<AuditoriumsClass> auditClass = new ArrayList<>();
                         for (int i = 0; i < responseSessionBody.length(); i++) {
                             auditClass = JSONUtils.toList(AuditoriumsClass.class, responseSessionBody.toString());
-//                            if(auditClass.get(i).getTheater() == ListData.getTheaterId()){
+                            if(auditClass.get(i).getTheater() == ListData.getTheaterId()){
                                 AuditData.put(auditClass.get(i).getAcronym(), auditClass.get(i).getId());
-//                            }
+                            }
                         }
                     } catch (Exception e) {
                         // TODO Auto-generated catch block

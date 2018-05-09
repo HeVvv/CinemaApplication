@@ -79,16 +79,17 @@
                 app:layout_constraintStart_toEndOf="@+id/camera"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0"
-                app:srcCompat="@mipmap/active_round" />
+                app:srcCompat="@drawable/glasses" />
 
             <TextView
                 android:id="@+id/glassesCount"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical|center_horizontal"
-                android:textColor="#161616"
-                android:textSize="60sp"
-                tools:text="33" />
+                android:paddingLeft="10dp"
+                android:textColor="#333333"
+                android:textSize="85sp"
+                tools:text="333" />
         </FrameLayout>
 
         <SurfaceView
