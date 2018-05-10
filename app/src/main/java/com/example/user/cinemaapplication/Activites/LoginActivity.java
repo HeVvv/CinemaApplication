@@ -83,6 +83,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject responseBody) {
                 Intent intent = new Intent(LoginActivity.this, SplashActivity.class);
+//                Intent intent = new Intent(LoginActivity.this, SplashActivity.class);
 
                 final String str = FileAdapter.readFromFile(getApplication().getFilesDir()+ "/" + "ID.txt");
                 if (!(str.isEmpty())) {
@@ -90,10 +91,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
                     System.out.println("device id->" + device_id);
                     THEATER_ID = ListData.getTheaterByDEVICE_ID(device_id);
                 }
-
                 startActivity(intent);
-
             }
+
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 if (statusCode == 401){
