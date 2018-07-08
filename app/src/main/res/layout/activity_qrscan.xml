@@ -87,8 +87,10 @@
                 android:layout_height="match_parent"
                 android:gravity="center_vertical|center_horizontal"
                 android:paddingLeft="5dp"
-                android:textSize = "85sp"
-                tools:text = "3"/>
+                android:shadowColor="@android:color/background_dark"
+                android:textSize="85sp"
+                tools:text="3" />
+
         </FrameLayout>
 
         <SurfaceView
