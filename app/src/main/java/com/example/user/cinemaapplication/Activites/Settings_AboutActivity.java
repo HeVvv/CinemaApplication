@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
@@ -98,5 +99,13 @@ public class Settings_AboutActivity extends AppCompatActivity {
             }
         });
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent i = new Intent(Settings_AboutActivity.this,TabActivity.class);
+        i.addCategory(Intent.CATEGORY_HOME);
+        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(i);
     }
 }

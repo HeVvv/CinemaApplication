@@ -95,6 +95,11 @@ public class ListData extends Application {
     final static String urlTheaterInfo = "https://inlogic.org:8443/wsglobal/webapi/theater/android";
     final static String urlConn = "https://inlogic.org:8443/wsglobal/webapi/salespoints/android/"; // + device_id
 
+//    final static String url12 = "https://soft.silverscreen.by:8443/wscinema/webapi/auditoriums";
+//    final static String url22 = "https://soft.silverscreen.by:8443/wscinema/webapi/show/auditorium/";
+//    final static String urlTheaterInfo = "https://soft.silverscreen.by:8443/wsglobal/webapi/theater/android";
+//    final static String urlConn = "https://soft.silverscreen.by:8443/wsglobal/webapi/salespoints/android/"; // + device_id
+
     // private static HashMap<String,Integer> AuditData = new HashMap<>();
     //HashMap sorting
     public static HashMap<String,Integer> getAuditData(){
@@ -118,6 +123,67 @@ public class ListData extends Application {
         client_loadListData.setSSLSocketFactory(MySSLSocketFactory.getFixedSocketFactory());
         client_loadListData.get(url12, null, new JsonHttpResponseHandler() {
             @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                try {
+                    AuditoriumsClass auditoriumsClass = new AuditoriumsClass();
+                    for (int i = 0; i < response.length(); i++) {
+                        auditoriumsClass = JSONUtils.parseJsonToObject(response.toString(), AuditoriumsClass.class);
+                        final String auditName = auditoriumsClass.getAcronym();
+                        AsyncHttpClient client2 = new AsyncHttpClient();
+                        client2.setBasicAuth(LoginActivity.getStaticLoginActivity().getUsername(), LoginActivity.getStaticLoginActivity().getPassword());
+                        client2.setSSLSocketFactory(MySSLSocketFactory.getFixedSocketFactory());
+                        client2.get(url22 + auditoriumsClass.getId(), null, new JsonHttpResponseHandler() {
+                            @Override
+                            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                                try {
+                                    SessionClass sessClass = new SessionClass();
+                                    List<String> sessList = new ArrayList<>();
+                                    //handle time check?
+                                    for (int k = 0; k < 3; k++) {
+                                        sessClass = JSONUtils.parseJsonToObject(response.toString(),SessionClass.class);
+                                        sessList.add(sessClass.getAcronymEvent() + " " + dateFormat.format(sessClass.getStart())+ " №" +sessClass.getId());
+                                    }
+                                    if (sessList.isEmpty()) {
+                                        sessList.add("This auditorium has no sessions today [-]");
+                                    }
+                                    expDetails.put(auditName, sessList);
+                                    System.out.println(expDetails);
+                                } catch (Exception e) {
+                                    System.out.println("Inner Url/Json error! " + statusCode + " " + response.toString());
+                                    e.printStackTrace();
+                                }
+                            }
+
+
+                            @Override
+                            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                                super.onFailure(statusCode, headers, responseString, throwable);
+                                System.out.println("error" + statusCode + "~~~~" + responseString);
+                            }
+
+                            @Override
+                            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                                super.onFailure(statusCode, headers, throwable, errorResponse);
+                                System.out.println("error" + statusCode + "~~~~" + errorResponse);
+                            }
+
+                            @Override
+                            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                                super.onFailure(statusCode, headers, throwable, errorResponse);
+                                System.out.println("error" + statusCode + "~~~~" + errorResponse);
+                            }
+
+                        });
+                    }
+                } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    System.out.println("Outer Url/Json error! " + statusCode + " " + response.toString());
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
             public void onSuccess(int statusCode, Header[] headers, final JSONArray responseSessionBody) {
                 try {
                     List<AuditoriumsClass> auditClass = new ArrayList<>();
@@ -128,6 +194,11 @@ public class ListData extends Application {
                         client2.setBasicAuth(LoginActivity.getStaticLoginActivity().getUsername(), LoginActivity.getStaticLoginActivity().getPassword());
                         client2.setSSLSocketFactory(MySSLSocketFactory.getFixedSocketFactory());
                         client2.get(url22 + auditClass.get(i).getId(), null, new JsonHttpResponseHandler() {
+                            @Override
+                            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                                System.out.println("got url22 response");
+                            }
+
                             @Override
                             public void onSuccess(int statusCode, Header[] headers1, JSONArray responseSessionBody2) {
                                 try {
@@ -203,6 +274,25 @@ public class ListData extends Application {
             client_loadAuditData.setSSLSocketFactory(MySSLSocketFactory.getFixedSocketFactory());
             client_loadAuditData.get(url12, null, new JsonHttpResponseHandler() {
                 @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    try {
+                        System.out.println("~~~~");
+                        AuditoriumsClass auditoriumsClass = new AuditoriumsClass();
+                        for (int i = 0; i < response.length(); i++) {
+                            auditoriumsClass = JSONUtils.parseJsonToObject(response.toString(),AuditoriumsClass.class);
+                            if(auditoriumsClass.getTheater() == ListData.getTheaterId()){
+                                AuditData.put(auditoriumsClass.getAcronym(), auditoriumsClass.getId());
+                                System.out.println(AuditData);
+                            }
+                        }
+                    } catch (Exception e) {
+                        // TODO Auto-generated catch block
+                        System.out.println("Outer Url/Json error! " + statusCode + " " + response.toString());
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
                 public void onSuccess(int statusCode, Header[] headers, final JSONArray responseSessionBody) {
                     try {
                         System.out.println("~~~~");
@@ -248,6 +338,21 @@ public class ListData extends Application {
         client_loadTheaterInfo.setSSLSocketFactory(MySSLSocketFactory.getFixedSocketFactory());
         client_loadTheaterInfo.get(urlTheaterInfo, null, new JsonHttpResponseHandler() {
             @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                try {
+                    TheaterClass theaterClass = new TheaterClass();
+                    for(int i = 0; i < response.length(); i++){
+                        theaterClass = JSONUtils.parseJsonToObject(response.toString(),TheaterClass.class);
+                        TheaterID_Name.put(theaterClass.getId(),theaterClass.getName());
+                        System.out.println("Theater id name -> " + TheaterID_Name);
+                    }
+                } catch (Exception e) {
+                    System.out.println("Outer Url/Json error! " + statusCode + " " + response.toString());
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
             public void onSuccess(int statusCode, Header[] headers, final JSONArray responseSessionBody) {
                 try {
                     List<TheaterClass> theaterClasses = new ArrayList<>();
@@ -288,6 +393,23 @@ public class ListData extends Application {
         client_loadTheaterInfo.setBasicAuth(LoginActivity.getStaticLoginActivity().getUsername(), LoginActivity.getStaticLoginActivity().getPassword());
         client_loadTheaterInfo.setSSLSocketFactory(MySSLSocketFactory.getFixedSocketFactory());
         client_loadTheaterInfo.get(urlTheaterInfo, null, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                System.out.println(response);
+                try {
+                    TheaterClass theaterClass = new TheaterClass();
+                    for(int i = 0; i < response.length(); i++){
+                        theaterClass= JSONUtils.parseJsonToObject(response.toString(),TheaterClass.class);
+                        TheaterColor.add(theaterClass.getColor());
+                    }
+
+                } catch (Exception e) {
+                    System.out.println("Outer Url/Json error! " + statusCode + " " + response.toString());
+                    e.printStackTrace();
+                }
+
+            }
+
             @Override
             public void onSuccess(int statusCode, Header[] headers, final JSONArray responseSessionBody) {
                 try {
@@ -330,7 +452,6 @@ public class ListData extends Application {
         client_theater_device.setBasicAuth(LoginActivity.getStaticLoginActivity().getUsername(), LoginActivity.getStaticLoginActivity().getPassword());
         client_theater_device.setSSLSocketFactory(MySSLSocketFactory.getFixedSocketFactory());
         client_theater_device.get(urlConn + device_id, null, new JsonHttpResponseHandler() {
-
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject responseSessionBody) {
                 try {
@@ -362,7 +483,6 @@ public class ListData extends Application {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
                 System.out.println("error" + statusCode + "~~~~" + errorResponse);
             }
-
         });
         System.out.println(THEATER_ID + "~~");
         return THEATER_ID;

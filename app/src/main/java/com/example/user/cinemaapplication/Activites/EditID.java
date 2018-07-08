@@ -49,13 +49,21 @@ public class EditID extends AppCompatActivity {
                 return true;
             case R.id.action_save:
                 saveFile(FILENAME);
-                Intent intent = new Intent(EditID.this, Settings_AboutActivity.class);
+                Intent i = new Intent(EditID.this,LoginActivity.class);
+                i.addCategory(Intent.CATEGORY_HOME);
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 Toast.makeText(getApplication(),"ID for device is set!",Toast.LENGTH_SHORT).show();
-                startActivity(intent);
+                startActivity(i);
                 return true;
             default:
                 return true;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        System.out.println("Back pressed");
+        finish();
     }
 
     // Метод для открытия файла

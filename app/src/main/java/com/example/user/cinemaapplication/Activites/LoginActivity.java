@@ -195,8 +195,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
                                   });
 
         //tested
-        username.setText("Tkachev_A");
-        password.setText("111111");
+//        username.setText("Tkachev_A");
+//        password.setText("111111");
 
 
         super.onCreate(savedInstanceState);

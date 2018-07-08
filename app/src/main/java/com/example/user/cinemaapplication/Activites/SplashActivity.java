@@ -3,6 +3,7 @@ package com.example.user.cinemaapplication.Activites;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -34,6 +35,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.sql.SQLOutput;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -72,10 +74,11 @@ public class SplashActivity extends AppCompatActivity{
         staticSplashActivity = this;
     }
 
+    private static final String HISTORY_FILE_DATE = "history_file_date";
+
     public HashMap<String, Integer> getDATA(){
         return DATA;
     }
-
     public int getTHEATER_ID(){
         return THEATER_ID;
     }
@@ -99,6 +102,23 @@ public class SplashActivity extends AppCompatActivity{
 
         return false;
     }
+
+    public static void deleteFilesOlderThanNdays(int daysBack, Context ctx) {
+        File file = new File(ctx.getFilesDir(), "history.txt");
+        System.out.println("Checking file to delete");
+        if(file.exists()){
+            long purgeTime = System.currentTimeMillis() - (daysBack * 24 * 60 * 60 * 1000);
+                if(file.lastModified() < purgeTime) {
+                    if(!file.delete()) {
+                        System.err.println("Unable to delete file: " + file);
+                    }else{
+                        FileAdapter.deleteFile(file);
+                        System.out.println("Deleted file" + file);
+                    }
+                }
+        }
+    }
+
     @Override
     public void onCreate(Bundle savedInstance) {
 
@@ -112,22 +132,46 @@ public class SplashActivity extends AppCompatActivity{
 
         File historyFile = new File(ctx.getFilesDir(), "history.txt");
 
-        //добавить проверку на разовое удаление
-        Date threshhold = new Date(111111111111L);
+        SharedPreferences sp = getSharedPreferences(HISTORY_FILE_DATE,
+                Context.MODE_PRIVATE);
+        boolean hasVisited = sp.getBoolean("hasVisited",false);
+        long days = 30;
+        Date purgeDate = new Date();
+        purgeDate.setTime(days * 1000 * 3600 * 24);
 
-        if((isFirstDayOfTheMonth(Calendar.getInstance().getTime()))) {
-            FileAdapter.deleteFile(historyFile);
+        if (!hasVisited) {
+            SharedPreferences.Editor e = sp.edit();
+            e.putBoolean("hasVisited",true);
+            e.putLong("historyPurgeTime",purgeDate.getTime());
+            e.apply();
         }
 
-//        Path path = historyFile.toPath();
-//
-//        BasicFileAttributes attr = Files.readAttributes(path,BasicFileAttributes.class);
+//        SimpleDateFormat format1 = new SimpleDateFormat("dd.MM.yyyy hh:mm");
+//        System.out.println(format1.format(sp.getLong("historyCreateTime",0)));
+//        System.out.println(format1.format(sp.getLong("historyPurgeTime",0)));
+//        System.out.println(format1.format(Calendar.getInstance().getTime()));
+
+        long currentMillis = new Date().getTime();
+        long millisIn30Days = days * 24 * 60 * 60 * 1000;
+        long historyCreateTime = sp.getLong("historyCreateTime",0);
+        boolean result = historyCreateTime < (currentMillis - millisIn30Days);
+        System.out.println(result);
+        System.out.println(historyCreateTime + "<"  + currentMillis + " - " +millisIn30Days);
+        if(result){
+            FileAdapter.deleteFile(historyFile);
+            System.out.println("History file deleted due to expire date");
+        }
 
         try {
             if (historyFile.createNewFile()) {
                 System.out.println("Файл создан: " + historyFile.getAbsolutePath());
+                Date createDate = Calendar.getInstance().getTime();
+                SharedPreferences.Editor e = sp.edit();
+                e.putLong("historyCreateTime",createDate.getTime());
+                e.apply();
+                System.out.println(System.currentTimeMillis());
             } else {
-                System.out.println("Не удалось создать файл.");
+                System.out.println("Не удалось создать файл." + historyFile);
             }
         } catch (IOException ex) {
             System.out.println("Creation file Error");
@@ -138,7 +182,7 @@ public class SplashActivity extends AppCompatActivity{
             if (file1.createNewFile()) {
                 System.out.println("Файл создан: " + file1.getAbsolutePath());
             } else {
-                System.out.println("Не удалось создать файл.");
+                System.out.println("Не удалось создать файл." + file1);
             }
         } catch (IOException ex) {
             System.out.println("Creation file Error");
