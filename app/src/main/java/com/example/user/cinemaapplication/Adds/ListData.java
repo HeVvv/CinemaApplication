@@ -89,16 +89,16 @@ public class ListData extends Application {
     public ListData() {
         staticListData = this;
     }
+//
+//    final static String url12 = "https://inlogic.org:8443/wscinema/webapi/auditoriums";
+//    final static String url22 = "https://inlogic.org:8443/wscinema/webapi/show/auditorium/";
+//    final static String urlTheaterInfo = "https://inlogic.org:8443/wsglobal/webapi/theater/android";
+//    final static String urlConn = "https://inlogic.org:8443/wsglobal/webapi/salespoints/android/"; // + device_id
 
-    final static String url12 = "https://inlogic.org:8443/wscinema/webapi/auditoriums";
-    final static String url22 = "https://inlogic.org:8443/wscinema/webapi/show/auditorium/";
-    final static String urlTheaterInfo = "https://inlogic.org:8443/wsglobal/webapi/theater/android";
-    final static String urlConn = "https://inlogic.org:8443/wsglobal/webapi/salespoints/android/"; // + device_id
-
-//    final static String url12 = "https://soft.silverscreen.by:8443/wscinema/webapi/auditoriums";
-//    final static String url22 = "https://soft.silverscreen.by:8443/wscinema/webapi/show/auditorium/";
-//    final static String urlTheaterInfo = "https://soft.silverscreen.by:8443/wsglobal/webapi/theater/android";
-//    final static String urlConn = "https://soft.silverscreen.by:8443/wsglobal/webapi/salespoints/android/"; // + device_id
+    final static String url12 = "https://soft.silverscreen.by:8443/wscinema/webapi/auditoriums";
+    final static String url22 = "https://soft.silverscreen.by:8443/wscinema/webapi/show/auditorium/";
+    final static String urlTheaterInfo = "https://soft.silverscreen.by:8443/wsglobal/webapi/theater/android";
+    final static String urlConn = "https://soft.silverscreen.by:8443/wsglobal/webapi/salespoints/android/"; // + device_id
 
     // private static HashMap<String,Integer> AuditData = new HashMap<>();
     //HashMap sorting
@@ -153,7 +153,6 @@ public class ListData extends Application {
                                     e.printStackTrace();
                                 }
                             }
-
 
                             @Override
                             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
@@ -344,7 +343,7 @@ public class ListData extends Application {
                     for(int i = 0; i < response.length(); i++){
                         theaterClass = JSONUtils.parseJsonToObject(response.toString(),TheaterClass.class);
                         TheaterID_Name.put(theaterClass.getId(),theaterClass.getName());
-                        System.out.println("Theater id name -> " + TheaterID_Name);
+//                        System.out.println("Theater id name -> " + TheaterID_Name);
                     }
                 } catch (Exception e) {
                     System.out.println("Outer Url/Json error! " + statusCode + " " + response.toString());

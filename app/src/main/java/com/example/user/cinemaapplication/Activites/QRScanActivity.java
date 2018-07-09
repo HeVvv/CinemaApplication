@@ -75,7 +75,7 @@ public class QRScanActivity extends Fragment {
 
 
 
-    public String check_ticket_url = "https://inlogic.org:8443/wsglobal/webapi/check/ticket";
+    public String check_ticket_url = "https://soft.silverscreen.by:8443/wsglobal/webapi/check/ticket";
 
     private static QRScanActivity staticQRScanActivity;
 
@@ -246,6 +246,7 @@ public class QRScanActivity extends Fragment {
 
                                     @Override
                                     public void onSuccess(int statusCode, Header[] headers, final String responseString) {
+                                        System.out.println("response");
                                         final String appended = responseString.concat(" ");
                                         System.out.println(appended);
                                         String status = appended.substring(0, 1);

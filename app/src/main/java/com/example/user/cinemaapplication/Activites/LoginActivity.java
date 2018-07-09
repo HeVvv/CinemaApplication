@@ -21,6 +21,8 @@ import android.widget.Toast;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -42,7 +44,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
     private HashMap <String,Integer> DATA = new HashMap<>();
     private HashMap<Integer,String> THEATER_DATA = new HashMap<>();
 
-
+    private String HardCodedUsername = "Starastsin_A";
+    private String HardCodedPassword = "test";
     private static LoginActivity staticLoginActivity;
     public static LoginActivity getStaticLoginActivity(){
         return staticLoginActivity;
@@ -54,10 +57,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
     public int getDEVICE_NUMBER(){ return DEVICE_NUMBER; }
     public String getCINEMA_NAME(){  return CINEMA_NAME; }
     public String getUsername(){
-        return username.getText().toString();
+        return HardCodedUsername;
     }
     public String getPassword(){
-        return password.getText().toString();
+        return HardCodedPassword;
     }
 
     public HashMap<String, Integer> getDATA(){
@@ -74,17 +77,23 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
         return THEATER_COLOR;
     }
 
-    public void onLogin(View view) {
+    public void onLogin(View view) throws UnsupportedEncodingException {
 
-        AsyncHttpClient client_main = new AsyncHttpClient();
-        client_main.setBasicAuth(username.getText().toString(), password.getText().toString());
+//        System.out.println(URLEncoder.encode(username.getText().toString(),"UTF-8"));
+//        String loginAuth = new String(username.getText().toString().getBytes("UTF-8"), "UTF-8");
+//        byte ptext[] = username.getText().toString().getBytes("UTF-8");
+//        String logina = new String(ptext,"UTF-8");
+//        System.out.println(logina);
+//        System.out.println(loginAuth);
+
+        final AsyncHttpClient client_main = new AsyncHttpClient();
+        client_main.setBasicAuth(HardCodedUsername, HardCodedPassword);
         client_main.setSSLSocketFactory(MySSLSocketFactory.getFixedSocketFactory());
-        client_main.get("https://inlogic.org:8443/security-1.0/webapi/auth/login/" + username.getText().toString(), null, new JsonHttpResponseHandler() {
+        client_main.get("https://soft.silverscreen.by:8443/security-1.0/webapi/auth/login/" + URLEncoder.encode(username.getText().toString(),"UTF-8"), null, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject responseBody) {
                 Intent intent = new Intent(LoginActivity.this, SplashActivity.class);
 //                Intent intent = new Intent(LoginActivity.this, SplashActivity.class);
-
                 final String str = FileAdapter.readFromFile(getApplication().getFilesDir()+ "/" + "ID.txt");
                 if (!(str.isEmpty())) {
                     final int device_id = Integer.parseInt(str.trim());
@@ -111,7 +120,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
                     toast.makeText(getApplicationContext(), "Ошибка! id-" + statusCode,Toast.LENGTH_SHORT).show();
                     toast.setGravity(Gravity.CENTER, 0, 0);
                 }
-                System.out.println("error" + statusCode + "~~~~" + responseString);
+                System.out.println("error" + statusCode + "~~~~1" + responseString);
             }
 
             @Override
@@ -132,7 +141,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
                     toast.makeText(getApplicationContext(), "Ошибка! id-" + statusCode,Toast.LENGTH_SHORT).show();
                     toast.setGravity(Gravity.CENTER, 0, 0);
                 }
-                System.out.println("error" + statusCode + "~~~~" + errorResponse);
+                System.out.println("error" + statusCode + "~~~~2" + errorResponse);
             }
 
             @Override
@@ -187,7 +196,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
                                           if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
                                                   (keyCode == KeyEvent.KEYCODE_ENTER)) {
                                               // Perform action on key press
-                                              LoginActivity.getStaticLoginActivity().onLogin(v);
+                                              try {
+                                                  LoginActivity.getStaticLoginActivity().onLogin(v);
+                                              } catch (UnsupportedEncodingException e) {
+                                                  e.printStackTrace();
+                                              }
                                               return true;
                                           }
                                           return false;

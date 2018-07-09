@@ -267,6 +267,24 @@ public class TabActivity extends AppCompatActivity {
         return true;
     }
 
+    private static final int TIME_DELAY = 2000;
+    private static long back_pressed;
+
+
+    @Override
+    public void onBackPressed() {
+        if (back_pressed + TIME_DELAY > System.currentTimeMillis()) {
+            Intent i = new Intent(TabActivity.this,LoginActivity.class);
+            i.addCategory(Intent.CATEGORY_HOME);
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(i);
+        } else {
+            Toast.makeText(getBaseContext(), "Press once again to exit!",
+                    Toast.LENGTH_SHORT).show();
+        }
+        back_pressed = System.currentTimeMillis();
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();

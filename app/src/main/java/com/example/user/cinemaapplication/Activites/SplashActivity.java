@@ -103,20 +103,8 @@ public class SplashActivity extends AppCompatActivity{
         return false;
     }
 
-    public static void deleteFilesOlderThanNdays(int daysBack, Context ctx) {
-        File file = new File(ctx.getFilesDir(), "history.txt");
-        System.out.println("Checking file to delete");
-        if(file.exists()){
-            long purgeTime = System.currentTimeMillis() - (daysBack * 24 * 60 * 60 * 1000);
-                if(file.lastModified() < purgeTime) {
-                    if(!file.delete()) {
-                        System.err.println("Unable to delete file: " + file);
-                    }else{
-                        FileAdapter.deleteFile(file);
-                        System.out.println("Deleted file" + file);
-                    }
-                }
-        }
+    @Override
+    public void onBackPressed() {
     }
 
     @Override
@@ -247,6 +235,6 @@ public class SplashActivity extends AppCompatActivity{
                 startActivity(openMainActivity);
                 finish();
             }
-        }, 6500);
+        }, 7000);
     }
 }

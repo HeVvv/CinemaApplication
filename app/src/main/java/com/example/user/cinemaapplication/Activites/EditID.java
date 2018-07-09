@@ -49,7 +49,7 @@ public class EditID extends AppCompatActivity {
                 return true;
             case R.id.action_save:
                 saveFile(FILENAME);
-                Intent i = new Intent(EditID.this,LoginActivity.class);
+                Intent i = new Intent(EditID.this,SplashActivity.class);
                 i.addCategory(Intent.CATEGORY_HOME);
                 i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 Toast.makeText(getApplication(),"ID for device is set!",Toast.LENGTH_SHORT).show();
