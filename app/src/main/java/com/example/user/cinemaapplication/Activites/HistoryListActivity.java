@@ -48,7 +48,31 @@ public class HistoryListActivity extends android.support.v4.app.Fragment{
         staticHistoryListActivity = this;
     }
 
+    private TicketListAdapter adapter;
+    private ListView ticketHistoryList;
     private String strs;
+
+    public TicketListAdapter getAdapter() {
+        return adapter;
+    }
+
+    public void setAdapter(TicketListAdapter adapter) {
+        this.adapter = adapter;
+    }
+
+    public ListView getTicketHistoryList() {
+        return ticketHistoryList;
+    }
+
+    public void setTicketHistoryList(ListView ticketHistoryList) {
+        this.ticketHistoryList = ticketHistoryList;
+    }
+
+    public static void historyListUpdate(TicketListAdapter adapter, ListView ticketHistoryList){
+        adapter.notifyDataSetChanged();
+        ticketHistoryList.smoothScrollToPosition(ticketHistoryList.getAdapter().getCount());
+        ticketHistoryList.setSelection(ticketHistoryList.getAdapter().getCount());
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, final Bundle savedInstanceState) {
@@ -59,8 +83,8 @@ public class HistoryListActivity extends android.support.v4.app.Fragment{
         final List<String> emptyList = new ArrayList<>();
         emptyList.add("История пуста.");
 
-        final TicketListAdapter adapter;
-        final ListView ticketHistoryList = (ListView) rootView.findViewById(R.id.History);
+
+        ticketHistoryList = (ListView) rootView.findViewById(R.id.History);
 
         adapter = new TicketListAdapter(getActivity(), ticketList);
         ticketHistoryList.setAdapter(adapter);

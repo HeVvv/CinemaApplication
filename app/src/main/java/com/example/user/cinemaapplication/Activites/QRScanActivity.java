@@ -265,16 +265,14 @@ public class QRScanActivity extends Fragment {
                                                 int color = Color.argb(1,251,251,251);
                                                 glassesCount.setTextColor(color);
                                                 glassesCount.setTextSize(125);
-//                                                glassesCount.setText(info.get(2));
-                                                glassesCount.setText("3");
+                                                glassesCount.setText(info.get(2));
+//                                                glassesCount.setText("3");
                                             }
                                         });
                                         ticketList.add(responseString + "|" + dateFormat.format(Calendar.getInstance().getTime()));
                                         adapter.notifyDataSetChanged();
                                         if (status.equals("0")) {
-//                                            responseImage.setImageResource(R.drawable.cancel);
-                                            responseImage.setImageResource(R.drawable.glasses);
-
+                                            responseImage.setImageResource(R.drawable.cancel);
                                         } else if (status.equals("1")) {
                                             responseImage.setImageResource(R.drawable.accept);
                                         } else if (status.equals("2")) {

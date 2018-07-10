@@ -110,12 +110,10 @@ public class TabActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_tab2);
 
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         viewPager = (CustomViewPager) findViewById(R.id.pager);
-
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);
 
         adapter = new PagerAdapter(getSupportFragmentManager());
@@ -179,11 +177,10 @@ public class TabActivity extends AppCompatActivity {
             }
         };
 
-        myTimer.scheduleAtFixedRate(new TimerTask() { // Определяем задачу
+        myTimer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
                 uiHandler.post(runnable);
-
             }
         }, 0L, 1500 );
 
@@ -198,7 +195,7 @@ public class TabActivity extends AppCompatActivity {
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-
+//                HistoryListActivity.getHistoryListActivity().historyListUpdate(HistoryListActivity.getHistoryListActivity().getAdapter(),HistoryListActivity.getHistoryListActivity().getTicketHistoryList());
             }
 
             @Override
