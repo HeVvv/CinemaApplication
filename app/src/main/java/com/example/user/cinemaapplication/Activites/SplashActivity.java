@@ -79,6 +79,10 @@ public class SplashActivity extends AppCompatActivity{
     public HashMap<String, Integer> getDATA(){
         return DATA;
     }
+    public void setDATA(){
+        System.out.println("Re-setting data");
+        DATA = new HashMap<>();
+    }
     public int getTHEATER_ID(){
         return THEATER_ID;
     }
@@ -90,7 +94,6 @@ public class SplashActivity extends AppCompatActivity{
     }
 
     public boolean isFirstDayOfTheMonth(Date date){
-
         if(date == null){
             return false;
         }
@@ -99,7 +102,6 @@ public class SplashActivity extends AppCompatActivity{
         if(c.get(Calendar.DAY_OF_MONTH) == 1){
             return true;
         }
-
         return false;
     }
 
@@ -143,8 +145,8 @@ public class SplashActivity extends AppCompatActivity{
         long millisIn30Days = days * 24 * 60 * 60 * 1000;
         long historyCreateTime = sp.getLong("historyCreateTime",0);
         boolean result = historyCreateTime < (currentMillis - millisIn30Days);
-        System.out.println(result);
-        System.out.println(historyCreateTime + "<"  + currentMillis + " - " +millisIn30Days);
+//        System.out.println(result);
+//        System.out.println(historyCreateTime + "<"  + currentMillis + " - " +millisIn30Days);
         if(result){
             FileAdapter.deleteFile(historyFile);
             System.out.println("History file deleted due to expire date");
@@ -215,7 +217,6 @@ public class SplashActivity extends AppCompatActivity{
 //
 //            }
 //        });
-
 //        SplashActivity.this.runOnUiThread(new Runnable() {
 //            @Override
 //            public void run() {

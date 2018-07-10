@@ -1,6 +1,9 @@
 package com.example.user.cinemaapplication.Activites;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -24,7 +27,7 @@ public class EditID extends AppCompatActivity {
 
     private static String FILENAME; // имя файла
     private EditText mEditText;
-
+    private Context context = getBaseContext();
 
     public void onCreate(Bundle savedInstanceState) {
         FILENAME = "ID.txt";
@@ -49,11 +52,19 @@ public class EditID extends AppCompatActivity {
                 return true;
             case R.id.action_save:
                 saveFile(FILENAME);
-                Intent i = new Intent(EditID.this,SplashActivity.class);
+                SplashActivity.getStaticSplashActivity().setDATA();
+                Intent i = new Intent(EditID.this,LoginActivity.class);
                 i.addCategory(Intent.CATEGORY_HOME);
                 i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 Toast.makeText(getApplication(),"ID for device is set!",Toast.LENGTH_SHORT).show();
                 startActivity(i);
+                // not tested
+//                Intent mStartActivity = new Intent(EditID.this, LoginActivity.class);
+//                int mPendingIntentId = 123456;
+//                PendingIntent mPendingIntent = PendingIntent.getActivity(EditID.this, mPendingIntentId,    mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
+//                AlarmManager mgr = (AlarmManager)EditID.this.getSystemService(Context.ALARM_SERVICE);
+//                mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
+//                System.exit(0);
                 return true;
             default:
                 return true;

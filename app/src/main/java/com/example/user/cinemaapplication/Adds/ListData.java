@@ -89,16 +89,16 @@ public class ListData extends Application {
     public ListData() {
         staticListData = this;
     }
-//
-//    final static String url12 = "https://inlogic.org:8443/wscinema/webapi/auditoriums";
-//    final static String url22 = "https://inlogic.org:8443/wscinema/webapi/show/auditorium/";
-//    final static String urlTheaterInfo = "https://inlogic.org:8443/wsglobal/webapi/theater/android";
-//    final static String urlConn = "https://inlogic.org:8443/wsglobal/webapi/salespoints/android/"; // + device_id
 
-    final static String url12 = "https://soft.silverscreen.by:8443/wscinema/webapi/auditoriums";
-    final static String url22 = "https://soft.silverscreen.by:8443/wscinema/webapi/show/auditorium/";
-    final static String urlTheaterInfo = "https://soft.silverscreen.by:8443/wsglobal/webapi/theater/android";
-    final static String urlConn = "https://soft.silverscreen.by:8443/wsglobal/webapi/salespoints/android/"; // + device_id
+    final static String url12 = "https://inlogic.org:8443/wscinema/webapi/auditoriums";
+    final static String url22 = "https://inlogic.org:8443/wscinema/webapi/show/auditorium/";
+    final static String urlTheaterInfo = "https://inlogic.org:8443/wsglobal/webapi/theater/android";
+    final static String urlConn = "https://inlogic.org:8443/wsglobal/webapi/salespoints/android/"; // + device_id
+
+//    final static String url12 = "https://soft.silverscreen.by:8443/wscinema/webapi/auditoriums";
+//    final static String url22 = "https://soft.silverscreen.by:8443/wscinema/webapi/show/auditorium/";
+//    final static String urlTheaterInfo = "https://soft.silverscreen.by:8443/wsglobal/webapi/theater/android";
+//    final static String urlConn = "https://soft.silverscreen.by:8443/wsglobal/webapi/salespoints/android/"; // + device_id
 
     // private static HashMap<String,Integer> AuditData = new HashMap<>();
     //HashMap sorting
@@ -458,7 +458,7 @@ public class ListData extends Application {
                     for(int i = 0; i < responseSessionBody.length(); i++){
                         salespointsClasses = JSONUtils.parseJsonToObject(responseSessionBody.toString(),SalespointsClass.class);
                         THEATER_ID = salespointsClasses.getTheater();
-                        System.out.println("got theater id" + THEATER_ID);
+//                        System.out.println("got theater id" + THEATER_ID);
                     }
                 } catch (Exception e) {
                     System.out.println("Outer Url/Json error! " + statusCode + " " + responseSessionBody.toString());

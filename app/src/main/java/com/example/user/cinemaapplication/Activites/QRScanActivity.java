@@ -203,8 +203,6 @@ public class QRScanActivity extends Fragment {
         ticketHistoryList.setAdapter(adapter);
 
 
-
-
         final File historyfile = new File(getContext().getFilesDir() + "/history.txt");
 
         qrEader = new QREader.Builder(getActivity(), mySurfaceView, new QRDataListener() {
@@ -221,8 +219,9 @@ public class QRScanActivity extends Fragment {
                     Runnable myRunnable = new Runnable() {
                         @Override
                         public void run() {
+
 //                            String datatest = "4172/30800/232/5//11";
-//                            final String test = "1/" + QRScanActivity.getStaticQRS    canActivity().getAuditoriumsIDS() + "/" + datatest;
+//                            final String test = "1/" + QRScanActivity.getStaticQRScanActivity().getAuditoriumsIDS() + "/" + datatest;
 
                             final String test = ID_DEVICE + "/" + QRScanActivity.getStaticQRScanActivity().getAuditoriumsIDS() + "/" + data;
                             try {
@@ -252,23 +251,30 @@ public class QRScanActivity extends Fragment {
                                         String status = appended.substring(0, 1);
                                         final String response = appended.substring(2, appended.length());
                                         final List<String> info = contentString(response);
+
                                         text.post(new Runnable() {
                                             @Override
                                             public void run() {
                                                 text.setText(info.get(0));
+                                                text.setTextSize(30);
                                                 textAdd.setText(info.get(1));
+                                                textAdd.setTextSize(18);
                                                 FileAdapter.writeFile(appended,historyfile);
                                                 Typeface type = Typeface.createFromAsset(getActivity().getAssets(),"Fontfabric - UniNeueBlack.otf");
                                                 glassesCount.setTypeface(type);
-                                                int color = Color.argb(100,51,51,51);
+                                                int color = Color.argb(1,251,251,251);
                                                 glassesCount.setTextColor(color);
-                                                glassesCount.setText(info.get(2));
+                                                glassesCount.setTextSize(125);
+//                                                glassesCount.setText(info.get(2));
+                                                glassesCount.setText("3");
                                             }
                                         });
                                         ticketList.add(responseString + "|" + dateFormat.format(Calendar.getInstance().getTime()));
                                         adapter.notifyDataSetChanged();
                                         if (status.equals("0")) {
-                                            responseImage.setImageResource(R.drawable.cancel);
+//                                            responseImage.setImageResource(R.drawable.cancel);
+                                            responseImage.setImageResource(R.drawable.glasses);
+
                                         } else if (status.equals("1")) {
                                             responseImage.setImageResource(R.drawable.accept);
                                         } else if (status.equals("2")) {

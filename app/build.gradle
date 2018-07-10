@@ -1,6 +1,9 @@
 apply plugin: 'com.android.application'
 repositories{
     mavenCentral()
+    maven {
+        url "https://jitpack.io"
+    }
 }
 android {
     compileSdkVersion 27
@@ -37,6 +40,7 @@ dependencies {
     compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.45'
     compile 'com.otaliastudios:cameraview:1.5.0'
     compile 'com.github.nisrulz:qreader:2.1.2'
+    compile 'com.github.iamBedant:OutlineTextView:1.0.5'
     implementation 'com.github.nisrulz:qreader:{latest version}'
     implementation 'com.asksira.android:cameraviewplus:0.7.0'
     compile 'com.google.code.gson:gson:2.8.1'

@@ -153,7 +153,7 @@ public class TabActivity extends AppCompatActivity {
                         }catch (NullPointerException e){
                             e.printStackTrace();
                         }
-                        System.out.println("added");
+//                        System.out.println("added");
                     }
                 }else{
                     //remove
@@ -173,7 +173,7 @@ public class TabActivity extends AppCompatActivity {
                         }catch (NullPointerException e){
                             e.printStackTrace();
                         }
-                        System.out.println("removed");
+//                        System.out.println("removed");
                     }
                 }
             }

@@ -74,6 +74,7 @@ public class HistoryListActivity extends android.support.v4.app.Fragment{
                     public void run() {
                         List<String> ticketList = buildHistoryList(getContext());
                         adapter.notifyDataSetChanged();
+                        ticketHistoryList.setSelection(ticketHistoryList.getAdapter().getCount());
                     }
                 });
             }

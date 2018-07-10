@@ -149,8 +149,6 @@ public class AuditChoosingActivity extends Fragment {
             requestPermissions(new String[]{Manifest.permission.CAMERA}, MY_CAMERA_REQUEST_CODE);
         }
 
-        System.out.println("~~~~~");
-
         HashMap <String,Integer> unsorted = SplashActivity.getStaticSplashActivity().getDATA();
 
         Map <String,Integer> listinfo = HashMapSort.sortByComparator(unsorted,true);

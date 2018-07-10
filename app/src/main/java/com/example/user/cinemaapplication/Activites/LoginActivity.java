@@ -35,6 +35,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
     private EditText password;
     private String CINEMA_NAME = "Arena Minsk";
     private int DEVICE_NUMBER = 1;
+
     private TextView Cancel;
     private ImageView Logo;
 
@@ -46,6 +47,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
 
     private String HardCodedUsername = "Starastsin_A";
     private String HardCodedPassword = "test";
+
     private static LoginActivity staticLoginActivity;
     public static LoginActivity getStaticLoginActivity(){
         return staticLoginActivity;
@@ -86,14 +88,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
 //        System.out.println(logina);
 //        System.out.println(loginAuth);
 
+//        String loginUrl = "https://soft.silverscreen.by:8443/security-1.0/webapi/auth/login/";
+        String loginUrl = "https://inlogic.org:8443/security-1.0/webapi/auth/login/";
+
         final AsyncHttpClient client_main = new AsyncHttpClient();
         client_main.setBasicAuth(HardCodedUsername, HardCodedPassword);
         client_main.setSSLSocketFactory(MySSLSocketFactory.getFixedSocketFactory());
-        client_main.get("https://soft.silverscreen.by:8443/security-1.0/webapi/auth/login/" + URLEncoder.encode(username.getText().toString(),"UTF-8"), null, new JsonHttpResponseHandler() {
+        client_main.get(loginUrl + URLEncoder.encode(username.getText().toString(),"UTF-8"), null, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject responseBody) {
                 Intent intent = new Intent(LoginActivity.this, SplashActivity.class);
-//                Intent intent = new Intent(LoginActivity.this, SplashActivity.class);
+//              Intent intent = new Intent(LoginActivity.this, SplashActivity.class);
                 final String str = FileAdapter.readFromFile(getApplication().getFilesDir()+ "/" + "ID.txt");
                 if (!(str.isEmpty())) {
                     final int device_id = Integer.parseInt(str.trim());
@@ -181,14 +186,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
         Cancel = (TextView) findViewById(R.id.cancel);
         Cancel.setOnTouchListener(this);
 
-
         Logo = (ImageView) findViewById(R.id.logo);
         Logo.setImageResource(R.drawable.logo_prog);
 
-
         username = (EditText)findViewById(R.id.usernameInput);
         password = (EditText)findViewById(R.id.passInput);
-
 
         password.setOnKeyListener(new View.OnKeyListener() {
                                       public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -208,8 +210,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
                                   });
 
         //tested
-//        username.setText("Tkachev_A");
-//        password.setText("111111");
+
+        username.setText("Tkachev_A");
+        password.setText("111111");
 
 
         super.onCreate(savedInstanceState);
