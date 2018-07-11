@@ -2,21 +2,28 @@ package com.example.user.cinemaapplication.Activites;
 
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
 import android.text.SpannableString;
 import android.text.style.StyleSpan;
 import android.view.Gravity;
+import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,6 +76,7 @@ public class QRScanActivity extends Fragment {
     private int ID_DEVICE;
     private TextView glassesCount;
 
+    private Context mContext;
     TextView text;
     TextView textAdd;
     ImageView responseImage;
@@ -166,10 +174,9 @@ public class QRScanActivity extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-
-
-        View rootView = inflater.inflate(R.layout.activity_qrscan, container, false);
+        
+        mContext = getContext();
+        final View rootView = inflater.inflate(R.layout.activity_qrscan, container, false);
         final AsyncHttpClient clientTicket = new AsyncHttpClient();
         clientTicket.setBasicAuth(LoginActivity.getStaticLoginActivity().getUsername(), LoginActivity.getStaticLoginActivity().getPassword());
         clientTicket.setSSLSocketFactory(MySSLSocketFactory.getFixedSocketFactory());
@@ -220,9 +227,17 @@ public class QRScanActivity extends Fragment {
                         @Override
                         public void run() {
 
+                            Vibrator v = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
+
+                            // Vibrate for 500 milliseconds
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                v.vibrate(VibrationEffect.createOneShot(500,VibrationEffect.DEFAULT_AMPLITUDE));
+                            }else{
+                                //deprecated in API 26
+                                v.vibrate(200);
+                            }
 //                            String datatest = "4172/30800/232/5//11";
 //                            final String test = "1/" + QRScanActivity.getStaticQRScanActivity().getAuditoriumsIDS() + "/" + datatest;
-
                             final String test = ID_DEVICE + "/" + QRScanActivity.getStaticQRScanActivity().getAuditoriumsIDS() + "/" + data;
                             try {
                                 try {

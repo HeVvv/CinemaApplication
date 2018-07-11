@@ -1,39 +1,23 @@
 package com.example.user.cinemaapplication.Activites;
 
-    import android.app.Fragment;
     import android.content.Context;
     import android.os.Bundle;
     import android.os.Handler;
     import android.os.Looper;
-    import android.view.KeyEvent;
+    import android.support.design.widget.FloatingActionButton;
     import android.view.LayoutInflater;
     import android.view.View;
     import android.view.ViewGroup;
-    import android.widget.Button;
+    import android.widget.AbsListView;
     import android.widget.ListView;
-    import android.widget.TextView;
 
     import com.example.user.cinemaapplication.Adds.FileAdapter;
     import com.example.user.cinemaapplication.Adds.TicketListAdapter;
     import com.example.user.cinemaapplication.R;
-    import com.google.zxing.common.StringUtils;
 
-    import java.io.BufferedReader;
-    import java.io.File;
-    import java.io.FileInputStream;
-    import java.io.FileNotFoundException;
-    import java.io.IOException;
-    import java.io.InputStreamReader;
     import java.util.ArrayList;
     import java.util.Arrays;
-    import java.util.HashSet;
     import java.util.List;
-    import java.util.Scanner;
-    import java.util.Set;
-    import java.util.Timer;
-    import java.util.TimerTask;
-
-    import github.nisrulz.qreader.QREader;
 
 
 public class HistoryListActivity extends android.support.v4.app.Fragment{
@@ -51,6 +35,7 @@ public class HistoryListActivity extends android.support.v4.app.Fragment{
     private TicketListAdapter adapter;
     private ListView ticketHistoryList;
     private String strs;
+    private FloatingActionButton fab;
 
     public TicketListAdapter getAdapter() {
         return adapter;
@@ -79,15 +64,47 @@ public class HistoryListActivity extends android.support.v4.app.Fragment{
         final View rootView = inflater.inflate(R.layout.activity_history,container,false);
 
         final List<String> ticketList = buildHistoryList(getContext());
-
         final List<String> emptyList = new ArrayList<>();
         emptyList.add("История пуста.");
 
 
         ticketHistoryList = (ListView) rootView.findViewById(R.id.History);
 
+
         adapter = new TicketListAdapter(getActivity(), ticketList);
         ticketHistoryList.setAdapter(adapter);
+
+        ticketHistoryList.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE
+                        && (ticketHistoryList.getLastVisiblePosition() - ticketHistoryList.getHeaderViewsCount() -
+                        ticketHistoryList.getFooterViewsCount()) >= (adapter.getCount() - 10)) {
+                    fab.hide();
+                }
+                else{
+                    fab.show();
+                }
+            }
+
+            @Override
+            public void onScroll(AbsListView lw, final int firstVisibleItem,
+                                 final int visibleItemCount, final int totalItemCount) {
+            }
+        });
+
+        fab = rootView.findViewById(R.id.fab);
+        fab.setImageResource(R.drawable.down_icon_fab);
+//        fab.setBackgroundResource(R.drawable.down_icon_fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                Snackbar.make(view, "Scrolled", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+                ticketHistoryList.smoothScrollToPosition(ticketHistoryList.getAdapter().getCount());
+            }
+        });
+
 
         final Handler mainHandler = new Handler(Looper.getMainLooper());
         Runnable myRunnable = new Runnable() {
@@ -98,7 +115,7 @@ public class HistoryListActivity extends android.support.v4.app.Fragment{
                     public void run() {
                         List<String> ticketList = buildHistoryList(getContext());
                         adapter.notifyDataSetChanged();
-                        ticketHistoryList.setSelection(ticketHistoryList.getAdapter().getCount());
+//                        ticketHistoryList.setSelection(ticketHistoryList.getAdapter().getCount());
                     }
                 });
             }
@@ -106,7 +123,6 @@ public class HistoryListActivity extends android.support.v4.app.Fragment{
         mainHandler.post(myRunnable);
         return rootView;
     }
-
 
     public List<String> buildHistoryList(Context context){
             try {

@@ -4,11 +4,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Vibrator;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.HapticFeedbackConstants;
+import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -96,6 +100,32 @@ public class Settings_AboutActivity extends AppCompatActivity {
                 FileAdapter.deleteFile(historyFile);
                 Toast.makeText(getApplication(),"Файл истории удален!",Toast.LENGTH_LONG).show();
                 System.out.println("Deleted histoty file!");
+            }
+        });
+        Button btnVibrate = (Button) findViewById(R.id.vibrTest);
+        btnVibrate.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+
+                int action = event.getAction();
+
+                if(action == MotionEvent.ACTION_DOWN){
+                    vibrator.vibrate(2000);
+                }else if(action == MotionEvent.ACTION_UP){
+                    vibrator.cancel();
+                }
+                return true;
+            }
+        });
+
+        final Button btnVibrate2 = (Button) findViewById(R.id.vibrTest2);
+        btnVibrate2.setHapticFeedbackEnabled(true);
+        btnVibrate2.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v) {
+                Settings.System.getInt(Settings_AboutActivity.staticSettings_AboutActivity.getContentResolver(),Settings.System.HAPTIC_FEEDBACK_ENABLED,0);
+                btnVibrate2.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                System.out.println("vibr");
             }
         });
         super.onCreate(savedInstanceState);

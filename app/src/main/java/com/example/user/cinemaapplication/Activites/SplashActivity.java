@@ -181,7 +181,6 @@ public class SplashActivity extends AppCompatActivity{
         //подрезать под один запрос в gettheaterbydeviceID
         final Handler mainHandler = new Handler(Looper.getMainLooper());
 
-
         mainHandler.post(new Runnable() {
             @Override
             public void run() {
