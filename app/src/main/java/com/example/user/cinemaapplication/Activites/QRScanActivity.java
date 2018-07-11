@@ -285,7 +285,6 @@ public class QRScanActivity extends Fragment {
         final File historyfile = new File(getContext().getFilesDir() + "/history.txt");
 
         qrEader = new QREader.Builder(getActivity(), mySurfaceView, new QRDataListener() {
-
             @Override
             public void onDetected(final String data) {
                 if( (  (data.equals(OLD_DATA)) && (Calendar.getInstance().getTime().getTime() - OLD_DATE.getTime() < 2500)  ) ){
