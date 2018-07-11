@@ -46,6 +46,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <android.support.constraint.ConstraintLayout
+        android:id="@+id/constraintLayout"
         android:layout_width="360dp"
         android:layout_height="197dp"
         android:layout_marginEnd="16dp"
@@ -83,7 +84,6 @@
                 app:srcCompat="@drawable/glasses" />
 
 
-
             <com.iambedant.text.OutlineTextView
                 android:id="@+id/glassesCount"
                 android:layout_width="match_parent"
@@ -92,7 +92,6 @@
                 android:paddingLeft="5dp"
                 app:outlineColor="@android:color/black"
                 app:outlineWidth="6" />
-
 
 
         </FrameLayout>
@@ -114,6 +113,18 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0" />
     </android.support.constraint.ConstraintLayout>
+
+    <Button
+        android:id="@+id/btnSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="256dp"
+        android:text="swtich"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </android.support.constraint.ConstraintLayout>

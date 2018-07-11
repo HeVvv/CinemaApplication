@@ -95,7 +95,6 @@ public class HistoryListActivity extends android.support.v4.app.Fragment{
 
         fab = rootView.findViewById(R.id.fab);
         fab.setImageResource(R.drawable.down_icon_fab);
-//        fab.setBackgroundResource(R.drawable.down_icon_fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -104,7 +103,6 @@ public class HistoryListActivity extends android.support.v4.app.Fragment{
                 ticketHistoryList.smoothScrollToPosition(ticketHistoryList.getAdapter().getCount());
             }
         });
-
 
         final Handler mainHandler = new Handler(Looper.getMainLooper());
         Runnable myRunnable = new Runnable() {

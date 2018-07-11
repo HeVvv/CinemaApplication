@@ -7,6 +7,9 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.hardware.Camera;
+import android.hardware.Camera.Parameters;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -27,6 +30,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -41,10 +45,13 @@ import com.example.user.cinemaapplication.R;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.MySSLSocketFactory;
 import com.loopj.android.http.TextHttpResponseHandler;
+import com.mysql.fabric.xmlrpc.base.Param;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Parameter;
+import java.security.Policy;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -75,6 +82,12 @@ public class QRScanActivity extends Fragment {
     private ListView ticketHistoryList;
     private int ID_DEVICE;
     private TextView glassesCount;
+    private boolean isFlashOn;
+    private boolean hasFlash;
+    MediaPlayer mp;
+    private Camera camera;
+    private Camera.Parameters params;
+
 
     private Context mContext;
     TextView text;
@@ -113,6 +126,50 @@ public class QRScanActivity extends Fragment {
         }
     }
 
+
+    private void getCamera() {
+        if (camera == null) {
+            try {
+                camera = Camera.open();
+                params = camera.getParameters();
+            } catch (RuntimeException e) {
+            }
+        }
+    }
+
+    private void turnOnFlash() {
+        if (!isFlashOn) {
+            if (camera == null || params == null) {
+                return;
+            }
+            System.out.println("on");
+            if(params != null) {
+                params = camera.getParameters();
+            }
+            params.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+            camera.setParameters(params);
+            camera.startPreview();
+            isFlashOn = true;
+        }
+
+    }
+    private void turnOffFlash() {
+        if (isFlashOn) {
+            if (camera == null || params == null) {
+                return;
+            }
+            System.out.println("off");
+            if(params != null) {
+                params = camera.getParameters();
+            }
+            params.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+            camera.setParameters(params);
+            camera.stopPreview();
+            isFlashOn = false;
+        }
+    }
+
+
     public String getAuditoriumsIDS(){
         Set<Integer> newset = AuditChoosingActivity.getStaticAuditChoosingActivity().getAuditIDS();
 
@@ -137,7 +194,7 @@ public class QRScanActivity extends Fragment {
 
         StringTokenizer st = new StringTokenizer(s, "|");
         while(st.hasMoreTokens()){
-           info.add(st.nextToken());
+            info.add(st.nextToken());
         }
         return info;
     }
@@ -174,7 +231,9 @@ public class QRScanActivity extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        
+
+//        camera = Camera.open();
+//        params = camera.getParameters();
         mContext = getContext();
         final View rootView = inflater.inflate(R.layout.activity_qrscan, container, false);
         final AsyncHttpClient clientTicket = new AsyncHttpClient();
@@ -209,6 +268,19 @@ public class QRScanActivity extends Fragment {
         adapter = new TicketListAdapter(getActivity(), ticketList);
         ticketHistoryList.setAdapter(adapter);
 
+//        Button btnSwitch = (Button) rootView.findViewById(R.id.btnSwitch);
+//        btnSwitch.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (isFlashOn) {
+//                    System.out.println("Turning off flash");
+//                    turnOffFlash();
+//                } else {
+//                    System.out.println("Turning on flash");
+//                    turnOnFlash();
+//                }
+//            }
+//        });
 
         final File historyfile = new File(getContext().getFilesDir() + "/history.txt");
 
