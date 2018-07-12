@@ -27,6 +27,7 @@ import android.view.Gravity;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
+import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +47,8 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.MySSLSocketFactory;
 import com.loopj.android.http.TextHttpResponseHandler;
 import com.mysql.fabric.xmlrpc.base.Param;
+import com.otaliastudios.cameraview.CameraView;
+import com.otaliastudios.cameraview.Flash;
 
 import java.io.File;
 import java.io.IOException;
@@ -84,7 +87,6 @@ public class QRScanActivity extends Fragment {
     private TextView glassesCount;
     private boolean isFlashOn;
     private boolean hasFlash;
-    MediaPlayer mp;
     private Camera camera;
     private Camera.Parameters params;
 
@@ -233,7 +235,10 @@ public class QRScanActivity extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
 //        camera = Camera.open();
-//        params = camera.getParameters();
+//        params =
+//        CameraView cameraView = new CameraView(mContext);
+
+
         mContext = getContext();
         final View rootView = inflater.inflate(R.layout.activity_qrscan, container, false);
         final AsyncHttpClient clientTicket = new AsyncHttpClient();
@@ -253,6 +258,8 @@ public class QRScanActivity extends Fragment {
             startActivity(getActivity().getIntent());
         }
 
+        final CameraView cameraView = (CameraView) rootView.findViewById(R.id.cameraView);
+
         textAdd = (TextView) rootView.findViewById(R.id.responseinfo2);
         textAdd.setTextAppearance(rootView.getContext(),R.style.TextAppearance_AppCompat);
         textAdd.setGravity(Gravity.CENTER);
@@ -263,24 +270,27 @@ public class QRScanActivity extends Fragment {
         responseImage.setImageDrawable(null);
 
         mySurfaceView = (SurfaceView) rootView.findViewById(R.id.camera);
+        SurfaceHolder previewHolder = mySurfaceView.getHolder();
 
         ticketHistoryList = (ListView) rootView.findViewById(R.id.ticketHistoryList);
         adapter = new TicketListAdapter(getActivity(), ticketList);
         ticketHistoryList.setAdapter(adapter);
 
-//        Button btnSwitch = (Button) rootView.findViewById(R.id.btnSwitch);
-//        btnSwitch.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (isFlashOn) {
-//                    System.out.println("Turning off flash");
+        Button btnSwitch = (Button) rootView.findViewById(R.id.btnSwitch);
+        btnSwitch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (cameraView.getFlash() == Flash.ON) {
+                    cameraView.setFlash(Flash.OFF);
+                    System.out.println("Turning off flash");
 //                    turnOffFlash();
-//                } else {
-//                    System.out.println("Turning on flash");
+                } else {
+                    cameraView.setFlash(Flash.ON);
+                    System.out.println("Turning on flash");
 //                    turnOnFlash();
-//                }
-//            }
-//        });
+                }
+            }
+        });
 
         final File historyfile = new File(getContext().getFilesDir() + "/history.txt");
 

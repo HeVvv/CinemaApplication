@@ -64,36 +64,28 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <Button
-        android:id="@+id/vibrTest"
-        android:layout_width="368dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Vibr test"
-        app:layout_constraintBottom_toTopOf="@+id/changeID"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login_info"
-        app:layout_constraintVertical_bias="1.0" />
-
-    <Button
-        android:id="@+id/vibrTest2"
+        android:id="@+id/btnSwitch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:hapticFeedbackEnabled="true"
-        android:text="Vibr test 2"
-        app:layout_constraintBottom_toTopOf="@+id/vibrTest"
+        android:text="btn switch"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login_info"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@+id/login_info" />
+
+    <com.otaliastudios.cameraview.CameraView
+        android:id="@+id/cameraView2"
+        android:layout_width="100dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="164dp"
+        android:keepScreenOn="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.852"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

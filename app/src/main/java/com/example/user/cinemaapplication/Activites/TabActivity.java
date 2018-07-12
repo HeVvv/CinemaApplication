@@ -2,10 +2,12 @@ package com.example.user.cinemaapplication.Activites;
 
 import android.content.Context;
 import android.content.Intent;
+import android.hardware.Camera;
 import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.TaskStackBuilder;
@@ -54,6 +56,11 @@ public class TabActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private LinearLayout tabStrip;
     private int THEATER_ID;
+    private boolean isFlashOn;
+    private boolean hasFlash;
+    private Camera camera;
+    private Camera.Parameters params;
+
 
     private int[] tabIcons = {
             R.drawable.tickets,
@@ -74,6 +81,49 @@ public class TabActivity extends AppCompatActivity {
         tabLayout.getTabAt(0).setIcon(tabIcons[1]);
         tabLayout.getTabAt(1).setIcon(tabIcons[2]);
         tabLayout.getTabAt(2).setIcon(tabIcons[0]);
+    }
+
+
+    private void getCamera() {
+        if (camera == null) {
+            try {
+                camera = Camera.open();
+                params = camera.getParameters();
+            } catch (RuntimeException e) {
+            }
+        }
+    }
+
+    private void turnOnFlash() {
+        if (!isFlashOn) {
+            if (camera == null || params == null) {
+                return;
+            }
+            System.out.println("on");
+            if(params != null) {
+                params = camera.getParameters();
+            }
+            params.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+            camera.setParameters(params);
+            camera.startPreview();
+            isFlashOn = true;
+        }
+
+    }
+    private void turnOffFlash() {
+        if (isFlashOn) {
+            if (camera == null || params == null) {
+                return;
+            }
+            System.out.println("off");
+            if(params != null) {
+                params = camera.getParameters();
+            }
+            params.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+            camera.setParameters(params);
+            camera.stopPreview();
+            isFlashOn = false;
+        }
     }
 
     @Override
@@ -126,6 +176,12 @@ public class TabActivity extends AppCompatActivity {
         tabLayout.getTabAt(1).setIcon(tabIcons[0]);
 
         tabStrip = ((LinearLayout) tabLayout.getChildAt(0));
+        if(params != null) {
+            getCamera();
+        } else {
+            camera = Camera.open();
+
+        }
 
         Timer myTimer = new Timer();
         final Handler uiHandler = new Handler();
@@ -297,10 +353,21 @@ public class TabActivity extends AppCompatActivity {
             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(i);
 //            Intent intent = new Intent(TabActivity.this,LoginActivity.class);
-//
 //            startActivity(intent);
             return true;
         }
+//        if( id == R.id.action_flashlight){
+//            if (isFlashOn) {
+//                Toast.makeText(getBaseContext(), "Flashlight off!",
+//                        Toast.LENGTH_SHORT).show();
+//                turnOffFlash();
+//            } else {
+//                Toast.makeText(getBaseContext(), "Flashlight on!",
+//                        Toast.LENGTH_SHORT).show();
+//                turnOnFlash();
+//            }
+//                return true;
+//        }
         return super.onOptionsItemSelected(item);
     }
 }

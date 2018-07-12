@@ -3,6 +3,8 @@ package com.example.user.cinemaapplication.Activites;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.hardware.Camera;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.provider.Settings;
@@ -25,6 +27,8 @@ import android.widget.Toast;
 
 import com.example.user.cinemaapplication.Adds.FileAdapter;
 import com.example.user.cinemaapplication.R;
+import com.otaliastudios.cameraview.CameraView;
+import com.otaliastudios.cameraview.Flash;
 
 import org.w3c.dom.Text;
 
@@ -48,6 +52,11 @@ public class Settings_AboutActivity extends AppCompatActivity {
     private ImageView response;
     private SharedPreferences mSettings;
 
+    private boolean isFlashOn;
+    private boolean hasFlash;
+    private Camera camera;
+    private Camera.Parameters params;
+
     public static final String APP_PREFERENCES = "mysettings";
     public static final String APP_PREFERENCES_COUNTER = "counter";
 
@@ -58,6 +67,48 @@ public class Settings_AboutActivity extends AppCompatActivity {
     }
     public Settings_AboutActivity(){
         staticSettings_AboutActivity = this;
+    }
+
+    private void getCamera() {
+        if (camera == null) {
+            try {
+                camera = Camera.open();
+                params = camera.getParameters();
+            } catch (RuntimeException e) {
+            }
+        }
+    }
+
+    private void turnOnFlash() {
+        if (!isFlashOn) {
+            if (camera == null || params == null) {
+                return;
+            }
+            System.out.println("on");
+            if(params != null) {
+                params = camera.getParameters();
+            }
+            params.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+            camera.setParameters(params);
+            camera.startPreview();
+            isFlashOn = true;
+        }
+
+    }
+    private void turnOffFlash() {
+        if (isFlashOn) {
+            if (camera == null || params == null) {
+                return;
+            }
+            System.out.println("off");
+            if(params != null) {
+                params = camera.getParameters();
+            }
+            params.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+            camera.setParameters(params);
+            camera.stopPreview();
+            isFlashOn = false;
+        }
     }
 
     @Override
@@ -91,7 +142,6 @@ public class Settings_AboutActivity extends AppCompatActivity {
             }
         });
 
-
         Button btnHistory = (Button) findViewById(R.id.deleteHistory);
         btnHistory.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,32 +152,51 @@ public class Settings_AboutActivity extends AppCompatActivity {
                 System.out.println("Deleted histoty file!");
             }
         });
-        Button btnVibrate = (Button) findViewById(R.id.vibrTest);
-        btnVibrate.setOnTouchListener(new View.OnTouchListener() {
+
+        getCamera();
+
+        final CameraView cameraView = (CameraView) findViewById(R.id.cameraView2);
+        Button btnSwitch = (Button) findViewById(R.id.btnSwitch);
+        btnSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-
-                int action = event.getAction();
-
-                if(action == MotionEvent.ACTION_DOWN){
-                    vibrator.vibrate(2000);
-                }else if(action == MotionEvent.ACTION_UP){
-                    vibrator.cancel();
-                }
-                return true;
-            }
-        });
-
-        final Button btnVibrate2 = (Button) findViewById(R.id.vibrTest2);
-        btnVibrate2.setHapticFeedbackEnabled(true);
-        btnVibrate2.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
-                Settings.System.getInt(Settings_AboutActivity.staticSettings_AboutActivity.getContentResolver(),Settings.System.HAPTIC_FEEDBACK_ENABLED,0);
-                btnVibrate2.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-                System.out.println("vibr");
+                if (cameraView.getFlash() == Flash.ON) {
+                    System.out.println("Turning off flash");
+                    cameraView.setFlash(Flash.OFF);
+                } else {
+                    System.out.println("Turning on flash");
+                    cameraView.setFlash(Flash.ON);
+                }
             }
         });
+
+
+//        Button btnVibrate = (Button) findViewById(R.id.vibrTest);
+//        btnVibrate.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+//
+//                int action = event.getAction();
+//
+//                if(action == MotionEvent.ACTION_DOWN){
+//                    vibrator.vibrate(2000);
+//                }else if(action == MotionEvent.ACTION_UP){
+//                    vibrator.cancel();
+//                }
+//                return true;
+//            }
+//        });
+//
+//        final Button btnVibrate2 = (Button) findViewById(R.id.vibrTest2);
+//        btnVibrate2.setHapticFeedbackEnabled(true);
+//        btnVibrate2.setOnClickListener(new View.OnClickListener(){
+//            public void onClick(View v) {
+//                Settings.System.getInt(Settings_AboutActivity.staticSettings_AboutActivity.getContentResolver(),Settings.System.HAPTIC_FEEDBACK_ENABLED,0);
+//                btnVibrate2.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+//                System.out.println("vibr");
+//            }
+//        });
         super.onCreate(savedInstanceState);
     }
 
