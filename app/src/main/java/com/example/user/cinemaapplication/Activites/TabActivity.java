@@ -176,12 +176,6 @@ public class TabActivity extends AppCompatActivity {
         tabLayout.getTabAt(1).setIcon(tabIcons[0]);
 
         tabStrip = ((LinearLayout) tabLayout.getChildAt(0));
-        if(params != null) {
-            getCamera();
-        } else {
-            camera = Camera.open();
-
-        }
 
         Timer myTimer = new Timer();
         final Handler uiHandler = new Handler();

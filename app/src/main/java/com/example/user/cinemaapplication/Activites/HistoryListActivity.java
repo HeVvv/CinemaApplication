@@ -1,6 +1,7 @@
 package com.example.user.cinemaapplication.Activites;
 
     import android.content.Context;
+    import android.graphics.Color;
     import android.os.Bundle;
     import android.os.Handler;
     import android.os.Looper;
@@ -94,6 +95,7 @@ public class HistoryListActivity extends android.support.v4.app.Fragment{
         });
 
         fab = rootView.findViewById(R.id.fab);
+        fab.setAlpha(1f);
         fab.setImageResource(R.drawable.down_icon_fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

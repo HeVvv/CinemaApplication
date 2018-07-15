@@ -276,21 +276,21 @@ public class QRScanActivity extends Fragment {
         adapter = new TicketListAdapter(getActivity(), ticketList);
         ticketHistoryList.setAdapter(adapter);
 
-        Button btnSwitch = (Button) rootView.findViewById(R.id.btnSwitch);
-        btnSwitch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (cameraView.getFlash() == Flash.ON) {
-                    cameraView.setFlash(Flash.OFF);
-                    System.out.println("Turning off flash");
-//                    turnOffFlash();
-                } else {
-                    cameraView.setFlash(Flash.ON);
-                    System.out.println("Turning on flash");
-//                    turnOnFlash();
-                }
-            }
-        });
+//        Button btnSwitch = (Button) rootView.findViewById(R.id.btnSwitch);
+//        btnSwitch.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (cameraView.getFlash() == Flash.ON) {
+//                    cameraView.setFlash(Flash.OFF);
+//                    System.out.println("Turning off flash");
+////                    turnOffFlash();
+//                } else {
+//                    cameraView.setFlash(Flash.ON);
+//                    System.out.println("Turning on flash");
+////                    turnOnFlash();
+//                }
+//            }
+//        });
 
         final File historyfile = new File(getContext().getFilesDir() + "/history.txt");
 
