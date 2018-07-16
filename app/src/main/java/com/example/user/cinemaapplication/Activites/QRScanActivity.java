@@ -1,6 +1,5 @@
 package com.example.user.cinemaapplication.Activites;
 
-
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
@@ -8,8 +7,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.hardware.Camera;
-import android.hardware.Camera.Parameters;
-import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,18 +17,17 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewPager;
-import android.text.SpannableString;
-import android.text.style.StyleSpan;
+import android.support.v4.view.GestureDetectorCompat;
+import android.util.Log;
+import android.view.GestureDetector;
 import android.view.Gravity;
-import android.view.HapticFeedbackConstants;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -43,18 +39,19 @@ import com.example.user.cinemaapplication.Adds.ListData;
 import com.example.user.cinemaapplication.Adds.TicketListAdapter;
 import com.example.user.cinemaapplication.Adds.TicketSClass;
 import com.example.user.cinemaapplication.R;
+import com.google.zxing.ResultPoint;
+import com.google.zxing.client.android.BeepManager;
+import com.journeyapps.barcodescanner.BarcodeCallback;
+import com.journeyapps.barcodescanner.BarcodeResult;
+import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.MySSLSocketFactory;
 import com.loopj.android.http.TextHttpResponseHandler;
-import com.mysql.fabric.xmlrpc.base.Param;
-import com.otaliastudios.cameraview.CameraView;
-import com.otaliastudios.cameraview.Flash;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Parameter;
-import java.security.Policy;
+import java.sql.SQLOutput;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -67,13 +64,11 @@ import java.util.StringTokenizer;
 
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.entity.StringEntity;
-import github.nisrulz.qreader.QRDataListener;
-import github.nisrulz.qreader.QREader;
+
 
 public class QRScanActivity extends Fragment {
 
     private SurfaceView mySurfaceView;
-    private QREader qrEader;
     private static final int MY_CAMERA_REQUEST_CODE = 100;
     private String OLD_DATA = "";
     private Date OLD_DATE = Calendar.getInstance().getTime();
@@ -88,6 +83,7 @@ public class QRScanActivity extends Fragment {
     private boolean isFlashOn;
     private boolean hasFlash;
     private Camera camera;
+    private GestureDetectorCompat mDetector;
     private Camera.Parameters params;
 
 
@@ -129,49 +125,6 @@ public class QRScanActivity extends Fragment {
     }
 
 
-    private void getCamera() {
-        if (camera == null) {
-            try {
-                camera = Camera.open();
-                params = camera.getParameters();
-            } catch (RuntimeException e) {
-            }
-        }
-    }
-
-    private void turnOnFlash() {
-        if (!isFlashOn) {
-            if (camera == null || params == null) {
-                return;
-            }
-            System.out.println("on");
-            if(params != null) {
-                params = camera.getParameters();
-            }
-            params.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
-            camera.setParameters(params);
-            camera.startPreview();
-            isFlashOn = true;
-        }
-
-    }
-    private void turnOffFlash() {
-        if (isFlashOn) {
-            if (camera == null || params == null) {
-                return;
-            }
-            System.out.println("off");
-            if(params != null) {
-                params = camera.getParameters();
-            }
-            params.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
-            camera.setParameters(params);
-            camera.stopPreview();
-            isFlashOn = false;
-        }
-    }
-
-
     public String getAuditoriumsIDS(){
         Set<Integer> newset = AuditChoosingActivity.getStaticAuditChoosingActivity().getAuditIDS();
 
@@ -204,14 +157,43 @@ public class QRScanActivity extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        qrEader.stop();
+        barcodeView.pause();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        qrEader.start();
+        barcodeView.resume();
     }
+
+    public void pause(View view) {
+        barcodeView.pause();
+    }
+
+    public void resume(View view) {
+        barcodeView.resume();
+    }
+
+    public void triggerScan(View view) {
+        barcodeView.decodeSingle(callback);
+    }
+
+//    class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
+//        private static final String DEBUG_TAG = "Gestures";
+//
+//        @Override
+//        public boolean onDown(MotionEvent event) {
+//            Log.d(DEBUG_TAG,"onDown: " + event.toString());
+//            return true;
+//        }
+//
+//        @Override
+//        public boolean onFling(MotionEvent event1, MotionEvent event2,
+//                               float velocityX, float velocityY) {
+//            Log.d(DEBUG_TAG, "onFling: " + event1.toString() + event2.toString());
+//            return true;
+//        }
+//    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -231,98 +213,53 @@ public class QRScanActivity extends Fragment {
         super.onActivityCreated(savedInstanceState);
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-//        camera = Camera.open();
-//        params =
-//        CameraView cameraView = new CameraView(mContext);
+    private DecoratedBarcodeView barcodeView;
+    private BeepManager beepManager;
+    private String lastText;
 
+    private AsyncHttpClient clientTicket = new AsyncHttpClient();
 
-        mContext = getContext();
-        final View rootView = inflater.inflate(R.layout.activity_qrscan, container, false);
-        final AsyncHttpClient clientTicket = new AsyncHttpClient();
-        clientTicket.setBasicAuth(LoginActivity.getStaticLoginActivity().getUsername(), LoginActivity.getStaticLoginActivity().getPassword());
-        clientTicket.setSSLSocketFactory(MySSLSocketFactory.getFixedSocketFactory());
+    private BarcodeCallback callback = new BarcodeCallback() {
+        @Override
+        public void barcodeResult(BarcodeResult data) {
+            if((data.getText() == null || data.getText().equals(lastText)) && (Calendar.getInstance().getTime().getTime() - OLD_DATE.getTime() < 2500)) {
+                System.out.println("Repetative QR code!");
+                // Prevent duplicate scans
+            } else {
+                clientTicket.setBasicAuth(LoginActivity.getStaticLoginActivity().getUsername(), LoginActivity.getStaticLoginActivity().getPassword());
+                clientTicket.setSSLSocketFactory(MySSLSocketFactory.getFixedSocketFactory());
 
-        if (ContextCompat.checkSelfPermission(rootView.getContext(), Manifest.permission.CAMERA)
-                == PackageManager.PERMISSION_DENIED) {
-            ActivityCompat.requestPermissions(QRScanActivity.staticQRScanActivity.getActivity(), new String[]{Manifest.permission.CAMERA}, MY_CAMERA_REQUEST_CODE);
-        }
+                lastText = data.getText();
 
-        try {
-            ID_DEVICE = Integer.parseInt((FileAdapter.readFromFile(getContext().getFilesDir() + "/" + "ID.txt")).trim());
-        }catch (NumberFormatException e){
-            e.printStackTrace();
-            Toast.makeText(rootView.getContext(),"ID_DEVICE not set!",Toast.LENGTH_SHORT).show();
-            startActivity(getActivity().getIntent());
-        }
+                final File historyfile = new File(getContext().getFilesDir() + "/history.txt");
 
-        final CameraView cameraView = (CameraView) rootView.findViewById(R.id.cameraView);
+                System.out.println("scanning -> " + data);
 
-        textAdd = (TextView) rootView.findViewById(R.id.responseinfo2);
-        textAdd.setTextAppearance(rootView.getContext(),R.style.TextAppearance_AppCompat);
-        textAdd.setGravity(Gravity.CENTER);
-        textAdd.setTextColor(Color.rgb(51,51,51));
-        glassesCount = (TextView) getActivity().findViewById(R.id.glassesCount);
+                OLD_DATA = data.toString();
+                OLD_DATE = Calendar.getInstance().getTime();
+                Handler mainHandler = new Handler(Looper.getMainLooper());
+                Runnable myRunnable = new Runnable() {
+                    @Override
+                    public void run() {
 
-        responseImage = (ImageView) rootView.findViewById(R.id.imageView);
-        responseImage.setImageDrawable(null);
+                        Vibrator v = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
 
-        mySurfaceView = (SurfaceView) rootView.findViewById(R.id.camera);
-        SurfaceHolder previewHolder = mySurfaceView.getHolder();
+                        // Vibrate for 500 milliseconds
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            v.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
+                        } else {
+                            //deprecated in API 26
+                            v.vibrate(200);
+                        }
 
-        ticketHistoryList = (ListView) rootView.findViewById(R.id.ticketHistoryList);
-        adapter = new TicketListAdapter(getActivity(), ticketList);
-        ticketHistoryList.setAdapter(adapter);
-
-//        Button btnSwitch = (Button) rootView.findViewById(R.id.btnSwitch);
-//        btnSwitch.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (cameraView.getFlash() == Flash.ON) {
-//                    cameraView.setFlash(Flash.OFF);
-//                    System.out.println("Turning off flash");
-////                    turnOffFlash();
-//                } else {
-//                    cameraView.setFlash(Flash.ON);
-//                    System.out.println("Turning on flash");
-////                    turnOnFlash();
-//                }
-//            }
-//        });
-
-        final File historyfile = new File(getContext().getFilesDir() + "/history.txt");
-
-        qrEader = new QREader.Builder(getActivity(), mySurfaceView, new QRDataListener() {
-            @Override
-            public void onDetected(final String data) {
-                if( (  (data.equals(OLD_DATA)) && (Calendar.getInstance().getTime().getTime() - OLD_DATE.getTime() < 2500)  ) ){
-
-                } else {
-                    System.out.println("scanning" + data);
-                    OLD_DATA = data;
-                    OLD_DATE = Calendar.getInstance().getTime();
-                    Handler mainHandler = new Handler(Looper.getMainLooper());
-                    Runnable myRunnable = new Runnable() {
-                        @Override
-                        public void run() {
-
-                            Vibrator v = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
-
-                            // Vibrate for 500 milliseconds
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                v.vibrate(VibrationEffect.createOneShot(500,VibrationEffect.DEFAULT_AMPLITUDE));
-                            }else{
-                                //deprecated in API 26
-                                v.vibrate(200);
-                            }
 //                            String datatest = "4172/30800/232/5//11";
 //                            final String test = "1/" + QRScanActivity.getStaticQRScanActivity().getAuditoriumsIDS() + "/" + datatest;
-                            final String test = ID_DEVICE + "/" + QRScanActivity.getStaticQRScanActivity().getAuditoriumsIDS() + "/" + data;
+
+                        final String test = ID_DEVICE + "/" + QRScanActivity.getStaticQRScanActivity().getAuditoriumsIDS() + "/" + data;
+                        try {
                             try {
-                                try {
-                                    TicketSClass ticketSClass = new TicketSClass(test);
+                                TicketSClass ticketSClass = new TicketSClass(test);
 
                                 String json = JSONUtils.parseObjectToJson(ticketSClass);
                                 StringEntity entity = null;
@@ -355,10 +292,10 @@ public class QRScanActivity extends Fragment {
                                                 text.setTextSize(30);
                                                 textAdd.setText(info.get(1));
                                                 textAdd.setTextSize(18);
-                                                FileAdapter.writeFile(appended,historyfile);
-                                                Typeface type = Typeface.createFromAsset(getActivity().getAssets(),"Fontfabric - UniNeueBlack.otf");
+                                                FileAdapter.writeFile(appended, historyfile);
+                                                Typeface type = Typeface.createFromAsset(getActivity().getAssets(), "Fontfabric - UniNeueBlack.otf");
                                                 glassesCount.setTypeface(type);
-                                                int color = Color.argb(1,251,251,251);
+                                                int color = Color.argb(1, 251, 251, 251);
                                                 glassesCount.setTextColor(color);
                                                 glassesCount.setTextSize(125);
                                                 glassesCount.setText(info.get(2));
@@ -373,7 +310,7 @@ public class QRScanActivity extends Fragment {
                                             responseImage.setImageResource(R.drawable.accept);
                                         } else if (status.equals("2")) {
                                             responseImage.setImageResource(R.drawable.exclam);
-                                        } else if(status.equals("3")){
+                                        } else if (status.equals("3")) {
                                             responseImage.setImageResource(R.drawable.glasses);
                                         }
                                         if (ticketList.size() > 3) {
@@ -381,16 +318,146 @@ public class QRScanActivity extends Fragment {
                                         }
                                     }
                                 });
-                                }catch(NumberFormatException e){
-                                    e.printStackTrace();
-                                    Toast.makeText(getActivity().getApplicationContext(), "Неверный формат QR кода!",Toast.LENGTH_LONG).show();
-                                }
-                            }catch (IOException e){
+                            } catch (NumberFormatException e) {
                                 e.printStackTrace();
-                                System.out.println(e);
+                                Toast.makeText(getActivity().getApplicationContext(), "Неверный формат QR кода!", Toast.LENGTH_LONG).show();
                             }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            System.out.println(e);
                         }
-                    };
+                    }
+                };
+                mainHandler.post(myRunnable);
+            }
+//            barcodeView.setStatusText(result.getText());
+
+            //Added preview of scanned barcode
+//            ImageView imageView = (ImageView) findViewById(R.id.barcodePreview);
+//            imageView.setImageBitmap(result.getBitmapWithResultPoints(Color.YELLOW));
+        }
+
+        @Override
+        public void possibleResultPoints(List<ResultPoint> resultPoints) {
+        }
+    };
+
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+
+
+
+        final View rootView = inflater.inflate(R.layout.activity_qrscan, container, false);
+        mContext = getContext();
+        final GestureDetector gesture = new GestureDetector(getActivity(),
+                new GestureDetector.SimpleOnGestureListener() {
+
+                    @Override
+                    public boolean onDown(MotionEvent e) {
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
+                                           float velocityY) {
+                        System.out.println("Onfling");
+                        final int SWIPE_MIN_DISTANCE = 120;
+                        final int SWIPE_MAX_OFF_PATH = 250;
+                        final int SWIPE_THRESHOLD_VELOCITY = 200;
+                        try {
+//                            if (Math.abs(e1.getY() - e2.getY()) > SWIPE_MAX_OFF_PATH)
+//                                return false;
+                            if (e1.getY() - e2.getY() > SWIPE_MIN_DISTANCE
+                                    && Math.abs(velocityY) > SWIPE_THRESHOLD_VELOCITY) {
+                                barcodeView.setTorchOn();
+                                System.out.println("vverh");
+                            } else if (e2.getY() - e1.getY() > SWIPE_MIN_DISTANCE
+                                    && Math.abs(velocityY) > SWIPE_THRESHOLD_VELOCITY) {
+                                barcodeView.setTorchOff();
+                                System.out.println("vniz");
+                            }
+                        } catch (Exception e) {
+                            // nothing
+                        }
+                        return super.onFling(e1, e2, velocityX, velocityY);
+                    }
+                });
+
+        rootView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return gesture.onTouchEvent(event);
+            }
+        });
+        if (ContextCompat.checkSelfPermission(rootView.getContext(), Manifest.permission.CAMERA)
+                == PackageManager.PERMISSION_DENIED) {
+            ActivityCompat.requestPermissions(QRScanActivity.staticQRScanActivity.getActivity(), new String[]{Manifest.permission.CAMERA}, MY_CAMERA_REQUEST_CODE);
+        }
+
+        try {
+            ID_DEVICE = Integer.parseInt((FileAdapter.readFromFile(getContext().getFilesDir() + "/" + "ID.txt")).trim());
+        }catch (NumberFormatException e){
+            e.printStackTrace();
+            Toast.makeText(rootView.getContext(),"ID_DEVICE not set!",Toast.LENGTH_SHORT).show();
+            startActivity(getActivity().getIntent());
+        }
+
+        textAdd = (TextView) rootView.findViewById(R.id.responseinfo2);
+        textAdd.setTextAppearance(rootView.getContext(),R.style.TextAppearance_AppCompat);
+        textAdd.setGravity(Gravity.CENTER);
+        textAdd.setTextColor(Color.rgb(51,51,51));
+
+        glassesCount = (TextView) getActivity().findViewById(R.id.glassesCount);
+
+        responseImage = (ImageView) rootView.findViewById(R.id.imageView);
+        responseImage.setImageDrawable(null);
+
+        mySurfaceView = (SurfaceView) rootView.findViewById(R.id.camera);
+
+        ticketHistoryList = (ListView) rootView.findViewById(R.id.ticketHistoryList);
+        adapter = new TicketListAdapter(getActivity(), ticketList);
+        ticketHistoryList.setAdapter(adapter);
+
+//        Button btnSwitch = (Button) rootView.findViewById(R.id.btnSwitch);
+//        btnSwitch.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (cameraView.getFlash() == Flash.ON) {
+//                    cameraView.setFlash(Flash.OFF);
+//                    System.out.println("Turning off flash");
+////                    turnOffFlash();
+//                } else {
+//                    cameraView.setFlash(Flash.ON);
+//                    System.out.println("Turning on flash");
+////                    turnOnFlash();
+//                }
+//            }
+//        });
+
+        barcodeView = (DecoratedBarcodeView) rootView.findViewById(R.id.barcode_scanner);
+        barcodeView.decodeContinuous(callback);
+        barcodeView.setStatusText("");
+
+
+        return rootView;
+    }
+}
+
+
+
+/*
+qrEader = new QREader.Builder(getActivity(), mySurfaceView, new QRDataListener() {
+            @Override
+            public void onDetected(final String data) {
+                if( (  (data.equals(OLD_DATA)) && (Calendar.getInstance().getTime().getTime() - OLD_DATE.getTime() < 2500)  ) ){
+
+                } else {
+
+                     // was request here
+
+
                     mainHandler.post(myRunnable);
                 }
             }
@@ -401,6 +468,4 @@ public class QRScanActivity extends Fragment {
                 .width(mySurfaceView.getWidth())
                 .build();
         qrEader.initAndStart(mySurfaceView);
-        return rootView;
-    }
-}
+ */

@@ -27,8 +27,6 @@ import android.widget.Toast;
 
 import com.example.user.cinemaapplication.Adds.FileAdapter;
 import com.example.user.cinemaapplication.R;
-import com.otaliastudios.cameraview.CameraView;
-import com.otaliastudios.cameraview.Flash;
 
 import org.w3c.dom.Text;
 
@@ -153,22 +151,6 @@ public class Settings_AboutActivity extends AppCompatActivity {
             }
         });
 
-        getCamera();
-
-        final CameraView cameraView = (CameraView) findViewById(R.id.cameraView2);
-        Button btnSwitch = (Button) findViewById(R.id.btnSwitch);
-        btnSwitch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (cameraView.getFlash() == Flash.ON) {
-                    System.out.println("Turning off flash");
-                    cameraView.setFlash(Flash.OFF);
-                } else {
-                    System.out.println("Turning on flash");
-                    cameraView.setFlash(Flash.ON);
-                }
-            }
-        });
 
 
 //        Button btnVibrate = (Button) findViewById(R.id.vibrTest);

@@ -51,8 +51,6 @@ import javax.xml.transform.Result;
 
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.entity.StringEntity;
-import github.nisrulz.qreader.QRDataListener;
-import github.nisrulz.qreader.QREader;
 
 public class SplashActivity extends AppCompatActivity{
 

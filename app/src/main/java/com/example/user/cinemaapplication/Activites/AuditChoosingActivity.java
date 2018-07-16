@@ -35,7 +35,6 @@ import android.widget.Toast;
 import com.example.user.cinemaapplication.Adds.HashMapSort;
 import com.example.user.cinemaapplication.Adds.ListData;
 import com.example.user.cinemaapplication.R;
-import com.google.android.gms.vision.text.Line;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -49,6 +48,10 @@ import java.util.Map;
 import java.util.Set;
 
 public class AuditChoosingActivity extends Fragment {
+
+
+
+    // test swiperefreshLayout
 
     private static String auditIDs = "";
     private int XD = 0;
@@ -113,6 +116,7 @@ public class AuditChoosingActivity extends Fragment {
         CompoundButtonCompat.setButtonTintList(checkBox, new
                 ColorStateList(states, colors));
     }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
