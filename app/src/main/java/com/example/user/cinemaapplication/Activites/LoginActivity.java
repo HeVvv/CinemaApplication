@@ -88,8 +88,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
 //        System.out.println(logina);
 //        System.out.println(loginAuth);
 
-        String loginUrl = "https://soft.silverscreen.by:8443/security-1.0/webapi/auth/login/";
-//        String loginUrl = "https://inlogic.org:8443/security-1.0/webapi/auth/login/";
+//        String loginUrl = "https://soft.silverscreen.by:8443/security-1.0/webapi/auth/login/";
+        String loginUrl = "https://inlogic.org:8443/security-1.0/webapi/auth/login/";
 
         final AsyncHttpClient client_main = new AsyncHttpClient();
         client_main.setBasicAuth(HardCodedUsername, HardCodedPassword);
@@ -189,35 +189,29 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
         Logo = (ImageView) findViewById(R.id.logo);
         Logo.setImageResource(R.drawable.logo_prog);
 
-        username = (EditText)findViewById(R.id.usernameInput);
-        password = (EditText)findViewById(R.id.passInput);
+        username = (EditText) findViewById(R.id.usernameInput);
+        password = (EditText) findViewById(R.id.passInput);
 
         password.setOnKeyListener(new View.OnKeyListener() {
-                                      public boolean onKey(View v, int keyCode, KeyEvent event) {
-                                          // If the event is a key-down event on the "enter" button
-                                          if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
-                                                  (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                                              // Perform action on key press
-                                              try {
-                                                  LoginActivity.getStaticLoginActivity().onLogin(v);
-                                              } catch (UnsupportedEncodingException e) {
-                                                  e.printStackTrace();
-                                              }
-                                              return true;
-                                          }
-                                          return false;
-                                      }
-                                  });
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                // If the event is a key-down event on the "enter" button
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
+                        (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    // Perform action on key press
+                    try {
+                        LoginActivity.getStaticLoginActivity().onLogin(v);
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
 
-        //tested
-
-//        username.setText("Tkachev_A");
-//        password.setText("111111");
-
+        username.setText("Tkachev_A");
+        password.setText("111111");
 
         super.onCreate(savedInstanceState);
     }
-
-
-
 }
