@@ -16,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.style.TabStopSpan;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -56,6 +57,7 @@ public class TabActivity extends AppCompatActivity {
     private boolean hasFlash;
     private Camera camera;
     private Camera.Parameters params;
+    private boolean toggled;
 
 
     private int[] tabIcons = {
@@ -214,40 +216,6 @@ public class TabActivity extends AppCompatActivity {
         }
     }
 
-//    public Runnable tabControl = new Runnable() {
-//        @Override
-//        public void run() {
-//            System.out.println("scan tab tick");
-//            if (!(checkAuditsEmpty())){
-//                // add
-//                if(tabStrip.getChildCount() == 2) {
-//                    adapter.addFragment(frag_scan, "Скан");
-//                    adapter.notifyDataSetChanged();
-//                    viewPager.setAdapter(adapter);
-//                    try {
-//                        tabLayout.getTabAt(1).select();
-//                    }catch (NullPointerException e){
-//                        e.printStackTrace();
-//                    }
-//                    System.out.println("added");
-//                }
-//            }else{
-//                //remove
-//                if(tabStrip.getChildCount() == 3) {
-//                    adapter.removeFragment(frag_scan, "Скан");
-//                    adapter.notifyDataSetChanged();
-//                    viewPager.setAdapter(adapter);
-//                    try {
-//                        tabLayout.getTabAt(1).select();
-//                    }catch (NullPointerException e){
-//                        e.printStackTrace();
-//                    }
-//                    System.out.println("removed");
-//                }
-//            }
-//        }
-//    };
-
     public boolean checkAuditsEmpty(){
         try {   
             state = AuditChoosingActivity.getStaticAuditChoosingActivity().getAuditIDS().isEmpty();
@@ -261,15 +229,9 @@ public class TabActivity extends AppCompatActivity {
             }
         }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.cinema_activity, menu);
-        return true;
-    }
-
     private static final int TIME_DELAY = 2000;
-    private static long back_pressed;
 
+    private static long back_pressed;
 
     @Override
     public void onBackPressed() {
@@ -283,6 +245,31 @@ public class TabActivity extends AppCompatActivity {
                     Toast.LENGTH_SHORT).show();
         }
         back_pressed = System.currentTimeMillis();
+    }
+
+    private String torchString = "Фонарик [Выкл]";
+
+    public String setTorchStringOn(){
+        torchString = "Фонарик [Вкл]";
+        return torchString;
+    }
+
+    public String setTorchStringOff(){
+        torchString = "Фонарик [Выкл]";
+        return torchString;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.cinema_activity, menu);
+        menu.findItem(R.id.torchToggle).setTitle(torchString);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        menu.findItem(R.id.torchToggle).setTitle(torchString);
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
@@ -303,18 +290,31 @@ public class TabActivity extends AppCompatActivity {
 //            startActivity(intent);
             return true;
         }
-//        if( id == R.id.action_flashlight){
-//            if (isFlashOn) {
-//                Toast.makeText(getBaseContext(), "Flashlight off!",
-//                        Toast.LENGTH_SHORT).show();
-//                turnOffFlash();
-//            } else {
-//                Toast.makeText(getBaseContext(), "Flashlight on!",
-//                        Toast.LENGTH_SHORT).show();
-//                turnOnFlash();
-//            }
-//                return true;
-//        }
+        if(id == R.id.torchToggle){
+            if(QRScanActivity.getStaticQRScanActivity().getBarcodeView() != null) {
+                if(!toggled) {
+                    QRScanActivity.getStaticQRScanActivity().torchOn(QRScanActivity.getStaticQRScanActivity().getBarcodeView());
+                    Toast toast = Toast.makeText(TabActivity.getStaticTabActivity().getApplication(),
+                            "Фонарик включен!",
+                            Toast.LENGTH_SHORT);
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.show();
+                    setTorchStringOn();
+                    item.setTitle(torchString);
+                    toggled = true;
+                }else{
+                    QRScanActivity.getStaticQRScanActivity().torchOff(QRScanActivity.getStaticQRScanActivity().getBarcodeView());
+                    Toast toast = Toast.makeText(TabActivity.getStaticTabActivity().getApplication(),
+                            "Фонарик выключен!",
+                            Toast.LENGTH_SHORT);
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.show();
+                    setTorchStringOff();
+                    item.setTitle(torchString);
+                    toggled = false;
+                }
+            }
+        }
         return super.onOptionsItemSelected(item);
     }
 }

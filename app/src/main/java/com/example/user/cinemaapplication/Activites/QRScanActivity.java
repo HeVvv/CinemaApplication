@@ -14,6 +14,7 @@ import android.os.Looper;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -43,6 +44,7 @@ import com.google.zxing.ResultPoint;
 import com.google.zxing.client.android.BeepManager;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
+import com.journeyapps.barcodescanner.BarcodeView;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.MySSLSocketFactory;
@@ -93,6 +95,11 @@ public class QRScanActivity extends Fragment {
     ImageView responseImage;
 
 
+    private DecoratedBarcodeView barcodeView;
+    private BeepManager beepManager;
+    private String lastText;
+    private AsyncHttpClient clientTicket = new AsyncHttpClient();
+
 
     public String check_ticket_url = "https://soft.silverscreen.by:8443/wsglobal/webapi/check/ticket";
 
@@ -108,6 +115,18 @@ public class QRScanActivity extends Fragment {
 
     public HashMap<String, Integer> getListData() {
         return list;
+    }
+    public DecoratedBarcodeView getBarcodeView(){
+        return barcodeView;
+    }
+
+
+    public void torchOn(DecoratedBarcodeView bview){
+        bview.setTorchOn();
+    }
+
+    public void torchOff(DecoratedBarcodeView bView){
+        bView.setTorchOff();
     }
 
     @Override
@@ -178,23 +197,6 @@ public class QRScanActivity extends Fragment {
         barcodeView.decodeSingle(callback);
     }
 
-//    class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
-//        private static final String DEBUG_TAG = "Gestures";
-//
-//        @Override
-//        public boolean onDown(MotionEvent event) {
-//            Log.d(DEBUG_TAG,"onDown: " + event.toString());
-//            return true;
-//        }
-//
-//        @Override
-//        public boolean onFling(MotionEvent event1, MotionEvent event2,
-//                               float velocityX, float velocityY) {
-//            Log.d(DEBUG_TAG, "onFling: " + event1.toString() + event2.toString());
-//            return true;
-//        }
-//    }
-
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
 
@@ -213,12 +215,6 @@ public class QRScanActivity extends Fragment {
         super.onActivityCreated(savedInstanceState);
     }
 
-
-    private DecoratedBarcodeView barcodeView;
-    private BeepManager beepManager;
-    private String lastText;
-
-    private AsyncHttpClient clientTicket = new AsyncHttpClient();
 
     private BarcodeCallback callback = new BarcodeCallback() {
         @Override
@@ -346,9 +342,6 @@ public class QRScanActivity extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-
-
-
         final View rootView = inflater.inflate(R.layout.activity_qrscan, container, false);
         mContext = getContext();
         final GestureDetector gesture = new GestureDetector(getActivity(),
@@ -371,12 +364,24 @@ public class QRScanActivity extends Fragment {
 //                                return false;
                             if (e1.getY() - e2.getY() > SWIPE_MIN_DISTANCE
                                     && Math.abs(velocityY) > SWIPE_THRESHOLD_VELOCITY) {
-                                barcodeView.setTorchOn();
-                                System.out.println("vverh");
+                                torchOn(barcodeView);
+                                TabActivity.getStaticTabActivity().setTorchStringOn();
+                                TabActivity.getStaticTabActivity().invalidateOptionsMenu();
+                                Toast toast = Toast.makeText(mContext,
+                                        "Фонарик включен!",
+                                        Toast.LENGTH_SHORT);
+                                toast.setGravity(Gravity.CENTER, 0, 0);
+                                toast.show();
                             } else if (e2.getY() - e1.getY() > SWIPE_MIN_DISTANCE
                                     && Math.abs(velocityY) > SWIPE_THRESHOLD_VELOCITY) {
-                                barcodeView.setTorchOff();
-                                System.out.println("vniz");
+                                torchOff(barcodeView);
+                                TabActivity.getStaticTabActivity().setTorchStringOff();
+                                TabActivity.getStaticTabActivity().invalidateOptionsMenu();
+                                Toast toast = Toast.makeText(mContext,
+                                        "Фонарик выключен!",
+                                        Toast.LENGTH_SHORT);
+                                toast.setGravity(Gravity.CENTER, 0, 0);
+                                toast.show();
                             }
                         } catch (Exception e) {
                             // nothing
@@ -420,22 +425,6 @@ public class QRScanActivity extends Fragment {
         adapter = new TicketListAdapter(getActivity(), ticketList);
         ticketHistoryList.setAdapter(adapter);
 
-//        Button btnSwitch = (Button) rootView.findViewById(R.id.btnSwitch);
-//        btnSwitch.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (cameraView.getFlash() == Flash.ON) {
-//                    cameraView.setFlash(Flash.OFF);
-//                    System.out.println("Turning off flash");
-////                    turnOffFlash();
-//                } else {
-//                    cameraView.setFlash(Flash.ON);
-//                    System.out.println("Turning on flash");
-////                    turnOnFlash();
-//                }
-//            }
-//        });
-
         barcodeView = (DecoratedBarcodeView) rootView.findViewById(R.id.barcode_scanner);
         barcodeView.decodeContinuous(callback);
         barcodeView.setStatusText("");
@@ -445,27 +434,3 @@ public class QRScanActivity extends Fragment {
     }
 }
 
-
-
-/*
-qrEader = new QREader.Builder(getActivity(), mySurfaceView, new QRDataListener() {
-            @Override
-            public void onDetected(final String data) {
-                if( (  (data.equals(OLD_DATA)) && (Calendar.getInstance().getTime().getTime() - OLD_DATE.getTime() < 2500)  ) ){
-
-                } else {
-
-                     // was request here
-
-
-                    mainHandler.post(myRunnable);
-                }
-            }
-        }
-        ).facing(QREader.BACK_CAM)
-                .enableAutofocus(true)
-                .height(mySurfaceView.getHeight())
-                .width(mySurfaceView.getWidth())
-                .build();
-        qrEader.initAndStart(mySurfaceView);
- */

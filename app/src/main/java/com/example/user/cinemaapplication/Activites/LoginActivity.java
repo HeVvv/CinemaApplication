@@ -88,8 +88,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
 //        System.out.println(logina);
 //        System.out.println(loginAuth);
 
-//        String loginUrl = "https://soft.silverscreen.by:8443/security-1.0/webapi/auth/login/";
-        String loginUrl = "https://inlogic.org:8443/security-1.0/webapi/auth/login/";
+        String loginUrl = "https://soft.silverscreen.by:8443/security-1.0/webapi/auth/login/";
+//        String loginUrl = "https://inlogic.org:8443/security-1.0/webapi/auth/login/";
 
         final AsyncHttpClient client_main = new AsyncHttpClient();
         client_main.setBasicAuth(HardCodedUsername, HardCodedPassword);
@@ -211,8 +211,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
 
         //tested
 
-        username.setText("Tkachev_A");
-        password.setText("111111");
+//        username.setText("Tkachev_A");
+//        password.setText("111111");
 
 
         super.onCreate(savedInstanceState);
