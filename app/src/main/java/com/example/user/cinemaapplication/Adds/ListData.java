@@ -101,7 +101,6 @@ public class ListData extends Application {
 //    final static String urlConn = "https://soft.silverscreen.by:8443/wsglobal/webapi/salespoints/android/"; // + device_id
 
     //private static HashMap<String,Integer> AuditData = new HashMap<>();
-    //HashMap sorting
     public static HashMap<String,Integer> getAuditData(){
         System.out.println("Audit data is ->" + AuditData);
         return AuditData;

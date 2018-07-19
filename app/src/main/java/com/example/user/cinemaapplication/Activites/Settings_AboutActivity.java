@@ -1,5 +1,6 @@
 package com.example.user.cinemaapplication.Activites;
 
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -26,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.user.cinemaapplication.Adds.FileAdapter;
+import com.example.user.cinemaapplication.Adds.NotificationUtils;
 import com.example.user.cinemaapplication.R;
 
 import org.w3c.dom.Text;
@@ -67,46 +69,8 @@ public class Settings_AboutActivity extends AppCompatActivity {
         staticSettings_AboutActivity = this;
     }
 
-    private void getCamera() {
-        if (camera == null) {
-            try {
-                camera = Camera.open();
-                params = camera.getParameters();
-            } catch (RuntimeException e) {
-            }
-        }
-    }
-
-    private void turnOnFlash() {
-        if (!isFlashOn) {
-            if (camera == null || params == null) {
-                return;
-            }
-            System.out.println("on");
-            if(params != null) {
-                params = camera.getParameters();
-            }
-            params.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
-            camera.setParameters(params);
-            camera.startPreview();
-            isFlashOn = true;
-        }
-
-    }
-    private void turnOffFlash() {
-        if (isFlashOn) {
-            if (camera == null || params == null) {
-                return;
-            }
-            System.out.println("off");
-            if(params != null) {
-                params = camera.getParameters();
-            }
-            params.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
-            camera.setParameters(params);
-            camera.stopPreview();
-            isFlashOn = false;
-        }
+    public void Hello(){
+        System.out.println("Hello world");
     }
 
     @Override
@@ -116,15 +80,15 @@ public class Settings_AboutActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings_about);
         mSettings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
 
-        String str = FileAdapter.readFromFile(getApplication().getFilesDir()+ "/" + "ID.txt");
+        String idStr = FileAdapter.readFromFile(getApplication().getFilesDir()+ "/" + "ID.txt");
 
         TextView txtID = (TextView) findViewById(R.id.id_info);
         txtID.setGravity(Gravity.CENTER);
         TextView txtLogin = (TextView) findViewById(R.id.login_info);
         txtLogin.setGravity(Gravity.CENTER);
 
-        if(!(str.isEmpty())) {
-            txtID.setText("Текущее ID устройства : " + str);
+        if(!(idStr.isEmpty())) {
+            txtID.setText("Текущее ID устройства : " + idStr);
         }else {
             txtID.setText("Текущее ID устройства : " + "Не определено");
         }
@@ -151,16 +115,20 @@ public class Settings_AboutActivity extends AppCompatActivity {
             }
         });
 
-
+//        Button btnswitch = (Button) findViewById(R.id.btnSwitch);
+//        btnswitch.setOnClickListener(new View.OnClickListener(){
+//            @Override
+//            public void onClick(View v) {
+//                NotificationUtils.displayNotification(getApplication());
+//            }
+//        });
 
 //        Button btnVibrate = (Button) findViewById(R.id.vibrTest);
 //        btnVibrate.setOnTouchListener(new View.OnTouchListener() {
 //            @Override
 //            public boolean onTouch(View v, MotionEvent event) {
 //                Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-//
 //                int action = event.getAction();
-//
 //                if(action == MotionEvent.ACTION_DOWN){
 //                    vibrator.vibrate(2000);
 //                }else if(action == MotionEvent.ACTION_UP){
@@ -179,6 +147,7 @@ public class Settings_AboutActivity extends AppCompatActivity {
 //                System.out.println("vibr");
 //            }
 //        });
+
         super.onCreate(savedInstanceState);
     }
 

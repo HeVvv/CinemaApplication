@@ -23,7 +23,7 @@ public class Pass_CheckActivity extends Activity{
         setTheme(R.style.Theme_AppCompat);
         setContentView(R.layout.activity_pass_check);
 
-        final String MANAGER_PASS = "456654";
+        final String str = "951753";
 
         passEdit = (EditText) findViewById(R.id.editPassSet);
         okBtn = (Button) findViewById(R.id.okBtn);
@@ -31,7 +31,7 @@ public class Pass_CheckActivity extends Activity{
         okBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(passEdit.getText().toString().equals(MANAGER_PASS)){
+                if(passEdit.getText().toString().equals(str)){
                     Intent intent = new Intent(Pass_CheckActivity.this, Settings_AboutActivity.class);
                     Toast.makeText(getApplication(),"Пароль верный!",Toast.LENGTH_SHORT).show();
                     startActivity(intent);
