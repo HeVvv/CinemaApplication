@@ -145,6 +145,7 @@ public class SplashActivity extends AppCompatActivity{
         boolean result = historyCreateTime < (currentMillis - millisIn30Days);
 //        System.out.println(result);
 //        System.out.println(historyCreateTime + "<"  + currentMillis + " - " +millisIn30Days);
+
         if(result){
             FileAdapter.deleteFile(historyFile);
             System.out.println("History file deleted due to expire date");

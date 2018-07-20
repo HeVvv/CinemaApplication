@@ -102,7 +102,11 @@ public class HistoryListActivity extends android.support.v4.app.Fragment{
             public void onClick(View view) {
 //                Snackbar.make(view, "Scrolled", Snackbar.LENGTH_LONG)
 //                        .setAction("Action", null).show();
-                ticketHistoryList.smoothScrollToPosition(ticketHistoryList.getAdapter().getCount());
+
+                // too slow
+//                ticketHistoryList.smoothScrollToPosition(ticketHistoryList.getAdapter().getCount());
+                ticketHistoryList.setSelection(ticketHistoryList.getAdapter().getCount());
+
             }
         });
 

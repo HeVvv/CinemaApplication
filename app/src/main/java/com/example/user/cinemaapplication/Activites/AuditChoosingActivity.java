@@ -50,7 +50,6 @@ import java.util.Set;
 public class AuditChoosingActivity extends Fragment {
 
 
-
     // test swiperefreshLayout
 
     private static String auditIDs = "";

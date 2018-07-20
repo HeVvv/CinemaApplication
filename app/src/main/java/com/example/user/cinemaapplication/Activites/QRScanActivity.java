@@ -215,7 +215,6 @@ public class QRScanActivity extends Fragment {
         super.onActivityCreated(savedInstanceState);
     }
 
-
     private BarcodeCallback callback = new BarcodeCallback() {
         @Override
         public void barcodeResult(BarcodeResult data) {
@@ -241,7 +240,6 @@ public class QRScanActivity extends Fragment {
 
                         Vibrator v = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
 
-                        // Vibrate for 500 milliseconds
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                             v.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
                         } else {
@@ -268,8 +266,14 @@ public class QRScanActivity extends Fragment {
 
                                     @Override
                                     public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                                        System.out.println("error1 " + statusCode + "~~~~" + responseString);
-                                        text.setText("Error " + statusCode);
+                                        if(statusCode == 0) {
+                                            System.out.println("error1 " + statusCode + "~~~~" + responseString);
+                                            text.setText("Проверьте подключение к интернету." + statusCode);
+                                            textAdd.setText("");
+                                        }else{
+                                            text.setText("Ошибка" + statusCode);
+                                            textAdd.setText("");
+                                        }
                                     }
 
                                     @Override
@@ -355,7 +359,7 @@ public class QRScanActivity extends Fragment {
                     @Override
                     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
                                            float velocityY) {
-                        System.out.println("Onfling");
+//                        System.out.println("Onfling");
                         final int SWIPE_MIN_DISTANCE = 120;
                         final int SWIPE_MAX_OFF_PATH = 250;
                         final int SWIPE_THRESHOLD_VELOCITY = 200;
@@ -396,6 +400,7 @@ public class QRScanActivity extends Fragment {
                 return gesture.onTouchEvent(event);
             }
         });
+
         if (ContextCompat.checkSelfPermission(rootView.getContext(), Manifest.permission.CAMERA)
                 == PackageManager.PERMISSION_DENIED) {
             ActivityCompat.requestPermissions(QRScanActivity.staticQRScanActivity.getActivity(), new String[]{Manifest.permission.CAMERA}, MY_CAMERA_REQUEST_CODE);

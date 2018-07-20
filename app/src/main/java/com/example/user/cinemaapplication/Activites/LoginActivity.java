@@ -6,7 +6,10 @@ import com.example.user.cinemaapplication.R;
 import com.loopj.android.http.*;
 
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -21,6 +24,7 @@ import android.widget.Toast;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -38,6 +42,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
 
     private TextView Cancel;
     private ImageView Logo;
+
+
+
+
 
 
     private List<String> THEATER_COLOR = new ArrayList<>();
@@ -98,7 +106,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject responseBody) {
                 Intent intent = new Intent(LoginActivity.this, SplashActivity.class);
-//              Intent intent = new Intent(LoginActivity.this, SplashActivity.class);
                 final String str = FileAdapter.readFromFile(getApplication().getFilesDir()+ "/" + "ID.txt");
                 if (!(str.isEmpty())) {
                     final int device_id = Integer.parseInt(str.trim());
@@ -120,11 +127,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
                     toast.makeText(getApplicationContext(),"Истекло время ожидания",Toast.LENGTH_SHORT).show();
                     toast.setGravity(Gravity.CENTER, 0, 0);
                 }
+                if(statusCode == 0)
+                {
+                    Toast toast = new Toast(LoginActivity.this);
+                    toast.makeText(getApplicationContext(), "Проверьте подключение к интернету!" + statusCode,Toast.LENGTH_SHORT).show();
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                }
                 if(statusCode != 200 && statusCode != 408 && statusCode != 401 ){
                     Toast toast = new Toast(LoginActivity.this);
                     toast.makeText(getApplicationContext(), "Ошибка! id-" + statusCode,Toast.LENGTH_SHORT).show();
                     toast.setGravity(Gravity.CENTER, 0, 0);
                 }
+
                 System.out.println("error" + statusCode + "~~~~1" + responseString);
             }
 
@@ -141,6 +155,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
                     toast.makeText(getApplicationContext(),"Истекло время ожидания",Toast.LENGTH_SHORT).show();
                     toast.setGravity(Gravity.CENTER, 0, 0);
                 }
+                if(statusCode == 0)
+                {
+                    Toast toast = new Toast(LoginActivity.this);
+                    toast.makeText(getApplicationContext(), "Проверьте подключение к интернету!" + statusCode,Toast.LENGTH_SHORT).show();
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                }
                 if(statusCode != 200 && statusCode != 408 && statusCode != 401 ){
                     Toast toast = new Toast(LoginActivity.this);
                     toast.makeText(getApplicationContext(), "Ошибка! id-" + statusCode,Toast.LENGTH_SHORT).show();
@@ -151,22 +171,28 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                    System.out.println("error" + statusCode + "~~~~" + errorResponse);
-                    if (statusCode == 401){
-                        Toast toast = new Toast(LoginActivity.this);
-                        toast.makeText(getApplicationContext(),"Неправильные данные", Toast.LENGTH_SHORT).show();
-                        toast.setGravity(Gravity.CENTER, 0, 0);
-                    }
-                    if(statusCode == 408){
-                        Toast toast = new Toast(LoginActivity.this);
-                        toast.makeText(getApplicationContext(),"Истекло время ожидания",Toast.LENGTH_SHORT).show();
-                        toast.setGravity(Gravity.CENTER, 0, 0);
-                    }
-                    if(statusCode != 200 && statusCode != 408 && statusCode != 401 ){
-                        Toast toast = new Toast(LoginActivity.this);
-                        toast.makeText(getApplicationContext(), "Ошибка! id-" + statusCode,Toast.LENGTH_SHORT).show();
-                        toast.setGravity(Gravity.CENTER, 0, 0);
-                    }
+                System.out.println("error" + statusCode + "~~~~" + errorResponse);
+                if (statusCode == 401){
+                    Toast toast = new Toast(LoginActivity.this);
+                    toast.makeText(getApplicationContext(),"Неправильные данные", Toast.LENGTH_SHORT).show();
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                }
+                if(statusCode == 408) {
+                    Toast toast = new Toast(LoginActivity.this);
+                    toast.makeText(getApplicationContext(), "Истекло время ожидания", Toast.LENGTH_SHORT).show();
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                }
+                if(statusCode == 0)
+                {
+                    Toast toast = new Toast(LoginActivity.this);
+                    toast.makeText(getApplicationContext(), "Проверьте подключение к интернету!" + statusCode,Toast.LENGTH_SHORT).show();
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                }
+                if(statusCode != 200 && statusCode != 408 && statusCode != 401 ){
+                    Toast toast = new Toast(LoginActivity.this);
+                    toast.makeText(getApplicationContext(), "Ошибка! id-" + statusCode,Toast.LENGTH_SHORT).show();
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                }
                 super.onFailure(statusCode, headers, throwable, errorResponse);
             }
         });
@@ -178,10 +204,44 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
         return true;
     }
 
+    private boolean STATE = true;
+
+
+    public boolean updateCheck(){
+        return STATE;
+    }
+    String version = "";
+    public void updateInstall(){
+        if(updateCheck()){
+            File file = new File("/storage/self/primary/Download/app-debug"+version+".apk");
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                System.out.println("1");
+                Uri fileUri = FileProvider.getUriForFile(getBaseContext(), getApplicationContext().getPackageName() + ".provider", file);
+                System.out.println("uri -> " + fileUri);
+                Intent intent = new Intent(Intent.ACTION_VIEW, fileUri);
+                intent.putExtra(Intent.EXTRA_NOT_UNKNOWN_SOURCE, true);
+                intent.setDataAndType(fileUri, "application/vnd.android" + ".package-archive");
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                // sharedprer settings for state of update
+                startActivity(intent);
+            } else {
+                System.out.println("2");
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                // sharedprer settings for state of update
+                startActivity(intent);
+            }
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.Theme_AppCompat_NoActionBar);
         setContentView(R.layout.activity_main);
+
+        updateInstall();
 
         Cancel = (TextView) findViewById(R.id.cancel);
         Cancel.setOnTouchListener(this);
