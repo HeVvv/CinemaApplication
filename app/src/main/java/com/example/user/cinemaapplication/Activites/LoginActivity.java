@@ -5,7 +5,9 @@ import com.example.user.cinemaapplication.Adds.ListData;
 import com.example.user.cinemaapplication.R;
 import com.loopj.android.http.*;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -43,11 +45,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
     private TextView Cancel;
     private ImageView Logo;
 
-
-
-
-
-
     private List<String> THEATER_COLOR = new ArrayList<>();
     private int THEATER_ID;
     private HashMap <String,Integer> DATA = new HashMap<>();
@@ -60,7 +57,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
     public static LoginActivity getStaticLoginActivity(){
         return staticLoginActivity;
     }
-    public LoginActivity(){
+    public LoginActivity() throws PackageManager.NameNotFoundException {
         staticLoginActivity = this;
     }
 
@@ -209,11 +206,26 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
 
     public boolean updateCheck(){
         return STATE;
-    }
-    String version = "";
+        }
+
+        // problema v imeni, smena imeni pri release
+
+
+    String testpath = "/storage/self/primary/Download/apk_downloader_1.17.apk";
+
     public void updateInstall(){
         if(updateCheck()){
-            File file = new File("/storage/self/primary/Download/app-debug"+version+".apk");
+
+            String versionName = null;
+            try {
+                versionName = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+            }
+
+            String path = "/storage/self/primary/Download/app-release"+versionName+".apk";
+            String testpath =  "/storage/self/primary/Download/Scinema2.1r.apk";
+            File file = new File(testpath);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 System.out.println("1");
                 Uri fileUri = FileProvider.getUriForFile(getBaseContext(), getApplicationContext().getPackageName() + ".provider", file);
@@ -240,8 +252,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.Theme_AppCompat_NoActionBar);
         setContentView(R.layout.activity_main);
-
-        updateInstall();
 
         Cancel = (TextView) findViewById(R.id.cancel);
         Cancel.setOnTouchListener(this);

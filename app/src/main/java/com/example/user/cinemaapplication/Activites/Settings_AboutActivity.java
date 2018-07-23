@@ -115,13 +115,13 @@ public class Settings_AboutActivity extends AppCompatActivity {
             }
         });
 
-//        Button btnswitch = (Button) findViewById(R.id.btnSwitch);
-//        btnswitch.setOnClickListener(new View.OnClickListener(){
-//            @Override
-//            public void onClick(View v) {
-//                NotificationUtils.displayNotification(getApplication());
-//            }
-//        });
+        Button btnswitch = (Button) findViewById(R.id.btnSwitch);
+        btnswitch.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                LoginActivity.getStaticLoginActivity().updateInstall();
+            }
+        });
 
 //        Button btnVibrate = (Button) findViewById(R.id.vibrTest);
 //        btnVibrate.setOnTouchListener(new View.OnTouchListener() {
