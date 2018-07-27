@@ -54,6 +54,8 @@ dependencies {
 //        exclude(group: "com.google.zxing", module:"core")
 //    }
 
+
+    compile 'com.github.Piashsarker:AndroidAppUpdateLibrary:1.0.3'
     compile 'com.github.duanhong169:Camera:1.0.3'
     compile 'com.caverock:androidsvg:1.2.1'
     compile 'com.facebook.shimmer:shimmer:0.1.0@aar'

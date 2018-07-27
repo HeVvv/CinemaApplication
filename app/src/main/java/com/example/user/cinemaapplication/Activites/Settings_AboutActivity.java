@@ -26,19 +26,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dcastalia.localappupdate.DownloadApk;
 import com.example.user.cinemaapplication.Adds.FileAdapter;
-import com.example.user.cinemaapplication.Adds.NotificationUtils;
 import com.example.user.cinemaapplication.R;
 
-import org.w3c.dom.Text;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-
 
 public class Settings_AboutActivity extends AppCompatActivity {
 
@@ -115,7 +108,10 @@ public class Settings_AboutActivity extends AppCompatActivity {
         btnswitch.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                LoginActivity.getStaticLoginActivity().updateInstall();
+//                String url = "https://github.com/Piashsarker/AndroidAppUpdateLibrary/raw/master/app-debug.apk";
+                String url = "https://github.com/HeVvv/Sapk/raw/master/app-debug.apk";
+                DownloadApk downloadApk = new DownloadApk(Settings_AboutActivity.this);
+                downloadApk.startDownloadingApk(url);
             }
         });
 

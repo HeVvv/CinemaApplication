@@ -12,6 +12,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
@@ -210,6 +211,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
     }
 
 
+    // https://github.com/HeVvv/Sapk/blob/master/app-debug.apk
+
     // problema v imeni, smena imeni pri vipuske novoi versii
     String testpath = "/storage/self/primary/Download/apk_downloader_1.17.apk";
 
@@ -250,9 +253,39 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
     }
 
     @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 1: {
+
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                    Toast.makeText(LoginActivity.this, "Permission denied to read your External storage", Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.Theme_AppCompat_NoActionBar);
         setContentView(R.layout.activity_main);
+
+        ActivityCompat.requestPermissions(LoginActivity.this,
+                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                1);
 
         try {
             PackageInfo pInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
