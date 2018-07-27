@@ -7,6 +7,7 @@ import com.loopj.android.http.*;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
@@ -206,11 +207,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
 
     public boolean updateCheck(){
         return STATE;
-        }
-
-        // problema v imeni, smena imeni pri release
+    }
 
 
+    // problema v imeni, smena imeni pri vipuske novoi versii
     String testpath = "/storage/self/primary/Download/apk_downloader_1.17.apk";
 
     public void updateInstall(){
@@ -225,6 +225,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
 
             String path = "/storage/self/primary/Download/app-release"+versionName+".apk";
             String testpath =  "/storage/self/primary/Download/Scinema2.1r.apk";
+
             File file = new File(testpath);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 System.out.println("1");
@@ -252,6 +253,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.Theme_AppCompat_NoActionBar);
         setContentView(R.layout.activity_main);
+
+        try {
+            PackageInfo pInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
+            String version = pInfo.versionName;
+            int verCode = pInfo.versionCode;
+
+            System.out.println("Version name -> " + version);
+            System.out.println("Version code -> " + verCode);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
 
         Cancel = (TextView) findViewById(R.id.cancel);
         Cancel.setOnTouchListener(this);
@@ -283,5 +295,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
         password.setText("111111");
 
         super.onCreate(savedInstanceState);
+
     }
 }

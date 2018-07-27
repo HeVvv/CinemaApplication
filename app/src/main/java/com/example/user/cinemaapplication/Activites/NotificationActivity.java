@@ -29,9 +29,5 @@ public class NotificationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setTheme(R.style.Theme_AppCompat);
         setContentView(R.layout.activity_notification);
-
-        Settings_AboutActivity.getStaticSettings_AboutActivityt().Hello();
-
-        System.out.println("123 hello from notify act");
     }
 }

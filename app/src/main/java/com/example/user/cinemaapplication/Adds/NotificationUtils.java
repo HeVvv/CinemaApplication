@@ -59,7 +59,6 @@ public class NotificationUtils {
         protected void onHandleIntent(Intent intent) {
             String action = intent.getAction();
             if (ACTION_1.equals(action)) {
-                Settings_AboutActivity.getStaticSettings_AboutActivityt().Hello();
                 Intent inten = new Intent(this, NotificationActivity.class);
                 startActivity(inten);
                 NotificationManagerCompat.from(this).cancel(NOTIFICATION_ID);

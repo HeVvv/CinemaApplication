@@ -69,10 +69,6 @@ public class Settings_AboutActivity extends AppCompatActivity {
         staticSettings_AboutActivity = this;
     }
 
-    public void Hello(){
-        System.out.println("Hello world");
-    }
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
 
