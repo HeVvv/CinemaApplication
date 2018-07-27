@@ -23,7 +23,7 @@ public class Pass_CheckActivity extends Activity{
         setTheme(R.style.Theme_AppCompat);
         setContentView(R.layout.activity_pass_check);
 
-        final String str = "951753";
+        final String str = "456654";
 
         passEdit = (EditText) findViewById(R.id.editPassSet);
         okBtn = (Button) findViewById(R.id.okBtn);

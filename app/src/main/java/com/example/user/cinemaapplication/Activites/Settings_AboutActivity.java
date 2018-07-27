@@ -4,6 +4,8 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -75,6 +77,10 @@ public class Settings_AboutActivity extends AppCompatActivity {
         txtID.setGravity(Gravity.CENTER);
         TextView txtLogin = (TextView) findViewById(R.id.login_info);
         txtLogin.setGravity(Gravity.CENTER);
+        TextView txtVName = (TextView) findViewById(R.id.versionName_info);
+        txtVName.setGravity(Gravity.CENTER);
+//        TextView txtVCode = (TextView) findViewById(R.id.versionCode_info);
+//        txtVCode.setGravity(Gravity.CENTER);
 
         if(!(idStr.isEmpty())) {
             txtID.setText("Текущее ID устройства : " + idStr);
@@ -82,6 +88,7 @@ public class Settings_AboutActivity extends AppCompatActivity {
             txtID.setText("Текущее ID устройства : " + "Не определено");
         }
             txtLogin.setText("Логин : " + LoginActivity.getStaticLoginActivity().getUsername());
+
 
 
         Button btnID = (Button) findViewById(R.id.changeID);
@@ -114,6 +121,21 @@ public class Settings_AboutActivity extends AppCompatActivity {
                 downloadApk.startDownloadingApk(url);
             }
         });
+
+        try {
+            PackageInfo pInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
+            String version = pInfo.versionName;
+            String verCode = String.valueOf(pInfo.versionCode);
+
+            System.out.println("Version name -> " + version);
+            System.out.println("Version code -> " + verCode);
+
+//            txtVCode.setText(pInfo.versionCode);
+            txtVName.setText("Версия : " + pInfo.versionName);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
 
 //        Button btnVibrate = (Button) findViewById(R.id.vibrTest);
 //        btnVibrate.setOnTouchListener(new View.OnTouchListener() {
