@@ -290,6 +290,7 @@ public class TabActivity extends AppCompatActivity {
 //            startActivity(intent);
             return true;
         }
+
         if(id == R.id.torchToggle){
             if(QRScanActivity.getStaticQRScanActivity().getBarcodeView() != null) {
                 if(!toggled) {

@@ -1,17 +1,25 @@
 package com.example.user.cinemaapplication.Activites;
 
+import com.dcastalia.localappupdate.DownloadApk;
 import com.example.user.cinemaapplication.Adds.FileAdapter;
 import com.example.user.cinemaapplication.Adds.ListData;
 import com.example.user.cinemaapplication.R;
 import com.loopj.android.http.*;
 
 import android.Manifest;
+import android.app.DownloadManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
@@ -37,6 +45,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.entity.mime.MIME;
 
 public class LoginActivity extends AppCompatActivity implements View.OnTouchListener {
 
@@ -55,6 +64,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
 
     private String HardCodedUsername = "Starastsin_A";
     private String HardCodedPassword = "test";
+
+    private long enqueue;
+    private DownloadManager dm;
 
     private static LoginActivity staticLoginActivity;
     public static LoginActivity getStaticLoginActivity(){
@@ -96,8 +108,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
 //        System.out.println(logina);
 //        System.out.println(loginAuth);
 
-//        String loginUrl = "https://soft.silverscreen.by:8443/security-1.0/webapi/auth/login/";
-        String loginUrl = "https://inlogic.org:8443/security-1.0/webapi/auth/login/";
+        String loginUrl = "https://soft.silverscreen.by:8443/security-1.0/webapi/auth/login/";
+//        String loginUrl = "https://inlogic.org:8443/security-1.0/webapi/auth/login/";
 
         final AsyncHttpClient client_main = new AsyncHttpClient();
         client_main.setBasicAuth(HardCodedUsername, HardCodedPassword);
@@ -211,98 +223,22 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
         return STATE;
     }
 
-
-    // https://github.com/HeVvv/Sapk/blob/master/app-debug.apk
-
-    // problema v imeni, smena imeni pri vipuske novoi versii
-    String testpath = "/storage/self/primary/Download/apk_downloader_1.17.apk";
-
-    public void updateInstall(){
-        if(updateCheck()){
-
-            String versionName = null;
-            try {
-                versionName = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
-            } catch (PackageManager.NameNotFoundException e) {
-                e.printStackTrace();
-            }
-
-            String path = "/storage/self/primary/Download/app-release"+versionName+".apk";
-            String testpath =  "/storage/self/primary/Download/Scinema2.1r.apk";
-
-            File file = new File(testpath);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                System.out.println("1");
-                Uri fileUri = FileProvider.getUriForFile(getBaseContext(), getApplicationContext().getPackageName() + ".provider", file);
-                System.out.println("uri -> " + fileUri);
-                Intent intent = new Intent(Intent.ACTION_VIEW, fileUri);
-                intent.putExtra(Intent.EXTRA_NOT_UNKNOWN_SOURCE, true);
-                intent.setDataAndType(fileUri, "application/vnd.android" + ".package-archive");
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                // sharedprer settings for state of update
-                startActivity(intent);
-            } else {
-                System.out.println("2");
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                // sharedprer settings for state of update
-                startActivity(intent);
-            }
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case 1: {
-
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
-                } else {
-
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                    Toast.makeText(LoginActivity.this, "Permission denied to read your External storage", Toast.LENGTH_SHORT).show();
-                }
-                return;
-            }
-
-            // other 'case' lines to check for other
-            // permissions this app might request
-        }
-    }
+    private String version = "";
+    private String updateString = "https://soft.silverscreen.by:8443/content/webapi/system/android/update/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.Theme_AppCompat_NoActionBar);
         setContentView(R.layout.activity_main);
-
-
-        if (ContextCompat.checkSelfPermission(LoginActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)
-                == PackageManager.PERMISSION_DENIED) {
-            ActivityCompat.requestPermissions(LoginActivity.this,
-                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                    1);
-        }
-
-
         try {
             PackageInfo pInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
-            String version = pInfo.versionName;
-            int verCode = pInfo.versionCode;
-
+            version = pInfo.versionName;
+//            String verCode = String.valueOf(pInfo.versionCode);
             System.out.println("Version name -> " + version);
-            System.out.println("Version code -> " + verCode);
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
+
 
         Cancel = (TextView) findViewById(R.id.cancel);
         Cancel.setOnTouchListener(this);

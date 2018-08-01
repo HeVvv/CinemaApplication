@@ -108,6 +108,31 @@ public class SplashActivity extends AppCompatActivity{
     }
 
     @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 1: {
+
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                    Toast.makeText(SplashActivity.this, "Permission denied to read your External storage", Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
+    }
+
+    @Override
     public void onCreate(Bundle savedInstance) {
 
         super.onCreate(savedInstance);
@@ -127,6 +152,15 @@ public class SplashActivity extends AppCompatActivity{
         Date purgeDate = new Date();
         purgeDate.setTime(days * 1000 * 3600 * 24);
 
+
+        if (ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                == PackageManager.PERMISSION_DENIED) {
+            ActivityCompat.requestPermissions(SplashActivity.this,
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    1);
+        }
+
+
         if (!hasVisited) {
             SharedPreferences.Editor e = sp.edit();
             e.putBoolean("hasVisited",true);
@@ -134,17 +168,10 @@ public class SplashActivity extends AppCompatActivity{
             e.apply();
         }
 
-//        SimpleDateFormat format1 = new SimpleDateFormat("dd.MM.yyyy hh:mm");
-//        System.out.println(format1.format(sp.getLong("historyCreateTime",0)));
-//        System.out.println(format1.format(sp.getLong("historyPurgeTime",0)));
-//        System.out.println(format1.format(Calendar.getInstance().getTime()));
-
         long currentMillis = new Date().getTime();
         long millisIn30Days = days * 24 * 60 * 60 * 1000;
         long historyCreateTime = sp.getLong("historyCreateTime",0);
         boolean result = historyCreateTime < (currentMillis - millisIn30Days);
-//        System.out.println(result);
-//        System.out.println(historyCreateTime + "<"  + currentMillis + " - " +millisIn30Days);
 
         if(result){
             FileAdapter.deleteFile(historyFile);

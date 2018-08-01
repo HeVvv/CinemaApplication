@@ -40,6 +40,5 @@ public class Pass_CheckActivity extends Activity{
                 }
             }
         });
-
     }
 }

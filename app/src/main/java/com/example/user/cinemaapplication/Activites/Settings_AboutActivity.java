@@ -55,6 +55,9 @@ public class Settings_AboutActivity extends AppCompatActivity {
     public static final String APP_PREFERENCES = "mysettings";
     public static final String APP_PREFERENCES_COUNTER = "counter";
 
+    private String version = "";
+    private String updateString = "https://soft.silverscreen.by:8443/content/webapi/system/android/update/";
+
 
     private static Settings_AboutActivity staticSettings_AboutActivity;
     public static Settings_AboutActivity getStaticSettings_AboutActivityt(){
@@ -111,14 +114,24 @@ public class Settings_AboutActivity extends AppCompatActivity {
             }
         });
 
+        try {
+            PackageInfo pInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
+            version = pInfo.versionName;
+//            String verCode = String.valueOf(pInfo.versionCode);
+            System.out.println("Version name -> " + version);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
         Button btnswitch = (Button) findViewById(R.id.btnSwitch);
         btnswitch.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-//                String url = "https://github.com/Piashsarker/AndroidAppUpdateLibrary/raw/master/app-debug.apk";
-                String url = "https://github.com/HeVvv/Sapk/raw/master/app-debug.apk";
-                DownloadApk downloadApk = new DownloadApk(Settings_AboutActivity.this);
-                downloadApk.startDownloadingApk(url);
+//                if(!version.isEmpty()) {
+//                    updateString += version;
+//                    DownloadApk downloadApk = new DownloadApk(Settings_AboutActivity.this);
+//                    downloadApk.startDownloadingApk(updateString);
+//                }
             }
         });
 

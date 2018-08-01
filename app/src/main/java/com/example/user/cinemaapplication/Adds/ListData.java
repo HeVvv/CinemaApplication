@@ -90,15 +90,15 @@ public class ListData extends Application {
         staticListData = this;
     }
 
-    final static String url12 = "https://inlogic.org:8443/wscinema/webapi/auditoriums";
-    final static String url22 = "https://inlogic.org:8443/wscinema/webapi/show/auditorium/";
-    final static String urlTheaterInfo = "https://inlogic.org:8443/wsglobal/webapi/theater/android";
-    final static String urlConn = "https://inlogic.org:8443/wsglobal/webapi/salespoints/android/"; // + device_id
+//    final static String url12 = "https://inlogic.org:8443/wscinema/webapi/auditoriums";
+//    final static String url22 = "https://inlogic.org:8443/wscinema/webapi/show/auditorium/";
+//    final static String urlTheaterInfo = "https://inlogic.org:8443/wsglobal/webapi/theater/android";
+//    final static String urlConn = "https://inlogic.org:8443/wsglobal/webapi/salespoints/android/"; // + device_id
 
-//    final static String url12 = "https://soft.silverscreen.by:8443/wscinema/webapi/auditoriums";
-//    final static String url22 = "https://soft.silverscreen.by:8443/wscinema/webapi/show/auditorium/";
-//    final static String urlTheaterInfo = "https://soft.silverscreen.by:8443/wsglobal/webapi/theater/android";
-//    final static String urlConn = "https://soft.silverscreen.by:8443/wsglobal/webapi/salespoints/android/"; // + device_id
+    final static String url12 = "https://soft.silverscreen.by:8443/wscinema/webapi/auditoriums";
+    final static String url22 = "https://soft.silverscreen.by:8443/wscinema/webapi/show/auditorium/";
+    final static String urlTheaterInfo = "https://soft.silverscreen.by:8443/wsglobal/webapi/theater/android";
+    final static String urlConn = "https://soft.silverscreen.by:8443/wsglobal/webapi/salespoints/android/"; // + device_id
 
     //private static HashMap<String,Integer> AuditData = new HashMap<>();
     public static HashMap<String,Integer> getAuditData(){

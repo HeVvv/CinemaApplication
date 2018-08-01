@@ -302,6 +302,7 @@ public class QRScanActivity extends Fragment {
 //                                                glassesCount.setText("3");
                                             }
                                         });
+
                                         ticketList.add(responseString + "|" + dateFormat.format(Calendar.getInstance().getTime()));
                                         adapter.notifyDataSetChanged();
                                         if (status.equals("0")) {
