@@ -14,8 +14,11 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -38,21 +41,57 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URL;
 import java.net.URLEncoder;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Scanner;
 
 import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.client.cache.Resource;
 import cz.msebera.android.httpclient.entity.mime.MIME;
+import kotlin.text.Charsets;
 
 public class LoginActivity extends AppCompatActivity implements View.OnTouchListener {
+
+
+    class RetrieveFeedTask extends AsyncTask<String, Void, String> {
+
+        private Exception exception;
+
+        protected String doInBackground(String... urls) {
+            try {
+                try {
+                    URL versionFile_gitUrl = new URL(urls[0]);
+                    Scanner s = new Scanner(versionFile_gitUrl.openStream());
+                    git_version = s.nextLine();
+                }catch (IOException pokemon){
+                    pokemon.printStackTrace();
+                }
+                return git_version;
+            } catch (Exception pokemon) {
+                pokemon.printStackTrace();
+                return null;
+            } finally {
+            }
+        }
+
+        protected void onPostExecute(String string) {
+        }
+    }
 
     private EditText username;
     private EditText password;
     private String CINEMA_NAME = "Arena Minsk";
-    private int DEVICE_NUMBER = 1;
+//    private int DEVICE_NUMBER = 1;
+    private String version = "";
+    private String git_version = "";
+    private TextView versionTview;
+
 
     private TextView Cancel;
     private ImageView Logo;
@@ -76,7 +115,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
         staticLoginActivity = this;
     }
 
-    public int getDEVICE_NUMBER(){ return DEVICE_NUMBER; }
+//    public int getDEVICE_NUMBER(){ return DEVICE_NUMBER; }
     public String getCINEMA_NAME(){  return CINEMA_NAME; }
     public String getUsername(){
         return HardCodedUsername;
@@ -223,28 +262,51 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
         return STATE;
     }
 
-    private String version = "";
     private String updateString = "https://soft.silverscreen.by:8443/content/webapi/system/android/update/";
 
+    private String versionFile_git = "https://raw.githubusercontent.com/HeVvv/Sapk/master/androidVersionFile.txt";
+    private String apkFile_git = "https://github.com/HeVvv/Sapk/raw/master/app-debug.apk";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.Theme_AppCompat_NoActionBar);
         setContentView(R.layout.activity_main);
+
+        do {
+            new RetrieveFeedTask().execute(versionFile_git);
+            System.out.println(git_version);
+        }while(git_version.isEmpty());
+
         try {
             PackageInfo pInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
             version = pInfo.versionName;
-//            String verCode = String.valueOf(pInfo.versionCode);
-            System.out.println("Version name -> " + version);
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
 
+
+        if(!(git_version.isEmpty())){
+            System.out.println("Git version -> " + git_version);
+            System.out.println("Mob version -> " + version);
+            if(!git_version.equals(version)){
+                System.out.println("Start update!");
+                DownloadApk downloadApk = new DownloadApk(LoginActivity.this);
+                downloadApk.startDownloadingApk(apkFile_git);
+            }else{
+                System.out.println("Device is up to date!");
+            }
+        }else{
+            System.out.println("git version file is null");
+        }
+        git_version = "";
 
         Cancel = (TextView) findViewById(R.id.cancel);
         Cancel.setOnTouchListener(this);
 
         Logo = (ImageView) findViewById(R.id.logo);
         Logo.setImageResource(R.drawable.logo_prog);
+
+        versionTview = (TextView)findViewById(R.id.versionTView);
+        versionTview.setText(version);
 
         username = (EditText) findViewById(R.id.usernameInput);
         password = (EditText) findViewById(R.id.passInput);
