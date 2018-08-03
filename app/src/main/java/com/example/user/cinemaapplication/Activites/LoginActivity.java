@@ -7,7 +7,10 @@ import com.example.user.cinemaapplication.R;
 import com.loopj.android.http.*;
 
 import android.Manifest;
+import android.app.Activity;
+import android.app.Application;
 import android.app.DownloadManager;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -27,6 +30,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -41,8 +45,12 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.sql.SQLOutput;
@@ -51,10 +59,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
+import javax.net.ssl.HttpsURLConnection;
+
 import cz.msebera.android.httpclient.Header;
-import cz.msebera.android.httpclient.client.cache.Resource;
-import cz.msebera.android.httpclient.entity.mime.MIME;
-import kotlin.text.Charsets;
 
 public class LoginActivity extends AppCompatActivity implements View.OnTouchListener {
 
@@ -136,6 +143,130 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
     }
     public List<String> getTHEATER_COLOR(){
         return THEATER_COLOR;
+    }
+
+    private String updateString = "https://soft.silverscreen.by:8443/content/webapi/system/android/update/";
+
+    private String versionFile_git = "https://raw.githubusercontent.com/HeVvv/Sapk/master/androidVersionFile.txt";
+    private String apkFile_git = "https://github.com/HeVvv/Sapk/raw/master/app-debug.apk";
+    private AsyncTask mtask;
+
+    private static Uri getUriFromFile(String location) {
+        return Build.VERSION.SDK_INT < 24 ? Uri.fromFile(new File(location + "app-debug.apk")) : FileProvider.getUriForFile(getStaticLoginActivity().getApplication(), getStaticLoginActivity().getApplication().getApplicationContext().getPackageName() + ".provider", new File(location + "app-debug.apk"));
+    }
+    private static void OpenNewVersion(String location) {
+        Intent intent = new Intent("android.intent.action.VIEW");
+        intent.setDataAndType(getUriFromFile(location), "application/vnd.android.package-archive");
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//        intent.addFlags(1);
+        context.startActivity(intent);
+        LoginActivity.getStaticLoginActivity().finish();
+    }
+    private static ProgressDialog bar;
+    private static Context context;
+
+    private static String downloadUrl;
+
+    public void startDownloadingApk(String url) {
+        downloadUrl = url;
+        if (downloadUrl != null) {
+            (new DownloadNewVersion()).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        }
+
+    }
+
+    private static class DownloadNewVersion extends AsyncTask<String, Integer, Boolean> {
+        private DownloadNewVersion() {
+        }
+
+        protected void onPreExecute() {
+            super.onPreExecute();
+            if (bar == null) {
+                bar = new ProgressDialog(context);
+                bar.setCancelable(false);
+                bar.setMessage("Downloading...");
+                System.out.println("sittin here");
+                bar.setIndeterminate(true);
+                bar.setCanceledOnTouchOutside(false);
+                bar.show();
+            }
+        }
+
+        protected void onProgressUpdate(Integer... progress) {
+            super.onProgressUpdate(progress);
+            bar.setIndeterminate(false);
+            bar.setMax(100);
+            bar.setProgress(progress[0]);
+            String msg = "";
+            if (progress[0] > 99) {
+                msg = "Finishing... ";
+            } else {
+                msg = "Downloading... " + progress[0] + "%";
+            }
+            bar.setMessage(msg);
+        }
+
+        protected void onPostExecute(Boolean result) {
+            super.onPostExecute(result);
+            if (bar.isShowing() && bar != null) {
+                bar.dismiss();
+                bar = null;
+            }
+
+            if (result) {
+                Toast.makeText(getStaticLoginActivity().getApplication(), "Update Done", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getStaticLoginActivity().getApplication(), "Error: Try Again", Toast.LENGTH_SHORT).show();
+            }
+
+        }
+
+        protected Boolean doInBackground(String... args0) {
+            Boolean flag = false;
+
+            try {
+                System.out.println("we got here");
+                URL url = new URL("https://github.com/HeVvv/Sapk/raw/master/app-debug.apk");
+                HttpsURLConnection c = (HttpsURLConnection) url.openConnection();
+                c.setRequestMethod("GET");
+                c.setSSLSocketFactory(HttpsURLConnection.getDefaultSSLSocketFactory());
+                c.setDoOutput(true);
+                c.connect();
+                String PATH = Environment.getExternalStorageDirectory() + "/Download/";
+                File file = new File(PATH);
+                file.mkdirs();
+                File outputFile = new File(file, "app-debug.apk");
+                if (outputFile.exists()) {
+                    outputFile.delete();
+                }
+
+                FileOutputStream fos = new FileOutputStream(outputFile);
+                InputStream is = c.getInputStream();
+                int total_size = c.getContentLength();
+                byte[] buffer = new byte[1024];
+                int downloaded = 0;
+
+                int len1;
+                while ((len1 = is.read(buffer)) != -1) {
+                    fos.write(buffer, 0, len1);
+                    downloaded += len1;
+                    int per = downloaded * 100 / total_size;
+                    this.publishProgress(new Integer[]{per});
+                }
+
+                fos.close();
+                is.close();
+                LoginActivity.OpenNewVersion(PATH);
+                flag = true;
+                System.out.println("now we here");
+            }catch(MalformedURLException mfpokemon){
+                mfpokemon.printStackTrace();
+            }catch(IOException iopokemon){
+                iopokemon.printStackTrace();
+            }
+
+            return flag;
+        }
     }
 
     public void onLogin(View view) throws UnsupportedEncodingException {
@@ -262,42 +393,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
         return STATE;
     }
 
-    private String updateString = "https://soft.silverscreen.by:8443/content/webapi/system/android/update/";
 
-    private String versionFile_git = "https://raw.githubusercontent.com/HeVvv/Sapk/master/androidVersionFile.txt";
-    private String apkFile_git = "https://github.com/HeVvv/Sapk/raw/master/app-debug.apk";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.Theme_AppCompat_NoActionBar);
         setContentView(R.layout.activity_main);
-
-        do {
-            new RetrieveFeedTask().execute(versionFile_git);
-            System.out.println(git_version);
-        }while(git_version.isEmpty());
-
-        try {
-            PackageInfo pInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
-            version = pInfo.versionName;
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-
-
-        if(!(git_version.isEmpty())){
-            System.out.println("Git version -> " + git_version);
-            System.out.println("Mob version -> " + version);
-            if(!git_version.equals(version)){
-                System.out.println("Start update!");
-                DownloadApk downloadApk = new DownloadApk(LoginActivity.this);
-                downloadApk.startDownloadingApk(apkFile_git);
-            }else{
-                System.out.println("Device is up to date!");
-            }
-        }else{
-            System.out.println("git version file is null");
-        }
-        git_version = "";
+        context = LoginActivity.this;
 
         Cancel = (TextView) findViewById(R.id.cancel);
         Cancel.setOnTouchListener(this);
@@ -328,8 +429,40 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
             }
         });
 
-        username.setText("Tkachev_A");
-        password.setText("111111");
+        do {
+            mtask = new RetrieveFeedTask().execute(versionFile_git);
+            System.out.println(git_version);
+        }while(git_version.isEmpty());
+        try {
+            PackageInfo pInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
+            version = pInfo.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        mtask.cancel(true);
+
+
+
+        if(!(git_version.isEmpty())){
+            System.out.println("Git version -> " + git_version);
+            System.out.println("Mob version -> " + version);
+            if(!git_version.equals(version)){
+                System.out.println("Start update!");
+                System.out.println("Url string -> " + apkFile_git);
+//                DownloadApk downloadApk = new DownloadApk(LoginActivity.this);
+//                downloadApk.startDownloadingApk(apkFile_git);
+
+                LoginActivity.getStaticLoginActivity().startDownloadingApk(apkFile_git);
+            }else{
+                System.out.println("Device is up to date!");
+            }
+        }else{
+            System.out.println("git version file is null");
+        }
+        git_version = "";
+
+//        username.setText("Tkachev_A");
+//        password.setText("111111");
 
         super.onCreate(savedInstanceState);
 
