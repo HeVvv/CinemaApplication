@@ -12,6 +12,8 @@ import android.widget.Toast;
 
 import com.example.user.cinemaapplication.R;
 
+
+
 public class Pass_CheckActivity extends Activity{
 
     private EditText passEdit;
@@ -26,8 +28,8 @@ public class Pass_CheckActivity extends Activity{
         final String str = "456654";
 
         passEdit = (EditText) findViewById(R.id.editPassSet);
-        okBtn = (Button) findViewById(R.id.okBtn);
 
+        okBtn = (Button) findViewById(R.id.okBtn);
         okBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -40,5 +42,6 @@ public class Pass_CheckActivity extends Activity{
                 }
             }
         });
+
     }
 }

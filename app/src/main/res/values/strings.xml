@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Scanner Application</string>
+    <string name="app_name">MobileTicketsReader</string>
     <string name="submitPassBtn">Подтвердить</string>
     <string name="StaffInfo">Логин:</string>
     <string name="PassInfo">Пароль:</string>

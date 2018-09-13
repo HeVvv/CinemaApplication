@@ -43,6 +43,7 @@ import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -100,7 +101,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
     private String git_version = "";
     private TextView versionTview;
 
-
+    private TextView idText;
     private TextView Cancel;
     private ImageView Logo;
     private TextView versionText;
@@ -431,17 +432,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
 
         Cancel = (TextView) findViewById(R.id.cancel);
         Cancel.setOnTouchListener(this);
+        Cancel.setGravity(Gravity.CENTER);
 
-        Logo = (ImageView) findViewById(R.id.logo);
-        Logo.setImageResource(R.drawable.logo_prog);
+        //Waiting for a blocking GC Alloc ????
+//        Logo = (ImageView) findViewById(R.id.logo);
+//        Logo.setImageResource(R.drawable.ic_frontrow_w);
 
-        versionTview = (TextView)findViewById(R.id.versionTView);
-        versionTview.setText(version);
 
         username = (EditText) findViewById(R.id.usernameInput);
+        username.setHint("Логин");
         password = (EditText) findViewById(R.id.passInput);
+        password.setHint("Пароль");
 
         versionText = (TextView) findViewById(R.id.versionText);
+        idText = (TextView) findViewById(R.id.idText);
 
         password.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -465,14 +469,23 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
             System.out.println(git_version);
         }while(git_version.isEmpty());
 
+
         try {
             PackageInfo pInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
             version = pInfo.versionName;
-            versionText.setText(version);
+            versionText.setText("MobileTicketsReader v " + version);
+            versionText.setGravity(Gravity.CENTER|Gravity.BOTTOM);
+            versionText.setTextSize(10);
+
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
         mtask.cancel(true);
+
+        String idStr = FileAdapter.readFromFile(getApplication().getFilesDir()+ "/" + "ID.txt");
+        idText.setText("ID #" + idStr);
+        idText.setGravity(Gravity.CENTER|Gravity.BOTTOM);
+        idText.setTextSize(10);
 
         if(!(git_version.isEmpty())){
             System.out.println("Git version -> " + git_version);
