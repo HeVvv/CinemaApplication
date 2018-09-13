@@ -20,6 +20,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -435,8 +436,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
         Cancel.setGravity(Gravity.CENTER);
 
         //Waiting for a blocking GC Alloc ????
-//        Logo = (ImageView) findViewById(R.id.logo);
-//        Logo.setImageResource(R.drawable.ic_frontrow_w);
+        Logo = (ImageView) findViewById(R.id.logo);
+        Logo.setImageResource(R.drawable.ic_frontrow_w);
 
 
         username = (EditText) findViewById(R.id.usernameInput);
@@ -474,7 +475,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
             PackageInfo pInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
             version = pInfo.versionName;
             versionText.setText("MobileTicketsReader v " + version);
-            versionText.setGravity(Gravity.CENTER|Gravity.BOTTOM);
+            versionText.setGravity(Gravity.CENTER);
             versionText.setTextSize(10);
 
         } catch (PackageManager.NameNotFoundException e) {
@@ -484,7 +485,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
 
         String idStr = FileAdapter.readFromFile(getApplication().getFilesDir()+ "/" + "ID.txt");
         idText.setText("ID #" + idStr);
-        idText.setGravity(Gravity.CENTER|Gravity.BOTTOM);
+        idText.setGravity(Gravity.CENTER);
         idText.setTextSize(10);
 
         if(!(git_version.isEmpty())){
