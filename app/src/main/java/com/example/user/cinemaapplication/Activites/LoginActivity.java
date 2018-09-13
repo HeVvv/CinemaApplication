@@ -63,6 +63,8 @@ import javax.net.ssl.HttpsURLConnection;
 
 import cz.msebera.android.httpclient.Header;
 
+import static android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION;
+
 public class LoginActivity extends AppCompatActivity implements View.OnTouchListener {
 
 
@@ -94,7 +96,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
     private EditText username;
     private EditText password;
     private String CINEMA_NAME = "Arena Minsk";
-//    private int DEVICE_NUMBER = 1;
     private String version = "";
     private String git_version = "";
     private TextView versionTview;
@@ -102,6 +103,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
 
     private TextView Cancel;
     private ImageView Logo;
+    private TextView versionText;
 
     private List<String> THEATER_COLOR = new ArrayList<>();
     private int THEATER_ID;
@@ -147,18 +149,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
 
     private String updateString = "https://soft.silverscreen.by:8443/content/webapi/system/android/update/";
 
-    private String versionFile_git = "https://raw.githubusercontent.com/HeVvv/Sapk/master/androidVersionFile.txt";
-    private String apkFile_git = "https://github.com/HeVvv/Sapk/raw/master/app-debug.apk";
+    private String versionFile_git = "https://raw.githubusercontent.com/HeVvv/SilverApkUpdateFolder/master/androidVersionFile.txt";
+    private String apkFile_git = "https://github.com/HeVvv/SilverApkUpdateFolder/raw/master/app-release.apk";
     private AsyncTask mtask;
 
     private static Uri getUriFromFile(String location) {
-        return Build.VERSION.SDK_INT < 24 ? Uri.fromFile(new File(location + "app-debug.apk")) : FileProvider.getUriForFile(getStaticLoginActivity().getApplication(), getStaticLoginActivity().getApplication().getApplicationContext().getPackageName() + ".provider", new File(location + "app-debug.apk"));
+        return Build.VERSION.SDK_INT < 24 ? Uri.fromFile(new File(location + "app-release.apk")) : FileProvider.getUriForFile(getStaticLoginActivity().getApplication(), "com.example.user.cinemaapplication.provider", new File(location + "app-release.apk"));
     }
     private static void OpenNewVersion(String location) {
         Intent intent = new Intent("android.intent.action.VIEW");
         intent.setDataAndType(getUriFromFile(location), "application/vnd.android.package-archive");
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//        intent.addFlags(1);
+        intent.addFlags(FLAG_GRANT_READ_URI_PERMISSION);
+//        intent.addFlags(1);Yt
         context.startActivity(intent);
         LoginActivity.getStaticLoginActivity().finish();
     }
@@ -166,6 +169,31 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
     private static Context context;
 
     private static String downloadUrl;
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 1: {
+
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                    Toast.makeText(LoginActivity.this, "Permission denied to read your External storage", Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
+    }
 
     public void startDownloadingApk(String url) {
         downloadUrl = url;
@@ -184,9 +212,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
             if (bar == null) {
                 bar = new ProgressDialog(context);
                 bar.setCancelable(false);
-                bar.setMessage("Downloading...");
-                System.out.println("sittin here");
-                bar.setIndeterminate(true);
+                bar.setMessage("Connecting...");
+                    bar.setIndeterminate(true);
                 bar.setCanceledOnTouchOutside(false);
                 bar.show();
             }
@@ -218,15 +245,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
             } else {
                 Toast.makeText(getStaticLoginActivity().getApplication(), "Error: Try Again", Toast.LENGTH_SHORT).show();
             }
-
         }
 
         protected Boolean doInBackground(String... args0) {
             Boolean flag = false;
 
             try {
-                System.out.println("we got here");
-                URL url = new URL("https://github.com/HeVvv/Sapk/raw/master/app-debug.apk");
+                URL url = new URL("https://github.com/HeVvv/SilverApkUpdateFolder/raw/master/app-release.apk");
                 HttpsURLConnection c = (HttpsURLConnection) url.openConnection();
                 c.setRequestMethod("GET");
                 c.setSSLSocketFactory(HttpsURLConnection.getDefaultSSLSocketFactory());
@@ -235,7 +260,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
                 String PATH = Environment.getExternalStorageDirectory() + "/Download/";
                 File file = new File(PATH);
                 file.mkdirs();
-                File outputFile = new File(file, "app-debug.apk");
+                File outputFile = new File(file, "app-release.apk");
                 if (outputFile.exists()) {
                     outputFile.delete();
                 }
@@ -258,7 +283,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
                 is.close();
                 LoginActivity.OpenNewVersion(PATH);
                 flag = true;
-                System.out.println("now we here");
             }catch(MalformedURLException mfpokemon){
                 mfpokemon.printStackTrace();
             }catch(IOException iopokemon){
@@ -388,17 +412,22 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
 
     private boolean STATE = true;
 
-
     public boolean updateCheck(){
         return STATE;
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.Theme_AppCompat_NoActionBar);
         setContentView(R.layout.activity_main);
         context = LoginActivity.this;
+
+        if (ContextCompat.checkSelfPermission(LoginActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                == PackageManager.PERMISSION_DENIED) {
+            ActivityCompat.requestPermissions(LoginActivity.this,
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    1);
+        }
 
         Cancel = (TextView) findViewById(R.id.cancel);
         Cancel.setOnTouchListener(this);
@@ -411,6 +440,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
 
         username = (EditText) findViewById(R.id.usernameInput);
         password = (EditText) findViewById(R.id.passInput);
+
+        versionText = (TextView) findViewById(R.id.versionText);
 
         password.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -433,15 +464,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
             mtask = new RetrieveFeedTask().execute(versionFile_git);
             System.out.println(git_version);
         }while(git_version.isEmpty());
+
         try {
             PackageInfo pInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
             version = pInfo.versionName;
+            versionText.setText(version);
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
         mtask.cancel(true);
-
-
 
         if(!(git_version.isEmpty())){
             System.out.println("Git version -> " + git_version);
@@ -451,7 +482,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
                 System.out.println("Url string -> " + apkFile_git);
 //                DownloadApk downloadApk = new DownloadApk(LoginActivity.this);
 //                downloadApk.startDownloadingApk(apkFile_git);
-
                 LoginActivity.getStaticLoginActivity().startDownloadingApk(apkFile_git);
             }else{
                 System.out.println("Device is up to date!");

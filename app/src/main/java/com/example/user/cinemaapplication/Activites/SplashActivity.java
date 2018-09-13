@@ -137,7 +137,6 @@ public class SplashActivity extends AppCompatActivity{
                     1);
         }
 
-
         if (!hasVisited) {
             SharedPreferences.Editor e = sp.edit();
             e.putBoolean("hasVisited",true);
@@ -199,36 +198,6 @@ public class SplashActivity extends AppCompatActivity{
                 THEATER_COLOR = ListData.loadTheaterColor();
             }
         });
-
-//        mainHandler.post(new Runnable() {
-//            @Override
-//            public void run() {
-//                DATA = ListData.loadAuditData();
-//                mainHandler.sendEmptyMessage(2);
-//
-//            }
-//
-//        });
-//
-//        mainHandler.post(new Runnable() {
-//            @Override
-//            public void run() {
-//                THEATER_DATA = ListData.loadTheaterInfo();
-//                THEATER_COLOR = ListData.loadTheaterColor();
-//                mainHandler.sendEmptyMessage(3);
-//
-//            }
-//        });
-//        SplashActivity.this.runOnUiThread(new Runnable() {
-//            @Override
-//            public void run() {
-//                if (!(str.isEmpty())) {
-//                    THEATER_ID = ListData.getTheaterByDEVICE_ID(device_id);
-//                    System.out.println("getting theater id");
-//                }
-//
-//            }
-//        });
 
         mainHandler.postDelayed(new Runnable() {
             @Override

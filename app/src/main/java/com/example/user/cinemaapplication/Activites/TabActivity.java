@@ -113,7 +113,7 @@ public class TabActivity extends AppCompatActivity {
             setTheme(R.style.Theme_AppCompat_NoActionBar);
         }
 
-        setContentView(R.layout.activity_tab2);
+            setContentView(R.layout.activity_tab2);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
