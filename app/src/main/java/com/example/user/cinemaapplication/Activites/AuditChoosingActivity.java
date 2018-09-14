@@ -49,7 +49,6 @@ import java.util.Set;
 
 public class AuditChoosingActivity extends Fragment {
 
-
     // test swiperefreshLayout
 
     private static String auditIDs = "";
@@ -65,7 +64,6 @@ public class AuditChoosingActivity extends Fragment {
     public AuditChoosingActivity(){
         staticAuditChoosingActivity = this;
     }
-
 
     public Set<Integer> getAuditIDS(){ return auditIDS;}
 
@@ -132,7 +130,6 @@ public class AuditChoosingActivity extends Fragment {
             }
         }
     }
-
 
     private int fetchAccentColor() {
         TypedValue typedValue = new TypedValue();

@@ -19,8 +19,11 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="outputName" value="ic_frontrow_w" />
-                            <entry key="sourceFile" value="C:\Users\User\Desktop\svg\FrontRow_w.svg" />
+                            <entry key="height" value="40" />
+                            <entry key="outputName" value="ic_frontrow_logo" />
+                            <entry key="overrideSize" value="true" />
+                            <entry key="sourceFile" value="C:\Users\User\AppData\Local\Packages\Microsoft.SkypeApp_kzf8qxf38zg5c\LocalState\Downloads\FrontRow_w.svg" />
+                            <entry key="width" value="113" />
                           </map>
                         </option>
                       </PersistentState>

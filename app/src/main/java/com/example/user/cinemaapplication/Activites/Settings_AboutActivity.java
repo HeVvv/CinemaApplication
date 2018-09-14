@@ -123,18 +123,6 @@ public class Settings_AboutActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        Button btnswitch = (Button) findViewById(R.id.btnSwitch);
-        btnswitch.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-//                if(!version.isEmpty()) {
-//                    updateString += version;
-//                    DownloadApk downloadApk = new DownloadApk(Settings_AboutActivity.this);
-//                    downloadApk.startDownloadingApk(updateString);
-//                }
-            }
-        });
-
         try {
             PackageInfo pInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
             String version = pInfo.versionName;
@@ -143,37 +131,12 @@ public class Settings_AboutActivity extends AppCompatActivity {
             System.out.println("Version name -> " + version);
             System.out.println("Version code -> " + verCode);
 
-//            txtVCode.setText(pInfo.versionCode);
             txtVName.setText("Версия : " + pInfo.versionName);
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
 
 
-//        Button btnVibrate = (Button) findViewById(R.id.vibrTest);
-//        btnVibrate.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-//                int action = event.getAction();
-//                if(action == MotionEvent.ACTION_DOWN){
-//                    vibrator.vibrate(2000);
-//                }else if(action == MotionEvent.ACTION_UP){
-//                    vibrator.cancel();
-//                }
-//                return true;
-//            }
-//        });
-//
-//        final Button btnVibrate2 = (Button) findViewById(R.id.vibrTest2);
-//        btnVibrate2.setHapticFeedbackEnabled(true);
-//        btnVibrate2.setOnClickListener(new View.OnClickListener(){
-//            public void onClick(View v) {
-//                Settings.System.getInt(Settings_AboutActivity.staticSettings_AboutActivity.getContentResolver(),Settings.System.HAPTIC_FEEDBACK_ENABLED,0);
-//                btnVibrate2.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-//                System.out.println("vibr");
-//            }
-//        });
 
         super.onCreate(savedInstanceState);
     }

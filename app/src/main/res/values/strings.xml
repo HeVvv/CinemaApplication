@@ -1,5 +1,6 @@
 <resources>
-    <string name="app_name">MobileTicketsReader</string>
+
+    <string name="app_name">Ticket Reader</string>
     <string name="submitPassBtn">Подтвердить</string>
     <string name="StaffInfo">Логин:</string>
     <string name="PassInfo">Пароль:</string>
@@ -8,12 +9,5 @@
     <string name="Log_off">Выход</string>
     <string name="Cancel">Отмена</string>
     <string name="Exit">Выход</string>
-
-
-    <string-array name="StaffList">
-        <item>Работник 1</item>
-        <item>Работник 2</item>
-        <item>Работник 3</item>
-    </string-array>
 
 </resources>

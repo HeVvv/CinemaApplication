@@ -10,9 +10,8 @@
 
     <TextView
         android:id="@+id/versionText"
-        android:layout_width="368dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="5dp"
+        android:layout_width="180dp"
+        android:layout_height="15dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         app:layout_constraintBottom_toTopOf="@+id/idText"
@@ -21,37 +20,35 @@
 
     <TextView
         android:id="@+id/idText"
-        android:layout_width="368dp"
-        android:layout_height="25dp"
+        android:layout_width="180dp"
+        android:layout_height="16dp"
         android:layout_marginBottom="4dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginStart="-12dp"
+        android:layout_marginStart="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/loginBtn"
-        android:layout_width="220dp"
-        android:layout_height="50dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_width="226dp"
+        android:layout_height="54dp"
         android:onClick="onLogin"
         android:text="Подтвердить"
+        android:textColor="#CBCBCB"
         app:layout_constraintBottom_toTopOf="@+id/cancel"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
+    <Button
         android:id="@+id/cancel"
         android:layout_width="220dp"
-        android:layout_height="16dp"
-        android:layout_marginBottom="8dp"
+        android:layout_height="32dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
+        android:background="#00FFFFFF"
         android:text="@string/Exit"
+        android:textColor="#CBCBCB"
         android:textAlignment="center"
         app:layout_constraintBottom_toTopOf="@+id/versionText"
         app:layout_constraintEnd_toEndOf="parent"
@@ -60,10 +57,10 @@
     <EditText
         android:id="@+id/usernameInput"
         android:layout_width="220dp"
-        android:layout_height="48dp"
+        android:layout_height="40dp"
         android:layout_marginBottom="4dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="9dp"
         android:background="@drawable/edittextbground"
         android:ems="10"
         android:inputType="textPersonName"
@@ -72,24 +69,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <ImageView
-        android:id="@+id/logo"
-        android:layout_width="377dp"
-        android:layout_height="194dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/usernameInput"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.491" />
-
     <EditText
         android:id="@+id/passInput"
+        android:textStyle="bold"
         android:layout_width="220dp"
-        android:layout_height="50dp"
+        android:layout_height="40dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="16dp"
@@ -101,5 +85,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.471"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="300dp"
+        android:layout_height="180dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/usernameInput"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.491" />
+
 
 </android.support.constraint.ConstraintLayout>
