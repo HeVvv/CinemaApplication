@@ -81,7 +81,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
     private String CINEMA_NAME = "Arena Minsk";
     private String version = "";
     private String git_version = "";
-    private TextView versionTview;
 
     private TextView idText;
     private TextView Cancel;
@@ -427,7 +426,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
         Cancel.setOnTouchListener(this);
         Cancel.setGravity(Gravity.CENTER);
 
-        //Waiting for a blocking GC Alloc ????
         Logo = (ImageView) findViewById(R.id.logo);
         Logo.setImageResource(R.drawable.ic_frontrow_logo);
 
@@ -475,7 +473,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
         });
 
         version = LoginActivity.getStaticLoginActivity().getpInfo().versionName;
-//        mtask.cancel(true);
 
         super.onCreate(savedInstanceState);
     }
