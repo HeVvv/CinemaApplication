@@ -149,8 +149,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
 
 
     @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
             case 1: {
 
@@ -198,7 +197,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
 //        System.out.println(loginAuth);
 
         String loginUrl = "https://soft.silverscreen.by:8443/security-1.0/webapi/auth/login/";
-//        String loginUrl = "https://inlogic.org:8443/security-1.0/webapi/auth/login/";
+//        String loginUrl = "https://tsoft.silverscreen.by/security-1.0/webapi/auth/login/";
 
         final AsyncHttpClient client_main = new AsyncHttpClient();
         client_main.setBasicAuth(HardCodedUsername, HardCodedPassword);
@@ -231,7 +230,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
                 if(statusCode == 0)
                 {
                     Toast toast = new Toast(LoginActivity.this);
-                    toast.makeText(getApplicationContext(), "Проверьте подключение к интернету!" + statusCode,Toast.LENGTH_SHORT).show();
+                    toast.makeText(getApplicationContext(), "Проверьте подключение к интернету! " + statusCode,Toast.LENGTH_SHORT).show();
                     toast.setGravity(Gravity.CENTER, 0, 0);
                 }
                 if(statusCode != 200 && statusCode != 408 && statusCode != 401 ){
@@ -259,7 +258,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
                 if(statusCode == 0)
                 {
                     Toast toast = new Toast(LoginActivity.this);
-                    toast.makeText(getApplicationContext(), "Проверьте подключение к интернету!" + statusCode,Toast.LENGTH_SHORT).show();
+                    toast.makeText(getApplicationContext(), "Проверьте подключение к интернету! " + statusCode,Toast.LENGTH_SHORT).show();
                     toast.setGravity(Gravity.CENTER, 0, 0);
                 }
                 if(statusCode != 200 && statusCode != 408 && statusCode != 401 ){
@@ -286,7 +285,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
                 if(statusCode == 0)
                 {
                     Toast toast = new Toast(LoginActivity.this);
-                    toast.makeText(getApplicationContext(), "Проверьте подключение к интернету!" + statusCode,Toast.LENGTH_SHORT).show();
+                    toast.makeText(getApplicationContext(), "Проверьте подключение к интернету! " + statusCode,Toast.LENGTH_SHORT).show();
                     toast.setGravity(Gravity.CENTER, 0, 0);
                 }
                 if(statusCode != 200 && statusCode != 408 && statusCode != 401 ){
@@ -402,11 +401,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
         context = LoginActivity.this;
 
         String idStr = FileAdapter.readFromFile(getApplication().getFilesDir()+ "/" + "ID.txt");
-        try {
-            pInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
-        }catch(PackageManager.NameNotFoundException pokemon){
-            pokemon.printStackTrace();
-        }
 
         if (ContextCompat.checkSelfPermission(LoginActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)
                 == PackageManager.PERMISSION_DENIED) {
@@ -421,6 +415,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
             pokemon.printStackTrace();
         }
         version = pInfo.versionName;
+//        version = LoginActivity.getStaticLoginActivity().getpInfo().versionName;
 
         Cancel = (TextView) findViewById(R.id.cancel);
         Cancel.setOnTouchListener(this);
@@ -429,24 +424,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
         Logo = (ImageView) findViewById(R.id.logo);
         Logo.setImageResource(R.drawable.ic_frontrow_logo);
 
-
         username = (EditText) findViewById(R.id.usernameInput);
         username.setHint("Логин");
+
         password = (EditText) findViewById(R.id.passInput);
         password.setHint("Пароль");
 
         versionText = (TextView) findViewById(R.id.versionText);
-        idText = (TextView) findViewById(R.id.idText);
-
         versionText.setText("Ticket Reader v " + version);
         versionText.setGravity(Gravity.CENTER);
         versionText.setTextSize(7);
 
+        idText = (TextView) findViewById(R.id.idText);
         idText.setText("ID #" + idStr);
         idText.setGravity(Gravity.CENTER);
         idText.setTextSize(7);
-
-
 
         password.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -472,7 +464,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
             }
         });
 
-        version = LoginActivity.getStaticLoginActivity().getpInfo().versionName;
+
 
         super.onCreate(savedInstanceState);
     }

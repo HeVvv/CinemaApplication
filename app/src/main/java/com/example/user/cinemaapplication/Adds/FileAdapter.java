@@ -82,9 +82,9 @@ public class FileAdapter {
         boolean deleted = file.delete();
 
         if(deleted){
-            System.out.println("Deleted file " + file.getName());
+//            System.out.println("Deleted file " + file.getName());
         }else{
-            System.out.println("Couldnt delete file!");
+//            System.out.println("Couldnt delete file!");
         }
     }
 

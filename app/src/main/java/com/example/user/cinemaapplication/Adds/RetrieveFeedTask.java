@@ -30,23 +30,22 @@ public class RetrieveFeedTask extends AsyncTask<String, Void, String> {
 
     @Override
     protected String doInBackground(String... strings) {
-        System.out.println("doinbground");
         try {
             try {
                 URL versionFile_gitUrl = new URL(strings[0]);
-                System.out.println(strings[0]);
-                System.out.println(versionFile_gitUrl);
+//                System.out.println(strings[0]);
+//                System.out.println(versionFile_gitUrl);
                 InputStream is =null;
                 try {
                     is = versionFile_gitUrl.openStream();
                 }catch (Exception e){
-                    System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+//                    System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
                     e.printStackTrace();
                 }
                 if(is!=null){
                     Scanner s = new Scanner(is);
                     this.git_version = s.nextLine();
-                    System.out.println("--------------------------------" + this.git_version);
+//                    System.out.println("--------------------------------" + this.git_version);
                 }
             }catch (IOException pokemon){
                 pokemon.printStackTrace();
@@ -56,7 +55,7 @@ public class RetrieveFeedTask extends AsyncTask<String, Void, String> {
             pokemon.printStackTrace();
             return null;
         } finally {
-            System.out.println("doinbground");
+//            System.out.println("doinbground");
             return "s";
         }
     }
@@ -65,7 +64,7 @@ public class RetrieveFeedTask extends AsyncTask<String, Void, String> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        System.out.println("onPreExecute");
+//        System.out.println("onPreExecute");
     }
 
     @Override
@@ -78,7 +77,7 @@ public class RetrieveFeedTask extends AsyncTask<String, Void, String> {
         }
         version = pInfo.versionName;
 
-        System.out.println("onPostExecute " + s);
+//        System.out.println("onPostExecute " + s);
         if(!(git_version.isEmpty())){
             System.out.println("Git version -> " + git_version);
             System.out.println("Mob version -> " + version);

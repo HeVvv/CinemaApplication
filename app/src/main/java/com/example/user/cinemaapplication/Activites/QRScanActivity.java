@@ -159,7 +159,7 @@ public class QRScanActivity extends Fragment {
             sb.append(s);
         }
 
-        System.out.println(sb.toString());
+//        System.out.println(sb.toString());
         return sb.toString();
     }
 
@@ -219,7 +219,7 @@ public class QRScanActivity extends Fragment {
         @Override
         public void barcodeResult(BarcodeResult data) {
             if((data.getText() == null || data.getText().equals(lastText)) && (Calendar.getInstance().getTime().getTime() - OLD_DATE.getTime() < 2500)) {
-                System.out.println("Repetative QR code!");
+//                System.out.println("Repetative QR code!");
                 // Prevent duplicate scans
             } else {
                 clientTicket.setBasicAuth(LoginActivity.getStaticLoginActivity().getUsername(), LoginActivity.getStaticLoginActivity().getPassword());
@@ -229,7 +229,7 @@ public class QRScanActivity extends Fragment {
 
                 final File historyfile = new File(getContext().getFilesDir() + "/history.txt");
 
-                System.out.println("scanning -> " + data);
+//                System.out.println("scanning -> " + data);
 
                 OLD_DATA = data.toString();
                 OLD_DATE = Calendar.getInstance().getTime();
@@ -239,7 +239,6 @@ public class QRScanActivity extends Fragment {
                     public void run() {
 
                         Vibrator v = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
-
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                             v.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
                         } else {
@@ -253,34 +252,40 @@ public class QRScanActivity extends Fragment {
                         final String test = ID_DEVICE + "/" + QRScanActivity.getStaticQRScanActivity().getAuditoriumsIDS() + "/" + data;
                         try {
                             try {
-                                TicketSClass ticketSClass = new TicketSClass(test);
 
-                                String json = JSONUtils.parseObjectToJson(ticketSClass);
+                                String[] tokenCheck = test.split("/");
                                 StringEntity entity = null;
-                                try {
-                                    entity = new StringEntity(json);
-                                } catch (UnsupportedEncodingException e) {
-                                    e.printStackTrace();
+                                if(tokenCheck.length != 8){
+                                    Toast.makeText(getActivity().getApplicationContext(), "Проверьте QR повторно.", Toast.LENGTH_LONG).show();
+                                }else{
+                                    TicketSClass ticketSClass = new TicketSClass(test);
+                                    String json = JSONUtils.parseObjectToJson(ticketSClass);
+                                    try {
+                                        entity = new StringEntity(json);
+                                    } catch (UnsupportedEncodingException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
+
                                 clientTicket.put(getContext(), check_ticket_url, entity, "application/json", new TextHttpResponseHandler() {
 
                                     @Override
                                     public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                                         if(statusCode == 0) {
-                                            System.out.println("error1 " + statusCode + "~~~~" + responseString);
-                                            text.setText("Проверьте подключение к интернету." + statusCode);
+//                                            System.out.println("error1 " + statusCode + "~~~~" + responseString);
+                                            text.setText("Проверьте подключение к интернету. " + statusCode);
                                             textAdd.setText("");
                                         }else{
-                                            text.setText("Ошибка" + statusCode);
+                                            text.setText("Ошибка " + statusCode);
                                             textAdd.setText("");
                                         }
                                     }
 
                                     @Override
                                     public void onSuccess(int statusCode, Header[] headers, final String responseString) {
-                                        System.out.println("response");
+//                                        System.out.println("response");
                                         final String appended = responseString.concat(" ");
-                                        System.out.println(appended);
+//                                        System.out.println(appended);
                                         String status = appended.substring(0, 1);
                                         final String response = appended.substring(2, appended.length());
                                         final List<String> info = contentString(response);
@@ -331,13 +336,7 @@ public class QRScanActivity extends Fragment {
                 };
                 mainHandler.post(myRunnable);
             }
-//            barcodeView.setStatusText(result.getText());
-
-            //Added preview of scanned barcode
-//            ImageView imageView = (ImageView) findViewById(R.id.barcodePreview);
-//            imageView.setImageBitmap(result.getBitmapWithResultPoints(Color.YELLOW));
         }
-
         @Override
         public void possibleResultPoints(List<ResultPoint> resultPoints) {
         }
@@ -346,6 +345,7 @@ public class QRScanActivity extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
 
         final View rootView = inflater.inflate(R.layout.activity_qrscan, container, false);
         mContext = getContext();
@@ -434,7 +434,6 @@ public class QRScanActivity extends Fragment {
         barcodeView = (DecoratedBarcodeView) rootView.findViewById(R.id.barcode_scanner);
         barcodeView.decodeContinuous(callback);
         barcodeView.setStatusText("");
-
 
         return rootView;
     }

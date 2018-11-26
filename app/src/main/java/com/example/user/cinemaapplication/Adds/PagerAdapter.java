@@ -44,6 +44,7 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
         public void addFragment(Fragment fragment, String title) {
             mFragmentList.add(fragment);
             mFragmentTitleList.add(title);
+            notifyDataSetChanged();
         }
 
         @Override
@@ -54,5 +55,29 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
         public void removeFragment(Fragment fragment,String title){
             mFragmentList.remove(fragment);
             mFragmentTitleList.remove(title);
+            notifyDataSetChanged();
         }
+
+        public void addFragToPos(Fragment fragment,String title, int count){
+            mFragmentList.add(count,fragment);
+            mFragmentTitleList.add(count,title);
+            notifyDataSetChanged();
+        }
+
+        public void removeFragAtPos(Fragment fragment, String title, int count){
+
+            mFragmentList.remove(fragment);
+            if(mFragmentList.contains(fragment)){
+                mFragmentList.remove(count);
+            }
+
+            mFragmentTitleList.remove(title);
+            if(mFragmentTitleList.contains(title)){
+                mFragmentTitleList.remove(count);
+            }
+
+            notifyDataSetChanged();
+
+        }
+
 }

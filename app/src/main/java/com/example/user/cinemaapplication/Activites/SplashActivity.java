@@ -55,7 +55,7 @@ public class SplashActivity extends AppCompatActivity{
         return DATA;
     }
     public void setDATA(){
-        System.out.println("Re-setting data");
+//        System.out.println("Re-setting data");
         DATA = new HashMap<>();
     }
     public int getTHEATER_ID(){
@@ -151,33 +151,33 @@ public class SplashActivity extends AppCompatActivity{
 
         if(result){
             FileAdapter.deleteFile(historyFile);
-            System.out.println("History file deleted due to expire date");
+//            System.out.println("History file deleted due to expire date");
         }
 
         try {
             if (historyFile.createNewFile()) {
-                System.out.println("Файл создан: " + historyFile.getAbsolutePath());
+//                System.out.println("Файл создан: " + historyFile.getAbsolutePath());
                 Date createDate = Calendar.getInstance().getTime();
                 SharedPreferences.Editor e = sp.edit();
                 e.putLong("historyCreateTime",createDate.getTime());
                 e.apply();
-                System.out.println(System.currentTimeMillis());
+//                System.out.println(System.currentTimeMillis());
             } else {
-                System.out.println("Не удалось создать файл." + historyFile);
+//                System.out.println("Не удалось создать файл." + historyFile);
             }
         } catch (IOException ex) {
-            System.out.println("Creation file Error");
+//            System.out.println("Creation file Error");
         }
 
         File file1 = new File(ctx.getFilesDir(), "ID.txt");
         try {
             if (file1.createNewFile()) {
-                System.out.println("Файл создан: " + file1.getAbsolutePath());
+//                System.out.println("Файл создан: " + file1.getAbsolutePath());
             } else {
-                System.out.println("Не удалось создать файл." + file1);
+//                System.out.println("Не удалось создать файл." + file1);
             }
         } catch (IOException ex) {
-            System.out.println("Creation file Error");
+//            System.out.println("Creation file Error");
         }
 
         //подрезать под один запрос в gettheaterbydeviceID
@@ -203,7 +203,7 @@ public class SplashActivity extends AppCompatActivity{
             @Override
             public void run() {
                 Intent openMainActivity = new Intent(SplashActivity.this, TabActivity.class);
-                System.out.println("Theater id on splash = " + LoginActivity.getStaticLoginActivity().getTHEATER_ID());
+//                System.out.println("Theater id on splash = " + LoginActivity.getStaticLoginActivity().getTHEATER_ID());
                 startActivity(openMainActivity);
                 finish();
             }

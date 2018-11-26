@@ -28,7 +28,7 @@ public class JSONUtils {
         try{
             c = mapper.readValue(json, mapper.getTypeFactory().constructCollectionType(List.class, clazz));
         }catch (Exception e){
-            System.out.println("e " + e.getMessage());
+//            System.out.println("e " + e.getMessage());
         }
         return c;
     }

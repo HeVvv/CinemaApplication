@@ -110,7 +110,7 @@ public class Settings_AboutActivity extends AppCompatActivity {
                 File historyFile = new File(getApplication().getApplicationContext().getFilesDir(), "history.txt");
                 FileAdapter.deleteFile(historyFile);
                 Toast.makeText(getApplication(),"Файл истории удален!",Toast.LENGTH_LONG).show();
-                System.out.println("Deleted histoty file!");
+//                System.out.println("Deleted histoty file!");
             }
         });
 

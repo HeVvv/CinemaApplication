@@ -18,15 +18,14 @@ public class TicketSClass {
     public TicketSClass(String string) throws IOException{
         String[] token = string.split("/");
 
-        this.salespointsValues = Integer.parseInt(token[0]);
-        this.auditoriumsValue = token[1];
-        this.tradingValue = Integer.parseInt(token[2]);
-        this.idTicketValue = Integer.parseInt(token[3]);
-        this.showValue = Integer.parseInt(token[4]);
-        this.rowValue = Integer.parseInt(token[5]);
-        this.prefixValue = token[6];
-        this.seatValue = Integer.parseInt(token[7]);
-
+            this.salespointsValues = Integer.parseInt(token[0]);
+            this.auditoriumsValue = token[1];
+            this.tradingValue = Integer.parseInt(token[2]);
+            this.idTicketValue = Integer.parseInt(token[3]);
+            this.showValue = Integer.parseInt(token[4]);
+            this.rowValue = Integer.parseInt(token[5]);
+            this.prefixValue = token[6];
+            this.seatValue = Integer.parseInt(token[7]);
     }
     public int getSalespointsValues() {
         return salespointsValues;

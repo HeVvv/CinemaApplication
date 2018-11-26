@@ -61,9 +61,9 @@ public class TabActivity extends AppCompatActivity {
 
 
     private int[] tabIcons = {
-            R.drawable.tickets,
             R.drawable.video_camera,
-            R.drawable.barcode
+            R.drawable.barcode,
+            R.drawable.tickets
     };
 
     private static TabActivity staticTabActivity;
@@ -76,9 +76,18 @@ public class TabActivity extends AppCompatActivity {
 
 
     private void setupTabIcons() {
-        tabLayout.getTabAt(0).setIcon(tabIcons[1]);
-        tabLayout.getTabAt(1).setIcon(tabIcons[2]);
-        tabLayout.getTabAt(2).setIcon(tabIcons[0]);
+        tabLayout.getTabAt(0).setIcon(tabIcons[0]);
+        tabLayout.getTabAt(1).setIcon(tabIcons[1]);
+        tabLayout.getTabAt(2).setIcon(tabIcons[2]);
+    }
+
+    public boolean checkAuditsEmpty(){
+        try {
+            state = AuditChoosingActivity.getStaticAuditChoosingActivity().getAuditIDS().isEmpty();
+        }catch (NullPointerException e){
+            e.printStackTrace();
+        }
+        return  state;
     }
 
     @Override
@@ -87,17 +96,11 @@ public class TabActivity extends AppCompatActivity {
 
         HashMap<Integer,String> theater_data = SplashActivity.getStaticSplashActivity().getTHEATER_DATA();
         List<String> theater_color = SplashActivity.getStaticSplashActivity().getTHEATER_COLOR();
-//
-//        System.out.println(LoginActivity.getStaticLoginActivity().getTHEATER_COLOR());
-//        System.out.println(LoginActivity.getStaticLoginActivity().getTHEATER_DATA());
-//        System.out.println(LoginActivity.getStaticLoginActivity().getTHEATER_ID());
 
         THEATER_ID = ListData.getTheaterId();
 
-        System.out.println(THEATER_ID + " THEATER ID ON TAB");
         for (Map.Entry entry : theater_data.entrySet()) {
             if(Integer.parseInt(entry.getKey().toString()) == THEATER_ID) {
-                System.out.println("Entry ->" + entry.getValue());
                 setTitle(entry.getValue().toString());
             }
         }
@@ -113,7 +116,7 @@ public class TabActivity extends AppCompatActivity {
             setTheme(R.style.Theme_AppCompat_NoActionBar);
         }
 
-            setContentView(R.layout.activity_tab2);
+        setContentView(R.layout.activity_tab2);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -123,12 +126,18 @@ public class TabActivity extends AppCompatActivity {
 
         adapter = new PagerAdapter(getSupportFragmentManager());
         adapter.addFragment(frag_choose,"Выбор");
+        adapter.addFragment(frag_scan,"Скан");
         adapter.addFragment(frag_history,"История");
 
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
-        tabLayout.getTabAt(0).setIcon(tabIcons[1]);
-        tabLayout.getTabAt(1).setIcon(tabIcons[0]);
+
+        try {
+            tabLayout.getTabAt(0).setIcon(tabIcons[0]);
+            tabLayout.getTabAt(1).setIcon(tabIcons[2]);
+        }catch (NullPointerException e){
+            e.printStackTrace();
+        }
 
         tabStrip = ((LinearLayout) tabLayout.getChildAt(0));
 
@@ -137,47 +146,40 @@ public class TabActivity extends AppCompatActivity {
         final Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                if (!(checkAuditsEmpty())){
-                    // add
-                    if(tabStrip.getChildCount() == 2) {
-                        adapter.removeFragment(frag_history,"История");
-                        adapter.addFragment(frag_scan, "Скан");
-                        adapter.addFragment(frag_history,"История");
+                try {
+                    if (!(checkAuditsEmpty())) {
+                        // add
+                        if (tabStrip.getChildCount() == 2) {
+//                            adapter.removeFragment(frag_history, "История");
+//                            adapter.addFragment(frag_scan, "Скан");
+//                            adapter.addFragment(frag_history, "История");
 
-                        try{
-                            adapter.notifyDataSetChanged();
-                        }catch (IllegalStateException e){
-                            e.printStackTrace();
-                        }
-                        viewPager.setAdapter(adapter);
-                        setupTabIcons();
-                        try {
-//                            tabLayout.getTabAt(1).select();
-                        }catch (NullPointerException e){
-                            e.printStackTrace();
-                        }
-//                        System.out.println("added");
-                    }
-                }else{
-                    //remove
-                    if(tabStrip.getChildCount() == 3) {
-                        adapter.removeFragment(frag_scan, "Скан");
-                        try{
-                            adapter.notifyDataSetChanged();
-                        }catch (IllegalStateException e){
-                            e.printStackTrace();
-                        }
-                        viewPager.setAdapter(adapter);
-                            tabLayout.getTabAt(0).setIcon(tabIcons[1]);
-                            tabLayout.getTabAt(1).setIcon(tabIcons[0]);
 
-                        try {
-//                            tabLayout.getTabAt(1).select();
-                        }catch (NullPointerException e){
-                            e.printStackTrace();
+                            adapter.removeFragAtPos(frag_history,"История",1);
+                            adapter.addFragToPos(frag_scan, "Скан", 1);
+                            adapter.addFragToPos(frag_history,"История",2);
+
+
+                            viewPager.setAdapter(adapter); // fragment already added (is it even needed???)
+                            tabLayout.setupWithViewPager(viewPager);  // not tested?
+
+                            setupTabIcons();
                         }
-//                        System.out.println("removed");
+                    } else {
+                        //remove
+                        if (tabStrip.getChildCount() == 3) {
+//                            adapter.removeFragment(frag_scan, "Скан");
+                            adapter.removeFragAtPos(frag_scan, "Скан", 1);
+
+                            viewPager.setAdapter(adapter);
+                            tabLayout.setupWithViewPager(viewPager);  // not tested?
+
+                            tabLayout.getTabAt(0).setIcon(tabIcons[0]);
+                            tabLayout.getTabAt(1).setIcon(tabIcons[2]);
+                        }
                     }
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
             }
         };
@@ -187,7 +189,8 @@ public class TabActivity extends AppCompatActivity {
             public void run() {
                 uiHandler.post(runnable);
             }
-        }, 0L, 1500 );
+        }, 0L, 1000 );
+        //test with 1000?
 
         uiHandler.removeCallbacks(runnable);
 
@@ -197,17 +200,12 @@ public class TabActivity extends AppCompatActivity {
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
             }
-
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-//                HistoryListActivity.getHistoryListActivity().historyListUpdate(HistoryListActivity.getHistoryListActivity().getAdapter(),HistoryListActivity.getHistoryListActivity().getTicketHistoryList());
             }
-
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-
             }
-
         });
         try {
             tabLayout.getTabAt(0).select();
@@ -216,23 +214,12 @@ public class TabActivity extends AppCompatActivity {
         }
     }
 
-    public boolean checkAuditsEmpty(){
-        try {   
-            state = AuditChoosingActivity.getStaticAuditChoosingActivity().getAuditIDS().isEmpty();
-        }catch (NullPointerException e){
-            e.printStackTrace();
-        }
-            if (state) {
-                return true;
-            } else {
-                return false;
-            }
-        }
 
+
+
+    /*Press once again to exit block*/
     private static final int TIME_DELAY = 2000;
-
     private static long back_pressed;
-
     @Override
     public void onBackPressed() {
         if (back_pressed + TIME_DELAY > System.currentTimeMillis()) {
@@ -249,6 +236,7 @@ public class TabActivity extends AppCompatActivity {
 
     private String torchString = "Фонарик [Выкл]";
 
+    /*nahera???*/
     public String setTorchStringOn(){
         torchString = "Фонарик [Вкл]";
         return torchString;
