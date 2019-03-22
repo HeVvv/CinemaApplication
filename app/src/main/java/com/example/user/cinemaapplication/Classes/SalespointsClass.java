@@ -1,15 +1,16 @@
 package com.example.user.cinemaapplication.Classes;
 
 public class SalespointsClass {
-    int id;
-    int theater;
-    int saleszone;
-    int type;
-    String name;
-    String acronym;
-    int company;
-    String logo;
-    String color;
+
+
+    private int id;
+    private String name;
+    private int typeId;
+    private String typeName;
+    private int theaterId;
+    private String theaterName;
+    private int saleszoneId;
+    private String saleszoneName;
 
     public int getId() {
         return id;
@@ -17,30 +18,6 @@ public class SalespointsClass {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public int getTheater() {
-        return theater;
-    }
-
-    public void setTheater(int theater) {
-        this.theater = theater;
-    }
-
-    public int getSaleszone() {
-        return saleszone;
-    }
-
-    public void setSaleszone(int saleszone) {
-        this.saleszone = saleszone;
-    }
-
-    public int getType() {
-        return type;
-    }
-
-    public void setType(int type) {
-        this.type = type;
     }
 
     public String getName() {
@@ -51,35 +28,51 @@ public class SalespointsClass {
         this.name = name;
     }
 
-    public String getAcronym() {
-        return acronym;
+    public int getTypeId() {
+        return typeId;
     }
 
-    public void setAcronym(String acronym) {
-        this.acronym = acronym;
+    public void setTypeId(int typeId) {
+        this.typeId = typeId;
     }
 
-    public int getCompany() {
-        return company;
+    public String getTypeName() {
+        return typeName;
     }
 
-    public void setCompany(int company) {
-        this.company = company;
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
     }
 
-    public String getLogo() {
-        return logo;
+    public int getTheaterId() {
+        return theaterId;
     }
 
-    public void setLogo(String logo) {
-        this.logo = logo;
+    public void setTheaterId(int theaterId) {
+        this.theaterId = theaterId;
     }
 
-    public String getColor() {
-        return color;
+    public String getTheaterName() {
+        return theaterName;
     }
 
-    public void setColor(String color) {
-        this.color = color;
+    public void setTheaterName(String theaterName) {
+        this.theaterName = theaterName;
+    }
+
+    public int getSaleszoneId() {
+        return saleszoneId;
+    }
+
+    public void setSaleszoneId(int saleszoneId) {
+        this.saleszoneId = saleszoneId;
+    }
+
+    public String getSaleszoneName() {
+        return saleszoneName;
+    }
+
+    public void setSaleszoneName(String saleszoneName) {
+        this.saleszoneName = saleszoneName;
     }
 }

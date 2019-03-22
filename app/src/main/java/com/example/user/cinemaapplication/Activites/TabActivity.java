@@ -1,5 +1,6 @@
 package com.example.user.cinemaapplication.Activites;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.Camera;
@@ -13,6 +14,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.ActivityChooserView;
 import android.support.v7.widget.Toolbar;
 import android.text.style.TabStopSpan;
 import android.util.Log;
@@ -34,6 +36,7 @@ import com.example.user.cinemaapplication.Adds.PagerAdapter;
 import com.example.user.cinemaapplication.R;
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -123,11 +126,19 @@ public class TabActivity extends AppCompatActivity {
 
         viewPager = (CustomViewPager) findViewById(R.id.pager);
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+        QRScanActivity qrScanActivity = new QRScanActivity();
 
-        adapter = new PagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(frag_choose,"Выбор");
-        adapter.addFragment(frag_scan,"Скан");
-        adapter.addFragment(frag_history,"История");
+        List<Fragment> activityList = new ArrayList<>();
+
+        activityList.add(frag_choose);
+        activityList.add(frag_scan);
+        activityList.add(frag_history);
+
+
+        adapter = new PagerAdapter(getSupportFragmentManager(), getApplicationContext(), activityList);
+//        adapter.addFragment(frag_choose,"Выбор");
+//        adapter.addFragment(frag_scan,"Скан");
+//        adapter.addFragment(frag_history,"История");
 
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
@@ -155,10 +166,12 @@ public class TabActivity extends AppCompatActivity {
 //                            adapter.addFragment(frag_history, "История");
 
 
-                            adapter.removeFragAtPos(frag_history,"История",1);
-                            adapter.addFragToPos(frag_scan, "Скан", 1);
-                            adapter.addFragToPos(frag_history,"История",2);
+                            adapter.setEnabled(1,true);
 
+//                            adapter.removeFragAtPos(frag_history,"История",1);
+//                            adapter.addFragToPos(frag_scan, "Скан", 1);
+//                            adapter.addFragToPos(frag_history,"История",2);
+//
 
                             viewPager.setAdapter(adapter); // fragment already added (is it even needed???)
                             tabLayout.setupWithViewPager(viewPager);  // not tested?
@@ -169,7 +182,9 @@ public class TabActivity extends AppCompatActivity {
                         //remove
                         if (tabStrip.getChildCount() == 3) {
 //                            adapter.removeFragment(frag_scan, "Скан");
-                            adapter.removeFragAtPos(frag_scan, "Скан", 1);
+//                            adapter.removeFragAtPos(frag_scan, "Скан", 1);
+
+                            adapter.setEnabled(1,false);
 
                             viewPager.setAdapter(adapter);
                             tabLayout.setupWithViewPager(viewPager);  // not tested?

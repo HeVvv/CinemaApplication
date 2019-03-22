@@ -49,10 +49,7 @@ import java.util.Set;
 
 public class AuditChoosingActivity extends Fragment {
 
-    // test swiperefreshLayout
-
     private static String auditIDs = "";
-    private int XD = 0;
     private HashMap<String,Integer> listInfo1 = new HashMap<String,Integer>();
     private Set<Integer> auditIDS = new HashSet<>();
     private int MY_CAMERA_REQUEST_CODE = 102;
@@ -81,12 +78,14 @@ public class AuditChoosingActivity extends Fragment {
         return returnString;
     }
 
+    /*TO-DELETE*/
     public static String parseIntString(Integer x) {
         String returnString = "";
         returnString = x + "";
         return returnString;
     }
 
+    /*TO-DELETE*/
     private static HashMap sortByValues(HashMap map) {
         List list = new LinkedList(map.entrySet());
         // Defined Custom Comparator here
@@ -164,8 +163,7 @@ public class AuditChoosingActivity extends Fragment {
             ch.setId(Integer.parseInt(entry.getValue().toString()));
             ch.setBackgroundColor(Color.argb(55,51,51,51));
             setCheckBoxColor(ch,fetchAccentColor(),Color.WHITE);
-            ch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
-            {
+            ch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
                     if(!isChecked){
@@ -188,6 +186,5 @@ public class AuditChoosingActivity extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 }

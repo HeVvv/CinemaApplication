@@ -26,17 +26,6 @@ public class NotificationUtils {
 
         PendingIntent action1PendingIntent = PendingIntent.getService(context, 0,
                 action1Intent, PendingIntent.FLAG_ONE_SHOT);
-//        BroadcastReceiver call_method = new BroadcastReceiver() {
-//            @Override
-//            public void onReceive(Context context, Intent intent) {
-//                String action_name = intent.getAction();
-//                if (action_name.equals("call_method")) {
-//                    // call your method here and do what ever you want.
-//                }
-//            }
-//        };
-//        registerReceiver(call_method, new IntentFilter("call_method"));
-
 
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(context)

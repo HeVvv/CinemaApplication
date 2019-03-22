@@ -73,7 +73,6 @@ public class EditID extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-//        System.out.println("Back pressed");
         finish();
     }
 

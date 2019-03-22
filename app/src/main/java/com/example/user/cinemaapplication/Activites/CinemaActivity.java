@@ -41,10 +41,6 @@ public class CinemaActivity extends Activity {
         staticCinemaActivity = this;
     }
 
-    final String url12 = "https://soft.silverscreen.by:8443/wscinema/webapi/auditoriums/";
-    final String url22 = "https://soft.silverscreen.by:8443/wscinema/webapi/show/auditorium/";
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

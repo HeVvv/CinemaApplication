@@ -56,7 +56,6 @@ public class Settings_AboutActivity extends AppCompatActivity {
     public static final String APP_PREFERENCES_COUNTER = "counter";
 
     private String version = "";
-    private String updateString = "https://soft.silverscreen.by:8443/content/webapi/system/android/update/";
 
 
     private static Settings_AboutActivity staticSettings_AboutActivity;

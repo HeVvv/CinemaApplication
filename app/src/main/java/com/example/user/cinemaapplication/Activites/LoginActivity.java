@@ -334,7 +334,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
             bar.dismiss();
             bar = null;
         }
-
         if (result) {
             Toast.makeText(LoginActivity.getStaticLoginActivity().getApplication(), "Update Done", Toast.LENGTH_SHORT).show();
         } else {
@@ -346,6 +345,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
         Boolean flag = false;
 
         try {
+            //
             URL url = new URL("https://github.com/HeVvv/SilverApkUpdateFolder/raw/master/app-release.apk");
             HttpsURLConnection c = (HttpsURLConnection) url.openConnection();
             c.setRequestMethod("GET");
@@ -394,6 +394,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
         return true;
     }
 
+    private static final int MY_CAMERA_REQUEST_CODE = 100;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.Theme_AppCompat_NoActionBar);
@@ -409,11 +411,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
                     1);
         }
 
+        if (ContextCompat.checkSelfPermission(LoginActivity.this, Manifest.permission.CAMERA)
+                == PackageManager.PERMISSION_DENIED) {
+            ActivityCompat.requestPermissions(LoginActivity.this, new String[]{Manifest.permission.CAMERA}, MY_CAMERA_REQUEST_CODE);
+        }
+
         try {
             pInfo = LoginActivity.getStaticLoginActivity().getPackageManager().getPackageInfo(LoginActivity.getStaticLoginActivity().getPackageName(), 0);
         }catch(PackageManager.NameNotFoundException pokemon){
             pokemon.printStackTrace();
         }
+
         version = pInfo.versionName;
 //        version = LoginActivity.getStaticLoginActivity().getpInfo().versionName;
 
@@ -426,9 +434,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
 
         username = (EditText) findViewById(R.id.usernameInput);
         username.setHint("Логин");
+//        username.setText("Ткачев_А");
 
         password = (EditText) findViewById(R.id.passInput);
         password.setHint("Пароль");
+//        password.setText("153351");
 
         versionText = (TextView) findViewById(R.id.versionText);
         versionText.setText("Ticket Reader v " + version);

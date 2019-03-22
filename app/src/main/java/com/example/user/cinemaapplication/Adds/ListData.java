@@ -456,7 +456,7 @@ public class ListData extends Application {
                     SalespointsClass salespointsClasses = new SalespointsClass();
                     for(int i = 0; i < responseSessionBody.length(); i++){
                         salespointsClasses = JSONUtils.parseJsonToObject(responseSessionBody.toString(),SalespointsClass.class);
-                        THEATER_ID = salespointsClasses.getTheater();
+                        THEATER_ID = salespointsClasses.getTheaterId();
 //                        System.out.println("got theater id" + THEATER_ID);
                     }
                 } catch (Exception e) {

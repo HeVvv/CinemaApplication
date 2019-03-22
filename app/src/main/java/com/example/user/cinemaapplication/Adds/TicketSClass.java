@@ -16,7 +16,7 @@ public class TicketSClass {
     int seatValue;
 
     public TicketSClass(String string) throws IOException{
-        String[] token = string.split("/");
+            String[] token = string.split("/");
 
             this.salespointsValues = Integer.parseInt(token[0]);
             this.auditoriumsValue = token[1];
@@ -25,23 +25,21 @@ public class TicketSClass {
             this.showValue = Integer.parseInt(token[4]);
             this.rowValue = Integer.parseInt(token[5]);
             this.prefixValue = token[6];
+
             this.seatValue = Integer.parseInt(token[7]);
     }
+
     public int getSalespointsValues() {
         return salespointsValues;
     }
 
-    public void setSalespointsValues(int salespointsValues) {
-        this.salespointsValues = salespointsValues;
-    }
+    public void setSalespointsValues(int salespointsValues) { this.salespointsValues = salespointsValues; }
 
     public String getAuditoriumsValue() {
         return auditoriumsValue;
     }
 
-    public void setAuditoriumsValue(String auditoriumsValue) {
-        this.auditoriumsValue = auditoriumsValue;
-    }
+    public void setAuditoriumsValue(String auditoriumsValue) { this.auditoriumsValue = auditoriumsValue; }
 
     public int getTradingValue() {
         return tradingValue;

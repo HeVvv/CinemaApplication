@@ -255,10 +255,14 @@ public class QRScanActivity extends Fragment {
 
                                 String[] tokenCheck = test.split("/");
                                 StringEntity entity = null;
-                                if(tokenCheck.length != 8){
+                                //если будет вылетать, замкнуть на 12 токенах
+                                //обдумать структуру без замыкания
+
+                                    /*добавить это и проверить (8)*/
+                                if(tokenCheck.length < 7){
                                     Toast.makeText(getActivity().getApplicationContext(), "Проверьте QR повторно.", Toast.LENGTH_LONG).show();
                                 }else{
-                                    TicketSClass ticketSClass = new TicketSClass(test);
+                                TicketSClass ticketSClass = new TicketSClass(test);
                                     String json = JSONUtils.parseObjectToJson(ticketSClass);
                                     try {
                                         entity = new StringEntity(json);
@@ -275,6 +279,9 @@ public class QRScanActivity extends Fragment {
 //                                            System.out.println("error1 " + statusCode + "~~~~" + responseString);
                                             text.setText("Проверьте подключение к интернету. " + statusCode);
                                             textAdd.setText("");
+                                        }else if(statusCode == 404){
+                                            text.setText("Ошибка " + statusCode);
+                                            textAdd.setText("Проверьте QR повторно");
                                         }else{
                                             text.setText("Ошибка " + statusCode);
                                             textAdd.setText("");
@@ -330,7 +337,6 @@ public class QRScanActivity extends Fragment {
                             }
                         } catch (IOException e) {
                             e.printStackTrace();
-                            System.out.println(e);
                         }
                     }
                 };
@@ -358,9 +364,7 @@ public class QRScanActivity extends Fragment {
                     }
 
                     @Override
-                    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
-                                           float velocityY) {
-//                        System.out.println("Onfling");
+                    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
                         final int SWIPE_MIN_DISTANCE = 120;
                         final int SWIPE_MAX_OFF_PATH = 250;
                         final int SWIPE_THRESHOLD_VELOCITY = 200;
@@ -389,7 +393,7 @@ public class QRScanActivity extends Fragment {
                                 toast.show();
                             }
                         } catch (Exception e) {
-                            // nothing
+                            e.printStackTrace();
                         }
                         return super.onFling(e1, e2, velocityX, velocityY);
                     }
@@ -402,17 +406,14 @@ public class QRScanActivity extends Fragment {
             }
         });
 
-        if (ContextCompat.checkSelfPermission(rootView.getContext(), Manifest.permission.CAMERA)
-                == PackageManager.PERMISSION_DENIED) {
-            ActivityCompat.requestPermissions(QRScanActivity.staticQRScanActivity.getActivity(), new String[]{Manifest.permission.CAMERA}, MY_CAMERA_REQUEST_CODE);
-        }
+
 
         try {
             ID_DEVICE = Integer.parseInt((FileAdapter.readFromFile(getContext().getFilesDir() + "/" + "ID.txt")).trim());
         }catch (NumberFormatException e){
             e.printStackTrace();
             Toast.makeText(rootView.getContext(),"ID_DEVICE not set!",Toast.LENGTH_SHORT).show();
-            startActivity(getActivity().getIntent());
+//            startActivity(getActivity().getIntent());
         }
 
         textAdd = (TextView) rootView.findViewById(R.id.responseinfo2);
