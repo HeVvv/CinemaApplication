@@ -355,6 +355,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnTouchList
             String PATH = Environment.getExternalStorageDirectory() + "/Download/";
             File file = new File(PATH);
             file.mkdirs();
+            /*проблема создания файла*/
             File outputFile = new File(file, "app-release.apk");
             if (outputFile.exists()) {
                 outputFile.delete();
